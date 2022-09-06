@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -20,12 +20,14 @@
     "analyze": "size-limit --why"
   },
   "peerDependencies": {
-    "react": ">=16",
-    "styled-components": ">=5",
     "@emotion/react": ">=11",
     "@emotion/styled": ">=11",
     "@mui/icons-material": ">=5",
-    "@mui/material": ">=5"
+    "@mui/material": ">=5",
+    "react": ">=16",
+    "styled-components": ">=5",
+    "react-router-dom": ">=6",
+    "nanoid": ">=4"
   },
   "husky": {
     "hooks": {
@@ -38,7 +40,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "labs-ui",
+  "name": "incubator-labs-ui",
   "author": "Ivan_Kazak",
   "module": "dist/labs-ui.esm.js",
   "size-limit": [
@@ -53,7 +55,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/myname/mypackage.git"
+    "url": "git+https://github.com/it-incubator/ui-kit.git"
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.0.1",

@@ -1,7 +1,7 @@
 import {StyledButton,Text} from "../../ui-styled-components/common";
 import React, {ReactNode} from "react"
 
-type BasicButtonPropsType = {
+export type BasicButtonPropsType = {
     mode: "normal" | "transparent" | "red" | "transparent-red"
     text: string | number | ReactNode
     icon?: ReactNode
