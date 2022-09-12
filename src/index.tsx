@@ -18,10 +18,12 @@ import { AddUserSvg } from "./ui-components/Svg/AddUserSvg";
 import { ArrowLeftSvg } from "./ui-components/Svg/ArrowLeftSvg";
 import { BlackTriangleDownSvg } from "./ui-components/Svg/BlackTriangleDownSvg";
 import { BlackTriangleUpSvg } from "./ui-components/Svg/BlackTriangleUpSvg";
+import { EditPencilSvg } from "./ui-components/Svg/EditSvg";
 import { LogoutSVG } from "./ui-components/Svg/LogoutSvg";
 import { MenuBaraSvg } from "./ui-components/Svg/MenuBaraSvg";
 import { MoreCircleSvg } from "./ui-components/Svg/MoreCircleSvg";
 import { PersonPentagramSvg } from "./ui-components/Svg/PersonPentagramSvg";
+import { PlusInCircleSVG } from "./ui-components/Svg/PlusInCircle";
 import { PlusPersonSvg } from "./ui-components/Svg/PlusPersonSvg";
 import { RefreshSvg } from "./ui-components/Svg/RefreshSvg";
 import { SmallBlackCircleSvg } from "./ui-components/Svg/SmallBlackCircleSvg";
@@ -48,7 +50,8 @@ export {
     InfoBar,InfoBarPropsType,
     NavBar,
     AddUserSvg,ArrowLeftSvg,BlackTriangleDownSvg,BlackTriangleUpSvg,LogoutSVG,MenuBaraSvg,
-    MoreCircleSvg,PersonPentagramSvg,PlusPersonSvg,RefreshSvg,SmallBlackCircleSvg,
+    MoreCircleSvg,PersonPentagramSvg,PlusPersonSvg,RefreshSvg,SmallBlackCircleSvg,EditPencilSvg,
+    PlusInCircleSVG,
     TeamHistoryTable,
     ToggleBar,ToggleBarPropsType,
     Block, StyledSvg, StyledSelect, Text, StyledButton, StyledKeyboardArrowDownIcon,

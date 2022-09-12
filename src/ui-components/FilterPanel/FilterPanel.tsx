@@ -12,6 +12,7 @@ export type FilterPanelPropsType = {
     secondSelectOptions : Array<string | number>
     inputPlaceholder : string
     inputOnChange: (value:string) => void
+    inputValue:string
 }
 /**
  * JSX Component( FilterPanel )
@@ -46,7 +47,7 @@ export const FilterPanel = (props: FilterPanelPropsType) => {
             <BasicSelect label={props.secondSelectLabel} options={props.secondSelectOptions}
                          onSelect={props.secondSelectOnSelect}  {...commonSelectStyle}/>
             <BasicInput mode={"search"} placeholder={props.inputPlaceholder} sx={{width: "60%"}}
-                        onChange={props.inputOnChange}/>
+                        onChange={props.inputOnChange} value={props.inputValue}/>
         </Block>
     )
 }

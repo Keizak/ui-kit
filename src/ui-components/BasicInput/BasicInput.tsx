@@ -9,6 +9,7 @@ export type BasicInputPropsType = {
     sx?: SxProps<Theme>
     positionIcon?: 'start' | 'end'
     onChange: (value:string) => void
+    value:string
 }
 /**
  * JSX Component( BasicInput )
@@ -37,6 +38,7 @@ export const BasicInput = (props: BasicInputPropsType) => {
     switch (props.mode) {
         case "search": {
             return <OutlinedInput placeholder={placeholder} sx={{...defaultStyle, ...sx}}
+                                  value={props.value}
                                   onChange={(event) => props.onChange(event.currentTarget.value)}
                                   startAdornment={
                                       <InputAdornment position={positionIcon}>
@@ -45,7 +47,9 @@ export const BasicInput = (props: BasicInputPropsType) => {
                                   }/>
         }
         case "text": {
-            return <OutlinedInput/>
+            return <OutlinedInput placeholder={placeholder} sx={{...defaultStyle, ...sx}} value={props.value}
+                                  onChange={(event) => props.onChange(event.currentTarget.value)}
+            />
         }
         default: {
             return <OutlinedInput/>

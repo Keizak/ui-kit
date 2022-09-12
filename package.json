@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.24",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,10 +24,10 @@
     "@emotion/styled": ">=11",
     "@mui/icons-material": ">=5",
     "@mui/material": ">=5",
+    "nanoid": ">=4",
     "react": ">=16",
-    "styled-components": ">=5",
     "react-router-dom": ">=6",
-    "nanoid": ">=4"
+    "styled-components": ">=5"
   },
   "husky": {
     "hooks": {
@@ -58,14 +58,21 @@
     "url": "git+https://github.com/it-incubator/ui-kit.git"
   },
   "devDependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/material": "^5.10.4",
     "@size-limit/preset-small-lib": "^8.0.1",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "@types/styled-components": "^5.1.26",
     "husky": "^8.0.1",
+    "nanoid": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
     "size-limit": "^8.0.1",
+    "styled-components": "^5.3.5",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.0",
     "typescript": "^4.8.2"

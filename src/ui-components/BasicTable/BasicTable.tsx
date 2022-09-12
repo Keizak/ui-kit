@@ -10,11 +10,13 @@ import React from "react";
 export type CustomRowType = {
     value: ReactNode,
     justifyContent: string
+    padding?:string
 }
 
 export type TableTitleType = {
     width: string,
-    value: string
+    value: string,
+    padding?:string
 }
 export type TableRowType = Record<string, ReactNode | CustomRowType>
 
@@ -45,7 +47,7 @@ export const BasicTable = (props: BasicTablePropsType) => {
             <Block name={"Table Container"} display={"block"} overflow={"auto"}>
                 <CustomTableHead titles={props.titles} minWidth={props.minWidthTable}/>
                 <CustomTableBody rows={props.rows} minWidth={props.minWidthTable}
-                                 columnStyle={props.titles.map(title => title.width)}/>
+                                 columnStyle={props.titles.map(title => ({width:title.width,padding:title.padding}))}/>
             </Block>
 
             <Block name={"Pagination"} width={"100%"} justifyContent={"flex-start"} margin={"38px 0 50px 0 "}>

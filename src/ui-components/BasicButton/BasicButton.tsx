@@ -1,12 +1,14 @@
 import {StyledButton,Text} from "../../ui-styled-components/common";
-import React, {ReactNode} from "react"
+import React, {CSSProperties, ReactNode} from "react"
 
 export type BasicButtonPropsType = {
-    mode: "normal" | "transparent" | "red" | "transparent-red"
+    mode: "normal" | "transparent" | "red" | "transparent-color"
     text: string | number | ReactNode
     icon?: ReactNode
     onClick?: (e:React.MouseEvent<HTMLButtonElement>) => void
     margin?: string | number
+    color? : string
+    style?: CSSProperties
 }
 /**
  * JSX Component( BasicButton )
@@ -27,7 +29,8 @@ export const BasicButton = (props: BasicButtonPropsType) => {
     }
     switch (props.mode) {
         case "normal":
-            return <StyledButton {...normalStyleProps} onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => props.onClick && props.onClick(e)}>
+            return <StyledButton style={props.style ? {...normalStyleProps,...props.style} : normalStyleProps}
+                                 onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => props.onClick && props.onClick(e)}>
                 {props.icon && props.icon}
                 <Text font={"Roboto Medium"} cursor={"pointer"}>{props.text}</Text>
             </StyledButton>
@@ -37,19 +40,20 @@ export const BasicButton = (props: BasicButtonPropsType) => {
                 <Text font={"Roboto Medium"} fontWeight={700} cursor={"pointer"}>{props.text}</Text>
             </StyledButton>
         case "red" :
-            return <StyledButton {...normalStyleProps} background={"#FF3636"}
+            return <StyledButton style={props.style ? {...normalStyleProps,...props.style} : normalStyleProps} background={"#FF3636"}
                                  width={"178px"} onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => props.onClick && props.onClick(e)}>
                 {props.icon && props.icon}
                 <Text color={"white"} cursor={"pointer"}>{props.text}</Text>
             </StyledButton>
-        case "transparent-red" :
-            return <StyledButton {...normalStyleProps} background={"none"} border={"1px red solid"}
+        case "transparent-color" :
+            return <StyledButton style={props.style ? {...normalStyleProps,...props.style} : normalStyleProps} background={"none"} border={`1px ${props.color} solid`}
                                  width={"178px"} onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => props.onClick && props.onClick(e)}>
                 {props.icon && props.icon}
-                <Text color={"red"} cursor={"pointer"}>{props.text}</Text>
+                <Text color={props.color} cursor={"pointer"}>{props.text}</Text>
             </StyledButton>
         default:
-            return <StyledButton onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => props.onClick && props.onClick(e)}>
+            return <StyledButton style={props.style ? {...normalStyleProps,...props.style} : normalStyleProps}
+                                 onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => props.onClick && props.onClick(e)}>
                 {props.icon && props.icon}
                 <Text font={"Roboto Medium"} cursor={"pointer"}>{props.text}</Text>
             </StyledButton>

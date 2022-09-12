@@ -3,9 +3,15 @@ import React from "react";
 import {Block} from "../../../ui-styled-components/common";
 import {TableRowType} from "../BasicTable";
 
+
+type columnStyle = {
+    width?:string,
+    padding?:string
+}
+
 type CustomTableBodyPropsType = {
     rows: TableRowType[]
-    columnStyle: string[]
+    columnStyle: columnStyle[]
     minWidth: number | string
 }
 /**
@@ -29,15 +35,18 @@ export const CustomTableBody = (props: CustomTableBodyPropsType) => {
                     width={"100%"}
                     height={"46px"}
                     borderBottom={"1px solid #CFCFCF"}
+                    flexWrap={"nowrap"}
+
                     // sx={{ '&:last-child td, &:last-child th': { border: 0 }}}
                 >
                     {Object.keys(row).map((key, index) => {
                         const currentRow = row[key] as any
                         return <Block name={"Row value"}
                                       key={nanoid()}
-                                      margin={index === 0 ? "0 0 0 24px" : ""}
+                                      margin={"0 0 0 24px"}
+                                      padding={props.columnStyle[index].padding}
                                       justifyContent={currentRow.justifyContent ? currentRow.justifyContent : "flex-start"}
-                                      width={props.columnStyle[index]}>
+                                      width={props.columnStyle[index].width}>
                             {currentRow.value ? currentRow.value : currentRow}
                         </Block>
                     })}

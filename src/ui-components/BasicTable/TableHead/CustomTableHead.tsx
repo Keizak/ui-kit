@@ -18,12 +18,15 @@ export const CustomTableHead = (props: TableHeadPropsType) => {
         <Block name={"Table Head"} background={"#E8E8E8"} width={"100%"}
                justifyContent={"flex-start"} height={"36px"}
                minWidth={props.minWidth}>
-                {props.titles.map(((title,index) => <Block name={"Title"} key={nanoid()}
-                                                           width={title.width}
-                                                           margin={index === 0 ? "0 0 0 24px" : ""}
-                                                           justifyContent={"flex-start"}>
-                    <strong>{title.value}</strong>
-                </Block>))}
+            {props.titles.map(((title) => <Block name={"Title"}
+                                                 key={nanoid()}
+                                                 flexWrap={"nowrap"}
+                                                 width={title.width}
+                                                 margin={"0 0 0 24px"}
+                                                 padding={title.padding}
+                                                 justifyContent={"flex-start"}>
+                <strong>{title.value}</strong>
+            </Block>))}
         </Block>
     )
 }

@@ -7,8 +7,9 @@ import {TableTitleType} from "../ui-components/BasicTable/BasicTable";
  */
 export const createTitle = (
     width: string,
-    value: string
-): TableTitleType => ({width, value})
+    value: string,
+    padding?: string
+): TableTitleType => ({width, value,padding})
 
 
 export type StatusTeamPropsType =  "new" | "on pause" | "not active" | "active"
