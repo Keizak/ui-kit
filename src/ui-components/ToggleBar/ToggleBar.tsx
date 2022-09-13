@@ -1,13 +1,16 @@
-import {ToggleItem} from "./ToggleItem/ToggleItem";
-import {Block} from "../../ui-styled-components/common";
-import {nanoid} from "nanoid";
-import React from "react";
+import React from 'react';
+
+import { nanoid } from 'nanoid';
+
+import { Block } from '../../ui-styled-components/common';
+
+import { ToggleItem } from './ToggleItem/ToggleItem';
 
 export type ToggleBarPropsType = {
-    selectedValue:string
-    values : string[]
-    selectValue : (value:string) => void
-}
+  selectedValue: string;
+  values: string[];
+  selectValue: (value: string) => void;
+};
 /**
  * JSX Component( ToggleBar )
  * Принимает пропсы :
@@ -16,14 +19,20 @@ export type ToggleBarPropsType = {
  * @param {(value:string) => void} props.selectValue функция для выбора значения ( Обязательный )
  */
 export const ToggleBar = (props: ToggleBarPropsType) => {
+  //-----------------------------------------------JSX-----------------------------------------------
 
-    //-----------------------------------------------JSX-----------------------------------------------
-
-    return (
-        <Block name={"Toggle"} width={"100%"}>
-            {props.values.map((value) => {
-                return <ToggleItem key={nanoid()} title={value} active={value===props.selectedValue} onClick={() => props.selectValue(value)}/>
-            })}
-        </Block>
-    )
-}
+  return (
+    <Block name={'Toggle'} width={'100%'}>
+      {props.values.map((value) => {
+        return (
+          <ToggleItem
+            key={nanoid()}
+            title={value}
+            active={value === props.selectedValue}
+            onClick={() => props.selectValue(value)}
+          />
+        );
+      })}
+    </Block>
+  );
+};

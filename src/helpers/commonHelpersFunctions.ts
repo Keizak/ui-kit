@@ -1,4 +1,4 @@
-import {TableTitleType} from "../ui-components/BasicTable/BasicTable";
+import { TableTitleType } from '../ui-components/BasicTable/BasicTable';
 
 //----------------------------------------createTitle---------------------------------------------
 
@@ -6,22 +6,26 @@ import {TableTitleType} from "../ui-components/BasicTable/BasicTable";
  * Упрощает создание заголовка таблицы
  */
 export const createTitle = (
-    width: string,
-    value: string,
-    padding?: string
-): TableTitleType => ({width, value,padding})
+  width: string,
+  value: string,
+  padding?: string
+): TableTitleType => ({ width, value, padding });
 
-
-export type StatusTeamPropsType =  "new" | "on pause" | "not active" | "active"
+export type StatusTeamPropsType = 'new' | 'on pause' | 'not active' | 'active';
 
 //----------------------------------------chooseColorFromStatus---------------------------------------------
 
-export const chooseColorFromStatus = (status:StatusTeamPropsType) => {
-    switch (status){
-        case "active": return "#2068F8"
-        case "new": return "#802DD4"
-        case "on pause": return "#EFA640"
-        case "not active": return "#737067"
-        default: return "#2068F8"
-    }
-}
+export const chooseColorFromStatus = (status: StatusTeamPropsType) => {
+  switch (status) {
+    case 'active':
+      return '#2068F8';
+    case 'new':
+      return '#802DD4';
+    case 'on pause':
+      return '#EFA640';
+    case 'not active':
+      return '#737067';
+    default:
+      return '#2068F8';
+  }
+};

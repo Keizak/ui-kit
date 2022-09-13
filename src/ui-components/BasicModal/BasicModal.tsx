@@ -1,23 +1,33 @@
-import React, {ReactNode} from "react";
-import {Box, Dialog, DialogProps, Grid, IconButton, SxProps, useTheme} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import {BasicButton} from "../BasicButton/BasicButton";
-import {Block} from "../../ui-styled-components/common";
+import React, { ReactNode } from 'react';
+
+import CloseIcon from '@mui/icons-material/Close';
+import {
+  Box,
+  Dialog,
+  DialogProps,
+  Grid,
+  IconButton,
+  SxProps,
+  useTheme,
+} from '@mui/material';
+
+import { Block } from '../../ui-styled-components/common';
+import { BasicButton } from '../BasicButton/BasicButton';
 
 export type BasicModalPropsType = {
-    open: boolean;
-    onClose: () => void;
-    title: string;
-    children: ReactNode;
-    width?: number;
-    mainContentStyle?: SxProps;
-    titleStyle?: SxProps;
-    dialogProps?: DialogProps;
-    onCancel?: () => void;
-    onCancelText? : string;
-    onSubmit?: () => void;
-    onSubmitText? : string;
-    customFooter? : ReactNode;
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+  width?: number;
+  mainContentStyle?: SxProps;
+  titleStyle?: SxProps;
+  dialogProps?: DialogProps;
+  onCancel?: () => void;
+  onCancelText?: string;
+  onSubmit?: () => void;
+  onSubmitText?: string;
+  customFooter?: ReactNode;
 };
 /**
  * JSX Component( BasicModal )
@@ -39,115 +49,126 @@ export type BasicModalPropsType = {
  * тогда пропсы ( onSubmitText,onSubmit,onCancelText,onCancel) становяться не актуальны
  */
 export const BasicModal = ({
-                               open,
-                               onClose,
-                               title,
-                               children,
-                               width,
-                               mainContentStyle,
-                               titleStyle,
-                               dialogProps,
-                               onCancel,
-                               onSubmit,
-                               onCancelText = "Cancel",
-                               onSubmitText = "Submit",
-                               customFooter
-                           }: BasicModalPropsType) => {
+  open,
+  onClose,
+  title,
+  children,
+  width,
+  mainContentStyle,
+  titleStyle,
+  dialogProps,
+  onCancel,
+  onSubmit,
+  onCancelText = 'Cancel',
+  onSubmitText = 'Submit',
+  customFooter,
+}: BasicModalPropsType) => {
+  //----------------------------------------Инициализуем значения---------------------------------------------
 
-    //----------------------------------------Инициализуем значения---------------------------------------------
+  // инициализируем значения относящиейся к стилям и общей теме
+  const theme = useTheme();
+  const isDarkTheme = theme.palette.mode === 'dark';
 
-    // инициализируем значения относящиейся к стилям и общей теме
-    const theme = useTheme();
-    const isDarkTheme = theme.palette.mode === 'dark';
+  const style = mainContentStyle
+    ? mainContentStyle
+    : {
+        width: width || 500,
+        boxShadow: 24,
+        position: 'relative',
+      };
+  const defaultTitleStyle = titleStyle
+    ? titleStyle
+    : {
+        fontWeight: 500,
+        fontSize: '18px',
+        lineHeight: '21px',
+      };
 
-    const style = mainContentStyle
-        ? mainContentStyle
-        : {
-            width: width || 500,
-            boxShadow: 24,
-            position: 'relative',
-        };
-    const defaultTitleStyle = titleStyle
-        ? titleStyle
-        : {
-            fontWeight: 500,
-            fontSize: '18px',
-            lineHeight: '21px',
-        };
+  //----------------------------------------Дополнительные функции---------------------------------------------
 
-
-    //----------------------------------------Дополнительные функции---------------------------------------------
-
-    /**
+  /**
      функция обрабатывает нажатие на кнопку отмены
      выполняет внутренею логику по закрытию модалки  в дополнение может выполонрить логику переданную в пропсах
      комопненте под именем onCansel
      */
-    const cancelHandler = () => {
-        onCancel && onCancel()
-        onClose()
-    }
+  const cancelHandler = () => {
+    onCancel && onCancel();
+    onClose();
+  };
 
-    /**
+  /**
      функция обрабатывает нажатие на кнопку сабмитв
      выполняет внутренею логику по закрытию модалки  в дополнение может выполонрить логику переданную в пропсах
      комопненте под именем onSubmit
      */
-    const submitHandler = () => {
-        onSubmit && onSubmit()
-        onClose()
-    }
+  const submitHandler = () => {
+    onSubmit && onSubmit();
+    onClose();
+  };
 
+  //----------------------------------------------JSX----------------------------------------------------------
 
-    //----------------------------------------------JSX----------------------------------------------------------
-
-    return (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            PaperProps={{
-                sx: {
-                    backgroundColor: isDarkTheme ? '#182636' : '#FFFFFF',
-                    backgroundImage: 'none',
-                    maxWidth: '100%',
-                },
-            }}
-            {...dialogProps}
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      PaperProps={{
+        sx: {
+          backgroundColor: isDarkTheme ? '#182636' : '#FFFFFF',
+          backgroundImage: 'none',
+          maxWidth: '100%',
+        },
+      }}
+      {...dialogProps}
+    >
+      <Box sx={style}>
+        <Grid
+          container
+          direction="row"
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          style={{
+            padding: '0 24px',
+            height: '60px',
+            borderBottom: isDarkTheme
+              ? '1px solid rgba(0, 0, 0, 0.1)'
+              : '1px solid #E5E5E5',
+          }}
         >
-            <Box sx={style}>
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent={'space-between'}
-                    alignItems={'center'}
-                    style={{
-                        padding: '0 24px',
-                        height: '60px',
-                        borderBottom: isDarkTheme
-                            ? '1px solid rgba(0, 0, 0, 0.1)'
-                            : '1px solid #E5E5E5',
-                    }}
-                >
-                    <Box sx={defaultTitleStyle}><strong>{title}</strong></Box>
-                    <Box justifyContent="center" alignItems="center" display="flex">
-                        <IconButton onClick={onClose} size="small">
-                            <CloseIcon/>
-                        </IconButton>
-                    </Box>
-                </Grid>
+          <Box sx={defaultTitleStyle}>
+            <strong>{title}</strong>
+          </Box>
+          <Box justifyContent="center" alignItems="center" display="flex">
+            <IconButton onClick={onClose} size="small">
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Grid>
 
-                <Grid style={{padding: '15px 24px 15px 24px', overflow: 'auto'}}>
-                    {children}
-                </Grid>
-                {customFooter ? customFooter :
-                    <Block name={"Buttons"} padding={"24px"} justifyContent={"space-between"}>
-                        <BasicButton mode={"normal"} text={onCancelText} onClick={cancelHandler}/>
-                        <BasicButton mode={"red"} text={onSubmitText} onClick={submitHandler}/>
-                    </Block>
-                }
-
-            </Box>
-        </Dialog>
-    );
+        <Grid style={{ padding: '15px 24px 15px 24px', overflow: 'auto' }}>
+          {children}
+        </Grid>
+        {customFooter ? (
+          customFooter
+        ) : (
+          <Block
+            name={'Buttons'}
+            padding={'24px'}
+            justifyContent={'space-between'}
+          >
+            <BasicButton
+              mode={'normal'}
+              text={onCancelText}
+              onClick={cancelHandler}
+            />
+            <BasicButton
+              mode={'red'}
+              text={onSubmitText}
+              onClick={submitHandler}
+            />
+          </Block>
+        )}
+      </Box>
+    </Dialog>
+  );
 };
-

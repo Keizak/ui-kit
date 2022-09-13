@@ -1,22 +1,28 @@
-import {Box, FormControl, MenuItem, OutlinedInput, SelectChangeEvent, Theme} from "@mui/material";
-import React, {ReactNode, useState} from "react";
-import {StyledKeyboardArrowDownIcon, StyledSelect} from "../../ui-styled-components/common";
-import {nanoid} from "nanoid";
-import {SxProps} from "@mui/system";
+import React, { useState } from 'react';
+
+import { SelectChangeEvent, Theme } from '@mui/material';
+import { SxProps } from '@mui/system';
+
+import { Block, Text } from '../../ui-styled-components/common';
+
+import { DefaultBasicSelect } from './DefaultBasicSelect';
+
+type modeType = 'default' | 'withLabel';
 
 export type BasicSelectProps = {
-    label: string
-    options: Array<string | number>
-    onSelect: (value: number | string) => void
-    minWidth?: number | string
-    size?: "small" | "medium" | undefined
-    opacityText?: number
-    margin?: number | string
-    height?: number | string
-    colorIcon? : string
-    colorText? : string
-    sx?: SxProps<Theme>
-}
+  label: string;
+  options: Array<string | number>;
+  onSelect: (value: number | string) => void;
+  minWidth?: number | string;
+  size?: 'small' | 'medium' | undefined;
+  opacityText?: number;
+  margin?: number | string;
+  height?: number | string;
+  colorIcon?: string;
+  colorText?: string;
+  sx?: SxProps<Theme>;
+  mode?: modeType | undefined;
+};
 
 /**
  * JSX Component ( BasicSelect )
@@ -33,47 +39,78 @@ export type BasicSelectProps = {
  * @param  {string} props.colorIcon - Цвет иконки ( необязательный )
  * @param  {string} props.colorText - Цвет текста в селекторе ( необязательный )
  * @param  {SxProps<Theme>} props.sx - дополнительные стили которые можно наложить поверх действующих ( необязательный )
+ * @param  {modeType} props.mode - режим отображения селектора
  */
 export function BasicSelect(props: BasicSelectProps) {
+  //--------------------------------------------Инициализируем переменные--------------------------------------------
 
-    //--------------------------------------------Инициализируем переменные--------------------------------------------
+  const [value, setValue] = useState<string>('');
+  const {
+    minWidth = 224,
+    size = 'small',
+    height = '36px',
+    mode = 'default',
+    ...restProps
+  } = props;
 
-    const [value, setValue] = useState<string>("");
-    const {minWidth = 224, size = "small", height = "36px"} = props
+  //---------------------------------------------Дополнительные функции---------------------------------------------
 
-    //---------------------------------------------Дополнительные функции---------------------------------------------
+  /**
+   * Функция обработчик выбора значения
+   */
+  const handleChange = (event: SelectChangeEvent | any) => {
+    setValue(event.target.value as string);
+    props.onSelect && props.onSelect(event.target.value as number);
+  };
 
-    /**
-     * Функция обработчик выбора значения
-     */
-    const handleChange = (event: SelectChangeEvent | any) => {
-        setValue(event.target.value as string);
-        props.onSelect && props.onSelect(event.target.value as number)
-    };
+  const chooseMode = (mode: modeType) => {
+    switch (mode) {
+      case 'default': {
+        return (
+          <DefaultBasicSelect
+            minWidth={minWidth}
+            size={size}
+            value={value}
+            height={height}
+            handleChange={handleChange}
+            {...restProps}
+          />
+        );
+      }
+      case 'withLabel': {
+        return (
+          <Block
+            name={'Course filter'}
+            flexDirection={'column'}
+            alignItems={'flex-start'}
+            margin={'0 14px 20px 0'}
+          >
+            <Text opacityText={0.5} fontSize={'14px'} margin={'0 0 8px 0'}>
+              Course
+            </Text>
+            <DefaultBasicSelect
+              {...props}
+              value={value}
+              handleChange={handleChange}
+            />
+          </Block>
+        );
+      }
+      default:
+        return (
+          <DefaultBasicSelect
+            minWidth={minWidth}
+            size={size}
+            value={value}
+            height={height}
+            handleChange={handleChange}
+            {...restProps}
+          />
+        );
+    }
+  };
 
+  //-----------------------------------------------JSX-----------------------------------------------
 
-    //-----------------------------------------------JSX-----------------------------------------------
-
-    return (
-        <Box sx={{minWidth: minWidth, margin: props.margin}}>
-            <FormControl fullWidth sx={{height: height, ...props.sx}}>
-                <StyledSelect
-                    displayEmpty
-                    value={value}
-                    onChange={handleChange}
-                    input={<OutlinedInput/>}
-                    size={size}
-                    renderValue={(value) => value ? value as ReactNode :
-                        <em style={{opacity: props.opacityText,color:props.colorText}}>{props.label}</em>
-                    }
-                    IconComponent={(classes) => {
-                        return <StyledKeyboardArrowDownIcon className={classes} sx={{color:props.colorIcon}}/>
-                    }}
-                >
-                    {props.options.map((option) => <MenuItem key={nanoid()} value={option}>{option}</MenuItem>)}
-                </StyledSelect>
-            </FormControl>
-        </Box>
-    );
+  return chooseMode(mode);
 }
-

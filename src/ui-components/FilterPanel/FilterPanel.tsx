@@ -1,19 +1,20 @@
-import {Block} from "../../ui-styled-components/common"
-import {BasicSelect} from "../BasicSelect/BasicSelect";
-import {BasicInput} from "../BasicInput/BasicInput";
-import React from "react";
+import React from 'react';
+
+import { Block } from '../../ui-styled-components/common';
+import { BasicInput } from '../BasicInput/BasicInput';
+import { BasicSelect } from '../BasicSelect/BasicSelect';
 
 export type FilterPanelPropsType = {
-    firstSelectLabel : string,
-    firstSelectOnSelect : (value:string | number) => void
-    firstSelectOptions : Array<string | number>
-    secondSelectLabel: string
-    secondSelectOnSelect : (value:string | number) => void
-    secondSelectOptions : Array<string | number>
-    inputPlaceholder : string
-    inputOnChange: (value:string) => void
-    inputValue:string
-}
+  firstSelectLabel: string;
+  firstSelectOnSelect: (value: string | number) => void;
+  firstSelectOptions: Array<string | number>;
+  secondSelectLabel: string;
+  secondSelectOnSelect: (value: string | number) => void;
+  secondSelectOptions: Array<string | number>;
+  inputPlaceholder: string;
+  inputOnChange: (value: string) => void;
+  inputValue: string;
+};
 /**
  * JSX Component( FilterPanel )
  * Принимает пропсы :
@@ -27,27 +28,44 @@ export type FilterPanelPropsType = {
  * @param {(value:string) => void} props.inputOnChange функция обработчик измененния значения инпута ( Обязательный )
  */
 export const FilterPanel = (props: FilterPanelPropsType) => {
+  //--------------------------------------------Инициализируем переменные--------------------------------------------
 
-    //--------------------------------------------Инициализируем переменные--------------------------------------------
+  /**
+   * Обозначаем общие параметры пропсов для более легкой передачи в компоненты
+   */
+  const commonSelectStyle = {
+    margin: '0 24px 0 0',
+    minWidth: '17%',
+  };
 
-    /**
-     * Обозначаем общие параметры пропсов для более легкой передачи в компоненты
-     */
-    const commonSelectStyle = {
-        margin: "0 24px 0 0",
-        minWidth: "17%",
-    }
+  //-----------------------------------------------JSX-----------------------------------------------
 
-    //-----------------------------------------------JSX-----------------------------------------------
-
-    return (
-        <Block name={"Filter Panel"} width={"100%"} margin={"24px 0 0 0"} justifyContent={"space-between"}>
-            <BasicSelect label={props.firstSelectLabel} options={props.firstSelectOptions}
-                         onSelect={props.firstSelectOnSelect} {...commonSelectStyle}/>
-            <BasicSelect label={props.secondSelectLabel} options={props.secondSelectOptions}
-                         onSelect={props.secondSelectOnSelect}  {...commonSelectStyle}/>
-            <BasicInput mode={"search"} placeholder={props.inputPlaceholder} sx={{width: "60%"}}
-                        onChange={props.inputOnChange} value={props.inputValue}/>
-        </Block>
-    )
-}
+  return (
+    <Block
+      name={'Filter Panel'}
+      width={'100%'}
+      margin={'24px 0 0 0'}
+      justifyContent={'space-between'}
+    >
+      <BasicSelect
+        label={props.firstSelectLabel}
+        options={props.firstSelectOptions}
+        onSelect={props.firstSelectOnSelect}
+        {...commonSelectStyle}
+      />
+      <BasicSelect
+        label={props.secondSelectLabel}
+        options={props.secondSelectOptions}
+        onSelect={props.secondSelectOnSelect}
+        {...commonSelectStyle}
+      />
+      <BasicInput
+        mode={'search'}
+        placeholder={props.inputPlaceholder}
+        sx={{ width: '60%' }}
+        onChange={props.inputOnChange}
+        value={props.inputValue}
+      />
+    </Block>
+  );
+};
