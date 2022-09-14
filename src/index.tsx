@@ -7,6 +7,7 @@ import {
   BasicButton,
   BasicButtonPropsType,
 } from './ui-components/BasicButton/BasicButton';
+import {BasicDatePicker, BasicDatePickerPropsType } from './ui-components/BasicDatePicker/BasicDatePicker';
 import {
   BasicInput,
   BasicInputPropsType,
@@ -30,6 +31,7 @@ import {
   TableTitleType,
   CustomRowType,
 } from './ui-components/BasicTable/BasicTable';
+import { BoxWithLabel } from './ui-components/BoxWithLabel/BoxWithLabel';
 import {
   FilterPanel,
   FilterPanelPropsType,
@@ -109,4 +111,7 @@ export {
   chooseColorFromStatus,
   createTitle,
   StatusTeamPropsType,
+  BasicDatePicker,
+  BasicDatePickerPropsType,
+  BoxWithLabel
 };

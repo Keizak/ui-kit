@@ -26,6 +26,7 @@ export type FilterPanelPropsType = {
  * @param {Array<string | number>} props.secondSelectOptions массив данных для второго селектора ( Обязательный )
  * @param {string} props.inputPlaceholder полпрозрачное значение на инпуте без введеного текста ( Обязательный )
  * @param {(value:string) => void} props.inputOnChange функция обработчик измененния значения инпута ( Обязательный )
+ * @param {string} props.inputValue функция обработчик измененния значения инпута ( Обязательный )
  */
 export const FilterPanel = (props: FilterPanelPropsType) => {
   //--------------------------------------------Инициализируем переменные--------------------------------------------
