@@ -81,7 +81,7 @@ export const Block = styled.div`
     props.background ? props.background : 'none'};
   box-shadow: ${(props: BlockProps) =>
     props.boxShadow ? props.boxShadow : 'none'};
-  border: ${(props: BlockProps) => (props.border ? props.border : '')};
+  border: ${(props: BlockProps) => (props.border ? props.border : '1px solid red')};
   flex-wrap: ${(props: BlockProps) =>
     props.flexWrap ? props.flexWrap : 'wrap'};
   border-radius: ${(props: BlockProps) =>
