@@ -1,9 +1,10 @@
-import React, { ChangeEvent, useState, memo } from 'react';
+import { ChangeEvent, useState, memo } from 'react';
 
 import { Pagination } from '@mui/material';
 
 import { Block, Text } from '../../ui-styled-components/common';
 import { BasicSelect } from '../BasicSelect/BasicSelect';
+import React from 'react';
 
 export type BasicPaginationPropsType = {
   currentPage?: number;
