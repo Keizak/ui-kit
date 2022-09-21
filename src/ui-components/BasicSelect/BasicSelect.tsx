@@ -70,7 +70,7 @@ export function BasicSelect(props: BasicSelectProps) {
                   <em style={{opacity: props.opacityText,color:props.colorText}}>{props.label}</em>
               }
               IconComponent={(classes) => {
-                return <StyledKeyboardArrowDownIcon className={classes} sx={{color:props.colorIcon}}/>
+                return <StyledKeyboardArrowDownIcon className={classes.className} sx={{color:props.colorIcon}}/>
               }}
           >
             {props.options.map((option) => <MenuItem key={nanoid()} value={option}>{option}</MenuItem>)}
