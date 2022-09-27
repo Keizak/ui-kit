@@ -23,7 +23,7 @@ export const NavBar = (props:NavBarPropsType) => {
   const [currentCourse,setCurrentCourse] = useState(selectOptions[0])
 
   const onSelectHandler = (value:string | number) => {
-    props.onSelect && props.onSelect
+    props.onSelect && props.onSelect(value.toString())
     setCurrentCourse(value.toString())
     console.log(currentCourse,"-selected")
   }
@@ -62,7 +62,7 @@ export const NavBar = (props:NavBarPropsType) => {
             margin={'10px 40px 10px 0'}
           >
             <BasicSelect
-              label={'Name course'}
+              label={currentCourse}
               options={selectOptions}
               onSelect={onSelectHandler}
             />
