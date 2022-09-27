@@ -1,19 +1,6 @@
 import React from 'react'
-import {makeStyles} from '@mui/styles'
 import {BasicPagination} from "../BasicPagination/BasicPagination";
-
-const useStyles = makeStyles(() => ({
-    root: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        '& span': {
-            marginTop: 0,
-            marginLeft: '10px',
-        },
-    },
-}))
+import { Block } from '../../ui-styled-components/common';
 
 type PaginationWithSelectRows = {
     setPageSize: (pageSize: number) => void
@@ -34,14 +21,12 @@ export const PaginationWithSelectRows: React.FC<PaginationWithSelectRows & IProp
                                                                                           pageSize,
                                                                                           setPageSize,
                                                                                       }) => {
-    const classes = useStyles()
-
     const rowsHandleChange = (value: any) => {
         setPageSize(value)
     }
 
     return (
-        <div className={classes.root}>
+        <Block name={"Pagination container"} >
             <BasicPagination
                 currentPage={currentPage}
                 optionsCountOnPage={['20', '50', '100']}
@@ -50,6 +35,6 @@ export const PaginationWithSelectRows: React.FC<PaginationWithSelectRows & IProp
                 setCurrentPage={setCurrentPage}
                 countPages={pagesCount}
             />
-        </div>
+        </Block>
     )
 }
