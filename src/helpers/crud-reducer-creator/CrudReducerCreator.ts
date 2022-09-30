@@ -1,7 +1,7 @@
 import {IBaseEntity, IItemsResult, InferActionsTypes, ThunkType} from "../../types/types";
 import {Action} from "redux";
 import {BaseAPI} from "./base-api/BaseApi";
-import { commonAsyncHandler } from "../common-async-handler/common-async-handler";
+import {commonAsyncHandler, IActions} from "../common-async-handler/common-async-handler";
 
 export type CrudStateType<TUpdate, TEntity extends TUpdate & IBaseEntity> = {
     items: Array<TEntity>
@@ -19,6 +19,17 @@ export type CrudStateType<TUpdate, TEntity extends TUpdate & IBaseEntity> = {
     }[]
 }
 
+enum EditingEntityStatuses {
+    None,
+    InProgress,
+    Success,
+    Error,
+}
+
+interface AppActions extends IActions {
+    setEditingEntityStatus: (value: EditingEntityStatuses) => void
+}
+
 type getAllDataType<TEntity> = {
     items: Array<TEntity>
     page: number
@@ -27,18 +38,15 @@ type getAllDataType<TEntity> = {
     totalCount: number
 }
 
-export const crudReducerCreator = <
-    TUpdate,
+export const crudReducerCreator = <TUpdate,
     TEntity extends TUpdate & IBaseEntity,
     AppActionsType extends Action<any>,
     AppStateType,
     TGridSortFields extends string | null = null,
-    TPatch = {}
-    >(
+    TPatch = {}>(
     api: BaseAPI<TUpdate, TEntity, TPatch>,
     reducerName: string,
-    AppActions: any,
-    EditingEntityStatuses: any,
+    AppActions: AppActions,
     additionalReducer?: (
         state: CrudStateType<TUpdate, TEntity>,
         action: any
@@ -69,9 +77,9 @@ export const crudReducerCreator = <
                 id,
             } as const),
         patchSuccess: (item: TEntity) =>
-            ({ type: `labs/crud/${reducerName}/patch-success`, item } as const),
+            ({type: `labs/crud/${reducerName}/patch-success`, item} as const),
         deleteSuccess: (id: string) =>
-            ({ type: `labs/crud/${reducerName}/delete-success`, id } as const),
+            ({type: `labs/crud/${reducerName}/delete-success`, id} as const),
         getByIdSuccess: (item: TUpdate | null) =>
             ({
                 type: `labs/crud/${reducerName}/get-by-id-success`,
@@ -83,7 +91,7 @@ export const crudReducerCreator = <
                 data,
             } as const),
         setSort: (sortBy: string) =>
-            ({ type: `labs/crud/${reducerName}/set-sort`, sortBy } as const),
+            ({type: `labs/crud/${reducerName}/set-sort`, sortBy} as const),
         setSortDirection: (sortDirection: 'asc' | 'desc') =>
             ({
                 type: `labs/crud/${reducerName}/set-sort-direction`,
@@ -120,11 +128,10 @@ export const crudReducerCreator = <
         switch (action.type) {
             case `labs/crud/${reducerName}/create-success`:
                 // @ts-ignore
-                return { ...state, items: [action.item, ...state.items] }
+                return {...state, items: [action.item, ...state.items]}
             case `labs/crud/${reducerName}/update-success`:
                 // @ts-ignore
-                return {...state, items: state.items.map((i) => i.id !== action.id ? i : { ...i, ...action.model }),
-                }
+                return {...state, items: state.items.map((i) => i.id !== action.id ? i : {...i, ...action.model}),}
             case `labs/crud/${reducerName}/patch-success`:
                 // @ts-ignore
                 return {...state, items: state.items.map((i) => i.id! == action.item.id ? i : action.item),}
@@ -133,22 +140,22 @@ export const crudReducerCreator = <
                 return {...state, items: state.items.filter((i) => i.id !== action.id),}
             case `labs/crud/${reducerName}/get-by-id-success`:
                 // @ts-ignore
-                return { ...state, editingItem: action.item }
+                return {...state, editingItem: action.item}
             case `labs/crud/${reducerName}/get-all-success`:
                 // @ts-ignore
                 return {...state, items: action.data.items, pagesCount: action.data.pagesCount, totalItemsCount: action.data.totalCount,}
             case `labs/crud/${reducerName}/set-sort`:
                 // @ts-ignore
-                return { ...state, sortBy: action.sortBy }
+                return {...state, sortBy: action.sortBy}
             case `labs/crud/${reducerName}/set-sort-direction`:
                 // @ts-ignore
-                return { ...state, sortDirection: action.sortDirection }
+                return {...state, sortDirection: action.sortDirection}
             case `labs/crud/${reducerName}/set-current-page`:
                 // @ts-ignore
-                return { ...state, currentPage: action.page }
+                return {...state, currentPage: action.page}
             case `labs/crud/${reducerName}/set-page-size`:
                 // @ts-ignore
-                return { ...state, pageSize: action.pageSize }
+                return {...state, pageSize: action.pageSize}
             case `labs/crud/${reducerName}/set-search-terms`:
                 // eslint-disable-next-line no-case-declarations
                 let terms = state.searchTerms.filter(
@@ -170,10 +177,10 @@ export const crudReducerCreator = <
                         newTerm.propValue.length > 0) ||
                     (newTerm.propType === '0' && newTerm.propValue !== null)
                 ) {
-                    return { ...state, searchTerms: [...terms, newTerm] }
+                    return {...state, searchTerms: [...terms, newTerm]}
                 }
 
-                return { ...state, searchTerms: [...terms] }
+                return {...state, searchTerms: [...terms]}
             default:
                 return additionalReducer
                     ? additionalReducer(state, action)
@@ -195,11 +202,7 @@ export const crudReducerCreator = <
                     const result = await api.path(editingItemId, updateModel)
                     if (result.resultCode === 0) {
                         dispatch(actions.patchSuccess(result.data))
-                        dispatch(
-                            AppActions.setEditingEntityStatus(
-                                EditingEntityStatuses.Success
-                            )
-                        )
+                        dispatch(AppActions.setEditingEntityStatus(EditingEntityStatuses.Success))
                     }
                     return result
                 }, dispatch, {...AppActions})
@@ -215,12 +218,7 @@ export const crudReducerCreator = <
                     const result = await api.update(editingItemId, updateModel)
                     if (result.resultCode === 0) {
                         // @ts-ignore
-                        //  dispatch(actions.updateSuccess(updateModel, editingItemId))
-                        dispatch(
-                            AppActions.setEditingEntityStatus(
-                                EditingEntityStatuses.Success
-                            )
-                        )
+                        dispatch(AppActions.setEditingEntityStatus(EditingEntityStatuses.Success))
                         let data = await api.getById(editingItemId)
                         // @ts-ignore
                         dispatch(actions.updateSuccess(data, editingItemId))
@@ -238,11 +236,8 @@ export const crudReducerCreator = <
                     if (result.resultCode === 0) {
                         // @ts-ignore
                         dispatch(actions.deleteSuccess(editingItemId))
-                        dispatch(
-                            AppActions.setEditingEntityStatus(
-                                EditingEntityStatuses.Success
-                            )
-                        )
+                        // @ts-ignore
+                        dispatch(AppActions.setEditingEntityStatus(EditingEntityStatuses.Success))
                     }
                     return result
                 }, dispatch, {...AppActions})
@@ -301,11 +296,8 @@ export const crudReducerCreator = <
                 if (result.resultCode === 0) {
                     // @ts-ignore
                     dispatch(actions.createSuccess(result.data.item))
-                    dispatch(
-                        AppActions.setEditingEntityStatus(
-                            EditingEntityStatuses.Success
-                        )
-                    )
+                    // @ts-ignore
+                    dispatch(AppActions.setEditingEntityStatus(EditingEntityStatuses.Success))
                 }
                 return result
             }, dispatch, {...AppActions})

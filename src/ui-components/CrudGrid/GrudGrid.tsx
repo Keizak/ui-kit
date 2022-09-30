@@ -20,16 +20,39 @@ import {createRows} from "../../helpers/createRows";
 import {PaginationWithSelectRows} from "../PaginationWithSelectedRows/PaginationWithSelectedRows";
 import {EnhancedTableToolbar} from "../TableToolbar/TableToolbar";
 import {EnhancedTableHead} from "../TableHead/TableHead";
+import {createStyles, makeStyles} from "@mui/styles";
+
+export const useCRUDGridStyles = makeStyles(() =>
+    createStyles({
+        root: {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+        },
+        paper: {
+            /*width: '70%',*/
+            marginTop: '20px',
+            border: 'solid 1px black',
+        },
+        table: {
+            minWidth: 750,
+        },
+        tableWrapper: {
+            overflowX: 'auto',
+        },
+    })
+)
 
 export const withCRUDGrid = <TUpdate,
-    TEntity extends TUpdate & IBaseEntity, CrudFlowsNamesTypes, RootRoutingKeys, AppStateType>(
+    TEntity extends TUpdate & IBaseEntity, CrudFlowsNamesTypes, RootRoutingKeys, AppStateType, CrudFlowsType>(
     entityName: CrudFlowsNamesTypes,
     rootRoutingKey: RootRoutingKeys,
     gridStructureData: GridItemElementType<TEntity, AppStateType>[],
     editFormData: FormElementType<TEntity>[] | null,
     title: string,
-    crudFlows: any,
-    navigateUrl: any,
+    crudFlows: CrudFlowsType,
+    navigateUrl: (controllerName: RootRoutingKeys, actionName: string, id?: number) => string,
     mdtp: { [key: string]: (...args: any[]) => any } = {},
     settings: {
         sortBy?: string | null
@@ -47,7 +70,6 @@ export const withCRUDGrid = <TUpdate,
         useAppDispatch: any,
         useHostLabsSelector: any,
         useHostSelector: any,
-        useCRUDGridStyles: any,
         useForm: any,
         useActions: any
     },
@@ -65,7 +87,7 @@ export const withCRUDGrid = <TUpdate,
         const [order, setOrder] = React.useState<'asc' | 'desc'>('asc')
         const [orderBy, setOrderBy] = React.useState('')
 
-        const classes = appHooks.useCRUDGridStyles()
+        const classes = useCRUDGridStyles()
         let queryParams = {...useParams()}
         let {control, register} = appHooks.useForm()
         let [search, setSearch] = useCustomSearchParams<{
@@ -73,7 +95,9 @@ export const withCRUDGrid = <TUpdate,
             rows: string
         }>()
 
+        // @ts-ignore
         let thunks = crudFlows[entityName].thunks
+        // @ts-ignore
         let actions = appHooks.useActions(crudFlows[entityName].actions)
 
         const page = crudState.currentPage

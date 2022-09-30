@@ -1,4 +1,4 @@
-import {Actions, commonAsyncHandler, RequestStatuses } from './helpers/common-async-handler/common-async-handler';
+import {Actions, commonAsyncHandler, configurateCommonAsyncHandler, RequestStatuses } from './helpers/common-async-handler/common-async-handler';
 import {
   chooseColorFromStatus,
   createTitle,
@@ -123,5 +123,6 @@ export {
   BaseAPI,
   commonAsyncHandler,
   Actions,
-  RequestStatuses
+  RequestStatuses,
+  configurateCommonAsyncHandler
 };
