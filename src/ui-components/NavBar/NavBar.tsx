@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import { Block, Text } from '../../ui-styled-components/common';
 import { BasicButton } from '../BasicButton/BasicButton';
@@ -6,27 +6,26 @@ import { BasicSelect } from '../BasicSelect/BasicSelect';
 import { LogoutSVG } from '../Svg/LogoutSvg';
 import { MenuBaraSvg } from '../Svg/MenuBaraSvg';
 
-
 type NavBarPropsType = {
-  selectOptions? : string []
-  userName?: string
-  onSelect: (value:string) => void
-}
+  selectOptions?: string[];
+  userName?: string;
+  onSelect: (value: string) => void;
+};
 /**
  * JSX Component ( NavBar )
  * Всегда отрисовывается сверху сайта
  * Не примает никакиз пропсов
  */
-export const NavBar = (props:NavBarPropsType) => {
+export const NavBar = (props: NavBarPropsType) => {
   const name = props.userName || 'Елизавета Спивак';
   const selectOptions = props.selectOptions || ['Front-end', 'Back-End'];
-  const [currentCourse,setCurrentCourse] = useState(selectOptions[0])
+  const [currentCourse, setCurrentCourse] = useState(selectOptions[0]);
 
-  const onSelectHandler = (value:string | number) => {
-    props.onSelect && props.onSelect(value.toString())
-    setCurrentCourse(value.toString())
-    console.log(currentCourse,"-selected")
-  }
+  const onSelectHandler = (value: string | number) => {
+    props.onSelect && props.onSelect(value.toString());
+    setCurrentCourse(value.toString());
+    console.log(currentCourse, '-selected');
+  };
 
   return (
     <Block

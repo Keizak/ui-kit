@@ -1,9 +1,10 @@
-import {Text, Block} from "../../ui-styled-components/common";
-import React, {PropsWithChildren} from "react";
+import React, { PropsWithChildren } from 'react';
+
+import { Text, Block } from '../../ui-styled-components/common';
 
 interface BoxWithLabelPropsType extends PropsWithChildren {
-    label: string
-    margin?: string
+  label: string;
+  margin?: string;
 }
 
 /**
@@ -12,24 +13,23 @@ interface BoxWithLabelPropsType extends PropsWithChildren {
  * @param {string} props.label
  */
 export const BoxWithLabel = (props: BoxWithLabelPropsType) => {
+  //--------------------------------------------Инициализируем переменные---------------------------------------------
 
-    //--------------------------------------------Инициализируем переменные---------------------------------------------
+  const { margin = '0 14px 20px 0' } = props;
 
-    const {margin = "0 14px 20px 0"} = props
+  //--------------------------------------------------------JSX-------------------------------------------------------
 
-    //--------------------------------------------------------JSX-------------------------------------------------------
-
-    return (
-        <Block
-            name={'Select with label'}
-            flexDirection={'column'}
-            alignItems={'flex-start'}
-            margin={margin}
-        >
-            <Text opacityText={0.5} fontSize={'14px'} margin={'0 0 8px 0'}>
-                {props.label}
-            </Text>
-            {props.children}
-        </Block>
-    )
-}
+  return (
+    <Block
+      name={'Select with label'}
+      flexDirection={'column'}
+      alignItems={'flex-start'}
+      margin={margin}
+    >
+      <Text opacityText={0.5} fontSize={'14px'} margin={'0 0 8px 0'}>
+        {props.label}
+      </Text>
+      {props.children}
+    </Block>
+  );
+};

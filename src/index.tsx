@@ -1,4 +1,9 @@
-import {Actions, commonAsyncHandler, configurateCommonAsyncHandler, RequestStatuses } from './helpers/common-async-handler/common-async-handler';
+import {
+  IActions,
+  commonAsyncHandler,
+  configurateCommonAsyncHandler,
+  RequestStatuses,
+} from './helpers/common-async-handler/common-async-handler';
 import {
   chooseColorFromStatus,
   createTitle,
@@ -10,7 +15,10 @@ import {
   BasicButton,
   BasicButtonPropsType,
 } from './ui-components/BasicButton/BasicButton';
-import {BasicDatePicker, BasicDatePickerPropsType } from './ui-components/BasicDatePicker/BasicDatePicker';
+import {
+  BasicDatePicker,
+  BasicDatePickerPropsType,
+} from './ui-components/BasicDatePicker/BasicDatePicker';
 import {
   BasicInput,
   BasicInputPropsType,
@@ -122,7 +130,7 @@ export {
   crudReducerCreator,
   BaseAPI,
   commonAsyncHandler,
-  Actions,
+  IActions,
   RequestStatuses,
-  configurateCommonAsyncHandler
+  configurateCommonAsyncHandler,
 };
