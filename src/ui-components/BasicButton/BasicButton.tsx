@@ -10,6 +10,7 @@ export type BasicButtonPropsType = {
   margin?: string | number;
   color?: string;
   style?: CSSProperties;
+  disabled?: boolean;
 };
 /**
  * JSX Component( BasicButton )
@@ -18,7 +19,10 @@ export type BasicButtonPropsType = {
  * @param {string | number | ReactNode} props.text - текст отображаемый в кнопке (Обязательный)
  * @param {ReactNode} props.icon - Иконка перед текстом (Необязательный)
  * @param { (e?:Event) => void} props.onClick - Действие выполняемое после нажатия на кнопку,получает в себя ивент
- * @param {string | number} props.margin - Внешгие отступы, имеют дефолтные значения  margin:"10px 5px 10px 5px",
+ * @param {string | number} props.margin - Внешгие отступы, имеют дефолтные значения  margin:"10px 5px 10px 5px",(Необязательный)
+ * @param {string} props.color - Цвет текста в кнопке (Необязательный)
+ * @param {CSSProperties} props.style - Стиль применяемый к кнопке(Необязательный)
+ * @param {boolean} props.disabled - параметр отвечающий за дизейбл кнопки (Необязательный)
  * */
 export const BasicButton = (props: BasicButtonPropsType) => {
   const normalStyleProps = {
@@ -29,6 +33,8 @@ export const BasicButton = (props: BasicButtonPropsType) => {
     margin: props.margin ? props.margin : '10px 5px 10px 5px',
     borderRadius: '2px',
   };
+
+  const { disabled = false } = props;
 
   const getStyledButton = () => {
     switch (props.mode) {
@@ -43,6 +49,7 @@ export const BasicButton = (props: BasicButtonPropsType) => {
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
               props.onClick && props.onClick(e)
             }
+            disabled={disabled}
           >
             {props.icon && props.icon}
             <Text font={'Roboto Medium'} cursor={'pointer'}>
@@ -57,6 +64,7 @@ export const BasicButton = (props: BasicButtonPropsType) => {
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
               props.onClick && props.onClick(e)
             }
+            disabled={disabled}
           >
             {props.icon && props.icon}
             <Text font={'Roboto Medium'} fontWeight={700} cursor={'pointer'}>
@@ -77,6 +85,7 @@ export const BasicButton = (props: BasicButtonPropsType) => {
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
               props.onClick && props.onClick(e)
             }
+            disabled={disabled}
           >
             {props.icon && props.icon}
             <Text color={'white'} cursor={'pointer'}>
@@ -98,6 +107,7 @@ export const BasicButton = (props: BasicButtonPropsType) => {
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
               props.onClick && props.onClick(e)
             }
+            disabled={disabled}
           >
             {props.icon && props.icon}
             <Text color={props.color} cursor={'pointer'}>
@@ -116,6 +126,7 @@ export const BasicButton = (props: BasicButtonPropsType) => {
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
               props.onClick && props.onClick(e)
             }
+            disabled={disabled}
           >
             {props.icon && props.icon}
             <Text font={'Roboto Medium'} cursor={'pointer'}>

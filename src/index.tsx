@@ -1,7 +1,7 @@
 import {
-  IActions,
   commonAsyncHandler,
   configurateCommonAsyncHandler,
+  IActions,
   RequestStatuses,
 } from './helpers/common-async-handler/common-async-handler';
 import {
@@ -38,11 +38,12 @@ import {
 import {
   BasicTable,
   BasicTablePropsType,
+  CustomRowType,
   TableRowType,
   TableTitleType,
-  CustomRowType,
 } from './ui-components/BasicTable/BasicTable';
 import { BoxWithLabel } from './ui-components/BoxWithLabel/BoxWithLabel';
+import { CronComponent } from './ui-components/CronSelect/CronComponent';
 import { withCRUDGrid } from './ui-components/CrudGrid/GrudGrid';
 import {
   FilterPanel,
@@ -70,11 +71,11 @@ import {
 } from './ui-components/ToggleBar/ToggleBar';
 import {
   Block,
-  StyledSvg,
-  StyledSelect,
-  Text,
   StyledButton,
   StyledKeyboardArrowDownIcon,
+  StyledSelect,
+  StyledSvg,
+  Text,
 } from './ui-styled-components/common';
 
 export {
@@ -133,4 +134,5 @@ export {
   IActions,
   RequestStatuses,
   configurateCommonAsyncHandler,
+  CronComponent,
 };
