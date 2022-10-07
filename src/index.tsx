@@ -7,7 +7,7 @@ import {
 import {
   chooseColorFromStatus,
   createTitle,
-  StatusTeamPropsType,
+  Statuses,
 } from './helpers/commonHelpersFunctions';
 import { BaseAPI } from './helpers/crud-reducer-creator/base-api/BaseApi';
 import { crudReducerCreator } from './helpers/crud-reducer-creator/CrudReducerCreator';
@@ -123,7 +123,7 @@ export {
   StyledKeyboardArrowDownIcon,
   chooseColorFromStatus,
   createTitle,
-  StatusTeamPropsType,
+  Statuses,
   BasicDatePicker,
   BasicDatePickerPropsType,
   BoxWithLabel,
