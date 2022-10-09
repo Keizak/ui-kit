@@ -24,6 +24,7 @@ export enum DaysOfWeeks {
 
 export type CronComponentPropsType = {
   onSubmit?: (value: string) => void;
+  onChangeValue?: (value: string) => void;
   withButton?: boolean;
   value?: string;
 };

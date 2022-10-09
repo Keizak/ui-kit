@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { createTheme, Switch } from '@mui/material';
 import dayjs from 'dayjs';
@@ -23,6 +23,8 @@ import {
  */
 export function CronComponent(props: CronComponentPropsType) {
   //---------------------------------------------Инициализируем переменные--------------------------------------------
+
+  const { withButton = true, onChangeValue = false } = props;
   /**
    * Тема для отоюражение вариантов селекта в горизонтаьном виде
    */
@@ -102,10 +104,7 @@ export function CronComponent(props: CronComponentPropsType) {
    * Фукнция для изменения значения даты при множественном выборре
    */
   const changeDate = (type: DateItemsType, value: []) => {
-    setDate({ ...date, [type]: value.join(',') });
-    console.log(value, '-value');
-    console.log(value.join(','));
-    console.log(date);
+    setDate({ ...date, [type]: value });
   };
 
   /**
@@ -141,7 +140,6 @@ export function CronComponent(props: CronComponentPropsType) {
       cronDate = dateToCron(startDate as Date);
     }
     props.onSubmit && props.onSubmit(cronDate);
-    console.log(cronDate);
 
     return cronDate;
   };
@@ -174,6 +172,10 @@ export function CronComponent(props: CronComponentPropsType) {
    * Стиль кнопки в случае дизейба
    */
   const buttonStyle = checkForSubmit() ? { background: '#e1e1e1' } : {};
+
+  useEffect(() => {
+    onChangeValue && !checkForSubmit() && onChangeValue(submitTime());
+  }, [date, startDate]);
 
   //-----------------------------------------------------JSX----------------------------------------------------------
 
@@ -277,13 +279,17 @@ export function CronComponent(props: CronComponentPropsType) {
           </>
         </Block>
       )}
-      <BasicButton
-        mode={'normal'}
-        onClick={() => submitTime()}
-        text={'Submit'}
-        style={buttonStyle}
-        disabled={checkForSubmit()}
-      />
+      {withButton ? (
+        <BasicButton
+          mode={'normal'}
+          onClick={() => submitTime()}
+          text={'Submit'}
+          style={buttonStyle}
+          disabled={checkForSubmit()}
+        />
+      ) : (
+        <></>
+      )}
     </Block>
   );
 }

@@ -83,7 +83,6 @@ export function BasicSelect(props: BasicSelectProps) {
     let value = event.target.value;
 
     setSelectValue(value);
-    console.log(selectValue, '-selectValue');
     props.onSelect && props.onSelect(value);
   };
 
