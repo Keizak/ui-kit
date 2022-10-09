@@ -32,6 +32,7 @@ export type BasicSelectProps = {
   colorText?: string;
   sx?: SxProps<Theme>;
   value?: string | string[];
+  defaultValue?: string | string[];
   menuType?: 'vertical' | 'horizontal';
   menuItemWidth?: string;
   theme?: DefaultTheme;
@@ -55,6 +56,7 @@ export type BasicSelectProps = {
  * @param  {SxProps<Theme>} props.sx - дополнительные стили которые можно наложить поверх действующих ( необязательный )
  * @param  {'once' | 'multiple'} props.mode - Режим выбора значения одиночный или множественный( необязательный )
  * @param  {string | string[]} props.value - Текущие значение инпута ( необязательный )
+ * @param  {string | string[]} props.defaultValue - значение инпута по умолчанию( необязательный )
  * @param  {'vertical' | 'horizontal'} props.menuType - ось отображение значений в селекте ( необязательный )
  * @param  {string} props.menuItemWidth - Ширина одного значение в меню, по дефолту 50px ( необязательный )
  * @param  {DefaultTheme} props.theme - Тема для кастомизации классов material ui ( необязательный )
@@ -70,6 +72,7 @@ export function BasicSelect(props: BasicSelectProps) {
     menuItemWidth = '50px',
     menuType = 'vertical',
     theme = createTheme({}),
+    defaultValue = '',
   } = props;
 
   const [selectValue, setSelectValue] = useState<string | string[]>(value);
@@ -96,6 +99,7 @@ export function BasicSelect(props: BasicSelectProps) {
             <StyledSelect
               displayEmpty
               value={selectValue}
+              defaultValue={defaultValue}
               onChange={handleChange}
               input={<OutlinedInput />}
               size={size}
@@ -140,6 +144,7 @@ export function BasicSelect(props: BasicSelectProps) {
               value={selectValue}
               onChange={handleChange}
               input={<OutlinedInput />}
+              defaultValue={defaultValue}
             >
               {props.options.map((name) => (
                 <MenuItem key={name} value={name}>

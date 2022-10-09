@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { createTheme, Switch } from '@mui/material';
-import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 
+import { dateToCron } from '../../helpers/cronFormat/CronFormatInTime';
 import { Block, Text } from '../../ui-styled-components/common';
 import { BasicButton } from '../BasicButton/BasicButton';
 
@@ -44,6 +44,10 @@ export function CronComponent(props: CronComponentPropsType) {
     },
   });
 
+  /**
+   * Режим редактирования
+   */
+  const [editMode, setEditMode] = useState(false);
   /**
    * Выбор даты , единожды или с повторением
    */
@@ -87,18 +91,6 @@ export function CronComponent(props: CronComponentPropsType) {
     minutes: [],
   });
   //----------------------------------------------Дополнительные фукнции----------------------------------------------
-  /**
-   * Функция приобразующая формат Даты в крон формат
-   */
-  const dateToCron = (date: Date) => {
-    const minutes = dayjs(date).get('m');
-    const hours = dayjs(date).get('h');
-    const days = dayjs(date).get('D');
-    const months = dayjs(date).get('M');
-    const dayOfWeek = dayjs(date).day();
-
-    return `${minutes} ${hours} ${days} ${months} ${dayOfWeek}`;
-  };
 
   /**
    * Фукнция для изменения значения даты при множественном выборре
@@ -185,110 +177,125 @@ export function CronComponent(props: CronComponentPropsType) {
       flexDirection={'column'}
       alignItems={'flex-start'}
     >
-      <Block name={'switch-container'} height={'50px'} margin={'0 10px'}>
-        <strong>Разовое интервью</strong>
-        <Switch
-          checked={switchValue}
-          onChange={() => setSwitchValue(!switchValue)}
-        />
-        <strong>Постоянные интервью</strong>
-      </Block>
-
-      {!switchValue ? (
-        <Block name={'datetime-container'} height={'50px'}>
-          <input
-            type={'datetime-local'}
-            value={startDate as string}
-            onChange={(e) => setStartDate(e.currentTarget.value)}
+      {props.defaultValue && !editMode ? (
+        <Block name={'Текущее расписание'} margin={'20px 0 0 0'}>
+          <Block name={'Тайтл'}>
+            Текущее расписание : {props.defaultValue}
+          </Block>
+          <BasicButton
+            mode={'normal'}
+            onClick={() => setEditMode(true)}
+            text={'Изменить'}
           />
         </Block>
       ) : (
-        <Block name={'datetime-container'} height={'50px'}>
-          <>
-            {date.period === periodOptions[0] && <Text>Каждый</Text>}
-            {date.period === periodOptions[1] && <Text>Каждую</Text>}
-            {date.period === periodOptions[2] && <Text>Каждый</Text>}
-          </>
-          <CronSelect
-            label={'Период'}
-            options={periodOptions}
-            onSelect={(e) => changeDate('period', e)}
-            mode={'once'}
-            value={date.period as string}
-            key={nanoid()}
-          />
-          <>
-            {date.period !== 'День' && date.period !== 'Месяц' && (
+        <>
+          <Block name={'switch-container'} height={'50px'} margin={'0 10px'}>
+            <strong>Разовое интервью</strong>
+            <Switch
+              checked={switchValue}
+              onChange={() => setSwitchValue(!switchValue)}
+            />
+            <strong>Постоянные интервью</strong>
+          </Block>
+
+          {!switchValue ? (
+            <Block name={'datetime-container'} height={'50px'}>
+              <input
+                type={'datetime-local'}
+                value={startDate as string}
+                onChange={(e) => setStartDate(e.currentTarget.value)}
+              />
+            </Block>
+          ) : (
+            <Block name={'datetime-container'} height={'50px'}>
+              <>
+                {date.period === periodOptions[0] && <Text>Каждый</Text>}
+                {date.period === periodOptions[1] && <Text>Каждую</Text>}
+                {date.period === periodOptions[2] && <Text>Каждый</Text>}
+              </>
+              <CronSelect
+                label={'Период'}
+                options={periodOptions}
+                onSelect={(e) => changeDate('period', e)}
+                mode={'once'}
+                value={date.period as string}
+                key={nanoid()}
+              />
+              <>
+                {date.period !== 'День' && date.period !== 'Месяц' && (
+                  <>
+                    В
+                    <CronSelect
+                      label={'День недели'}
+                      options={daysOptions}
+                      value={date.day}
+                      onSelect={(e) => changeDate('day', e)}
+                    />
+                  </>
+                )}
+              </>
+              <>
+                {date.period === 'Месяц' && (
+                  <>
+                    <CronSelect
+                      label={'Число месяца'}
+                      options={daysOfMonthOptions}
+                      value={date.dayOfMonth}
+                      onSelect={(e) => changeDate('dayOfMonth', e)}
+                      theme={horizontalTheme}
+                    />
+                    чисел
+                    <span style={{ marginRight: '5px' }} />
+                  </>
+                )}
+              </>
               <>
                 В
                 <CronSelect
-                  label={'День недели'}
-                  options={daysOptions}
-                  value={date.day}
-                  onSelect={(e) => changeDate('day', e)}
-                />
-              </>
-            )}
-          </>
-          <>
-            {date.period === 'Месяц' && (
-              <>
-                <CronSelect
-                  label={'Число месяца'}
-                  options={daysOfMonthOptions}
-                  value={date.dayOfMonth}
-                  onSelect={(e) => changeDate('dayOfMonth', e)}
+                  label={'Часы'}
+                  options={hoursOptions}
+                  value={date.hours}
+                  onSelect={(e) => changeDate('hours', e)}
+                  menuType={'horizontal'}
                   theme={horizontalTheme}
                 />
-                чисел
-                <span style={{ marginRight: '5px' }} />
+                <>
+                  {/* eslint-disable-next-line no-nested-ternary */}
+                  {date.hours.length <= 1 ? (
+                    date.hours.includes('21') || date.hours.includes('22') ? (
+                      <Text>час в </Text>
+                    ) : (
+                      <Text> часов в</Text>
+                    )
+                  ) : (
+                    <Text>часы в</Text>
+                  )}
+                  <CronSelect
+                    label={'Минуты'}
+                    options={minutesOptions}
+                    value={date.minutes}
+                    onSelect={(e) => changeDate('minutes', e)}
+                    menuType={'horizontal'}
+                    theme={horizontalTheme}
+                  />
+                  минут
+                </>
               </>
-            )}
-          </>
-          <>
-            В
-            <CronSelect
-              label={'Часы'}
-              options={hoursOptions}
-              value={date.hours}
-              onSelect={(e) => changeDate('hours', e)}
-              menuType={'horizontal'}
-              theme={horizontalTheme}
+            </Block>
+          )}
+          {withButton ? (
+            <BasicButton
+              mode={'normal'}
+              onClick={() => submitTime()}
+              text={'Submit'}
+              style={buttonStyle}
+              disabled={checkForSubmit()}
             />
-            <>
-              {/* eslint-disable-next-line no-nested-ternary */}
-              {date.hours.length <= 1 ? (
-                date.hours.includes('21') || date.hours.includes('22') ? (
-                  <Text>час в </Text>
-                ) : (
-                  <Text> часов в</Text>
-                )
-              ) : (
-                <Text>часы в</Text>
-              )}
-              <CronSelect
-                label={'Минуты'}
-                options={minutesOptions}
-                value={date.minutes}
-                onSelect={(e) => changeDate('minutes', e)}
-                menuType={'horizontal'}
-                theme={horizontalTheme}
-              />
-              минут
-            </>
-          </>
-        </Block>
-      )}
-      {withButton ? (
-        <BasicButton
-          mode={'normal'}
-          onClick={() => submitTime()}
-          text={'Submit'}
-          style={buttonStyle}
-          disabled={checkForSubmit()}
-        />
-      ) : (
-        <></>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </Block>
   );

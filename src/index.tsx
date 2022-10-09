@@ -9,6 +9,10 @@ import {
   createTitle,
   Statuses,
 } from './helpers/commonHelpersFunctions';
+import {
+  CronFormatInTime,
+  dateToCron,
+} from './helpers/cronFormat/CronFormatInTime';
 import { BaseAPI } from './helpers/crud-reducer-creator/base-api/BaseApi';
 import { crudReducerCreator } from './helpers/crud-reducer-creator/CrudReducerCreator';
 import {
@@ -135,4 +139,6 @@ export {
   RequestStatuses,
   configurateCommonAsyncHandler,
   CronComponent,
+  CronFormatInTime,
+  dateToCron,
 };
