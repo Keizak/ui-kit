@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 
 import { createTheme, Switch } from '@mui/material';
 import dayjs from 'dayjs';
@@ -6,10 +6,14 @@ import { nanoid } from 'nanoid';
 
 import { Block, Text } from '../../ui-styled-components/common';
 import { BasicButton } from '../BasicButton/BasicButton';
-import { BasicSelect } from '../BasicSelect/BasicSelect';
 
 import { CronSelect } from './CronSelect/CronSelect';
-import { CronComponentPropsType, DateItemsType, DateObjectType } from './types';
+import {
+  CronComponentPropsType,
+  DateItemsType,
+  DateObjectType,
+  DaysOfWeeks,
+} from './types';
 
 /**
  * JSX Component ( CronComponent )
@@ -97,17 +101,18 @@ export function CronComponent(props: CronComponentPropsType) {
   /**
    * Фукнция для изменения значения даты при множественном выборре
    */
-  const changeDate = (type: DateItemsType, value: string) => {
-    type === 'period'
-      ? setDate({ ...date, [type]: value })
-      : setDate({ ...date, [type]: value.split(',') });
+  const changeDate = (type: DateItemsType, value: []) => {
+    setDate({ ...date, [type]: value.join(',') });
+    console.log(value, '-value');
+    console.log(value.join(','));
+    console.log(date);
   };
 
   /**
    * Функция преобразует массив Дней недели в словах в строку чисел по порядку недели
    */
   const arrayDaysOfWeekInStringNumbers = (array: string[]) => {
-    // @ts-ignore
+    //@ts-ignore
     const numberArr = array.map((el) => DaysOfWeeks[el]);
 
     return numberArr.join(',');
@@ -170,95 +175,14 @@ export function CronComponent(props: CronComponentPropsType) {
    */
   const buttonStyle = checkForSubmit() ? { background: '#e1e1e1' } : {};
 
-  /**
-   * Дефолтные селекторы отоюражающие при множественном выборе
-   */
-  const defaultCronSelects: ReactNode[] = [
-    <React.Fragment key={nanoid()}>
-      {date.period === periodOptions[0] && <Text>Каждый</Text>}
-      {date.period === periodOptions[1] && <Text>Каждую</Text>}
-      {date.period === periodOptions[2] && <Text>Каждый</Text>}
-    </React.Fragment>,
-    <CronSelect
-      label={'Период'}
-      options={periodOptions}
-      onSelect={(e) => changeDate('period', e.toString())}
-      multiple={false}
-      value={date.period as string}
-      key={nanoid()}
-    />,
-    <React.Fragment key={nanoid()}>
-      {date.period !== 'День' && date.period !== 'Месяц' && (
-        <>
-          В
-          <CronSelect
-            label={'День недели'}
-            multiple={true}
-            options={daysOptions}
-            value={date.day}
-            onSelect={(e) => changeDate('day', e.toString())}
-          />
-        </>
-      )}
-    </React.Fragment>,
-    <React.Fragment key={nanoid()}>
-      {date.period === 'Месяц' && (
-        <>
-          <CronSelect
-            label={'Число месяца'}
-            multiple={true}
-            options={daysOfMonthOptions}
-            value={date.dayOfMonth}
-            onSelect={(e) => changeDate('dayOfMonth', e.toString())}
-            theme={horizontalTheme}
-          />
-          чисел
-          <span style={{ marginRight: '5px' }} />
-        </>
-      )}
-    </React.Fragment>,
-    <React.Fragment key={nanoid()}>
-      В
-      <CronSelect
-        label={'Часы'}
-        multiple={true}
-        options={hoursOptions}
-        value={date.hours}
-        onSelect={(e) => changeDate('hours', e.toString())}
-        menuType={'horizontal'}
-        theme={horizontalTheme}
-      />
-    </React.Fragment>,
-    <React.Fragment key={nanoid()}>
-      {/* eslint-disable-next-line no-nested-ternary */}
-      {date.hours.length <= 1 ? (
-        date.hours.includes('21') || date.hours.includes('22') ? (
-          <Text>час в </Text>
-        ) : (
-          <Text> часов в</Text>
-        )
-      ) : (
-        <Text>часы в</Text>
-      )}
-      <BasicSelect
-        label={'Минуты'}
-        multiple={true}
-        options={minutesOptions}
-        value={date.minutes}
-        onSelect={(e) => changeDate('minutes', e.toString())}
-        minWidth={'50px'}
-        margin={'0 5px'}
-        menuType={'horizontal'}
-        theme={horizontalTheme}
-      />
-      минут
-    </React.Fragment>,
-  ];
-
   //-----------------------------------------------------JSX----------------------------------------------------------
 
   return (
-    <Block name={'cron-container'} flexDirection={'column'} width={'700px'}>
+    <Block
+      name={'cron-container'}
+      flexDirection={'column'}
+      alignItems={'flex-start'}
+    >
       <Block name={'switch-container'} height={'50px'} margin={'0 10px'}>
         <strong>Разовое интервью</strong>
         <Switch
@@ -278,7 +202,79 @@ export function CronComponent(props: CronComponentPropsType) {
         </Block>
       ) : (
         <Block name={'datetime-container'} height={'50px'}>
-          {defaultCronSelects.map((el) => el)}
+          <>
+            {date.period === periodOptions[0] && <Text>Каждый</Text>}
+            {date.period === periodOptions[1] && <Text>Каждую</Text>}
+            {date.period === periodOptions[2] && <Text>Каждый</Text>}
+          </>
+          <CronSelect
+            label={'Период'}
+            options={periodOptions}
+            onSelect={(e) => changeDate('period', e)}
+            mode={'once'}
+            value={date.period as string}
+            key={nanoid()}
+          />
+          <>
+            {date.period !== 'День' && date.period !== 'Месяц' && (
+              <>
+                В
+                <CronSelect
+                  label={'День недели'}
+                  options={daysOptions}
+                  value={date.day}
+                  onSelect={(e) => changeDate('day', e)}
+                />
+              </>
+            )}
+          </>
+          <>
+            {date.period === 'Месяц' && (
+              <>
+                <CronSelect
+                  label={'Число месяца'}
+                  options={daysOfMonthOptions}
+                  value={date.dayOfMonth}
+                  onSelect={(e) => changeDate('dayOfMonth', e)}
+                  theme={horizontalTheme}
+                />
+                чисел
+                <span style={{ marginRight: '5px' }} />
+              </>
+            )}
+          </>
+          <>
+            В
+            <CronSelect
+              label={'Часы'}
+              options={hoursOptions}
+              value={date.hours}
+              onSelect={(e) => changeDate('hours', e)}
+              menuType={'horizontal'}
+              theme={horizontalTheme}
+            />
+            <>
+              {/* eslint-disable-next-line no-nested-ternary */}
+              {date.hours.length <= 1 ? (
+                date.hours.includes('21') || date.hours.includes('22') ? (
+                  <Text>час в </Text>
+                ) : (
+                  <Text> часов в</Text>
+                )
+              ) : (
+                <Text>часы в</Text>
+              )}
+              <CronSelect
+                label={'Минуты'}
+                options={minutesOptions}
+                value={date.minutes}
+                onSelect={(e) => changeDate('minutes', e)}
+                menuType={'horizontal'}
+                theme={horizontalTheme}
+              />
+              минут
+            </>
+          </>
         </Block>
       )}
       <BasicButton

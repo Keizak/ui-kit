@@ -6,9 +6,9 @@ import { BasicSelect } from '../../BasicSelect/BasicSelect';
 
 export type CronSelectType = {
   options: (string | number)[];
-  multiple: boolean;
+  mode?: 'once' | 'multiple';
   value: string | string[];
-  onSelect: (value: string) => void;
+  onSelect: (value: []) => void;
   theme?: DefaultTheme;
   label: string;
   menuType?: 'vertical' | 'horizontal';
@@ -27,24 +27,23 @@ export type CronSelectType = {
  */
 export const CronSelect = ({
   options,
-  multiple,
   value,
   onSelect,
   theme,
-  label,
   menuType,
+  mode = 'multiple',
 }: CronSelectType) => {
   return (
     <BasicSelect
-      label={label}
-      multiple={multiple}
+      label={value as string}
       options={options}
       value={value}
-      onSelect={(e) => onSelect(e.toString())}
-      minWidth={'50px'}
+      onSelect={(e) => onSelect(e)}
+      minWidth={'150px'}
       margin={'0 5px'}
       theme={theme}
       menuType={menuType}
+      mode={mode}
     />
   );
 };
