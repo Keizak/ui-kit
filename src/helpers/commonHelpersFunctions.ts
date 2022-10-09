@@ -11,19 +11,27 @@ export const createTitle = (
   padding?: string
 ): TableTitleType => ({ width, value, padding });
 
-export type StatusTeamPropsType = 'new' | 'on pause' | 'not active' | 'active';
+
+export enum Statuses {
+  NEW = 'new',
+  ACTIVE = 'active',
+  ONPAUSE = 'onPause',
+  INACTIVE = 'inactive',
+  COLLABORETIVE_WORK = 'collaborative-work',
+  TRAINING = 'training',
+}
 
 //----------------------------------------chooseColorFromStatus---------------------------------------------
 
-export const chooseColorFromStatus = (status: StatusTeamPropsType) => {
+export const chooseColorFromStatus = (status: Statuses) => {
   switch (status) {
-    case 'active':
+    case Statuses.ACTIVE:
       return '#2068F8';
-    case 'new':
+    case Statuses.NEW:
       return '#802DD4';
-    case 'on pause':
+    case Statuses.ONPAUSE:
       return '#EFA640';
-    case 'not active':
+    case Statuses.INACTIVE:
       return '#737067';
     default:
       return '#2068F8';
