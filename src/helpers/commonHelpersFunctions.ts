@@ -11,7 +11,6 @@ export const createTitle = (
   padding?: string
 ): TableTitleType => ({ width, value, padding });
 
-
 export enum Statuses {
   NEW = 'new',
   ACTIVE = 'active',

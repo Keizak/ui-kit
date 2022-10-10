@@ -1,5 +1,5 @@
 {
-  "version": "0.2.41",
+  "version": "0.2.42",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -102,8 +102,9 @@
     "@mui/styles": "^5.10.6",
     "axios": "^0.27.2",
     "cron-parser": "^4.6.0",
+    "cronstrue": "^2.12.0",
     "react-hook-form": "^7.36.0",
-    "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1"
+    "redux": "4.2.0",
+    "redux-thunk": "2.4.1"
   }
 }

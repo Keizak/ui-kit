@@ -47,7 +47,7 @@ import {
   TableTitleType,
 } from './ui-components/BasicTable/BasicTable';
 import { BoxWithLabel } from './ui-components/BoxWithLabel/BoxWithLabel';
-import { CronComponent } from './ui-components/CronSelect/CronComponent';
+import { CronComponent } from './ui-components/CronComponent/CronComponent';
 import { withCRUDGrid } from './ui-components/CrudGrid/GrudGrid';
 import {
   FilterPanel,

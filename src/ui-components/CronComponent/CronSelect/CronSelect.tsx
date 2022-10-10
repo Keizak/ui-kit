@@ -14,7 +14,7 @@ export type CronSelectType = {
   menuType?: 'vertical' | 'horizontal';
 };
 /**
- * JSX Component ( CronSelect )
+ * JSX Component ( CronComponent )
  * Базовый селектор с минимаьным настройками подходящими для отображения в CronComponent
  * Принимает следующие пропсы
  * @param {( string | number) []} options - Параметры для выбора ( обязательный )

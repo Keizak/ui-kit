@@ -1,35 +1,13 @@
+import cronstrue from 'cronstrue';
 import dayjs from 'dayjs';
+import 'cronstrue/locales/ru';
 
 /**
  * Функция преобразует крон формат в массив нормальных дат
  */
-// export const CronFormatInTime = (cron: string, customOptions: any) => {
-//   const result = [''];
-//   const currentDate = new Date();
-//   const defaultOptions = {
-//     currentDate: currentDate,
-//     endDate: new Date(currentDate.setMonth(currentDate.getMonth() + 8)),
-//     iterator: true,
-//   };
-//
-//   const interval = parser.parseExpression(
-//     cron,
-//     customOptions ? customOptions : defaultOptions
-//   );
-//
-//   // eslint-disable-next-line no-constant-condition
-//   while (true) {
-//     try {
-//       let obj: any = interval.next();
-//
-//       result.push(obj.value.toString());
-//     } catch (e) {
-//       break;
-//     }
-//   }
-//
-//   return result;
-// };
+export const CronFormatInTime = (cron: string) => {
+  return cronstrue.toString(cron, { locale: 'ru' });
+};
 
 /**
  * Функция приобразующая формат Даты в крон формат
