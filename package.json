@@ -1,5 +1,5 @@
 {
-  "version": "0.2.42",
+  "version": "0.2.43",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -45,17 +45,7 @@
   },
   "name": "incubator-labs-ui",
   "author": "Ivan_Kazak",
-  "module": "dist/labs-ui.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/labs-ui.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/labs-ui.esm.js",
-      "limit": "10 KB"
-    }
-  ],
+  "module": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/it-incubator/ui-kit.git"
@@ -89,6 +79,7 @@
     "react-hook-form": "7.36.0",
     "react-router-dom": "6.3.0",
     "rollup-plugin-alias": "2.2.0",
+    "rollup-plugin-visualizer": "^5.8.2",
     "size-limit": "8.1.0",
     "styled-components": "5.3.5",
     "stylelint": "14.11.0",
@@ -105,6 +96,7 @@
     "cronstrue": "^2.12.0",
     "react-hook-form": "^7.36.0",
     "redux": "4.2.0",
-    "redux-thunk": "2.4.1"
+    "redux-thunk": "2.4.1",
+    "rollup-plugin-buble": "^0.19.8"
   }
 }
