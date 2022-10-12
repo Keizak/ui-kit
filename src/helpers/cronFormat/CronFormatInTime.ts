@@ -16,7 +16,7 @@ export const dateToCron = (date: Date) => {
   const minutes = dayjs(date).get('m');
   const hours = dayjs(date).get('h');
   const days = dayjs(date).get('D');
-  const months = dayjs(date).get('M');
+  const months = +dayjs(date).get('M') + 1;
   const dayOfWeek = dayjs(date).day();
 
   return `${minutes} ${hours} ${days} ${months} ${dayOfWeek}`;
