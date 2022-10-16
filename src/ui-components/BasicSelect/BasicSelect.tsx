@@ -31,7 +31,7 @@ export type BasicSelectProps = {
   colorIcon?: string;
   colorText?: string;
   sx?: SxProps<Theme>;
-  value?: string | string[];
+  value?: string | string[] | number[];
   defaultValue?: string | string[];
   menuType?: 'vertical' | 'horizontal';
   menuItemWidth?: string;
@@ -75,7 +75,9 @@ export function BasicSelect(props: BasicSelectProps) {
     defaultValue = '',
   } = props;
 
-  const [selectValue, setSelectValue] = useState<string | string[]>(value);
+  const [selectValue, setSelectValue] = useState<string | string[] | number[]>(
+    value
+  );
 
   //---------------------------------------------Дополнительные функции---------------------------------------------
 

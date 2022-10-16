@@ -32,7 +32,6 @@ export function CronComponent(props: CronComponentPropsType) {
   //---------------------------------------------Инициализируем переменные--------------------------------------------
 
   const { withButton = true, onChangeValue = false, defaultValue = '' } = props;
-
   /**
    * Тема для отоюражение вариантов селекта в горизонтаьном виде
    */
@@ -57,9 +56,12 @@ export function CronComponent(props: CronComponentPropsType) {
 
   const chooseSwitchValue = (defaultValue: string): 'once' | 'multiple' => {
     if (!defaultValue) return 'once';
-    if (defaultValue.slice(-1) === '*' && defaultValue.slice(-3, -2) === '*')
-      return 'multiple';
-    else return 'once';
+    else {
+      const arraySymbols = getArraySymbolsFromStringWithSpaces(defaultValue);
+
+      if (arraySymbols[4] === '*' || arraySymbols[3] === '*') return 'multiple';
+      else return 'once';
+    }
   };
 
   /**
@@ -127,7 +129,7 @@ export function CronComponent(props: CronComponentPropsType) {
    * Функция преобразует массив Дней недели в словах в строку чисел по порядку недели
    */
   const arrayDaysOfWeekInStringNumbers = (array: string[]) => {
-    //@ts-ignore
+    // @ts-ignore
     const numberArr = array.map((el) => DaysOfWeeks[el]);
 
     return numberArr.join(',');
@@ -164,7 +166,8 @@ export function CronComponent(props: CronComponentPropsType) {
    * Фукнкция отвечающая за дизейбл кнопки сабмита
    */
   const checkForSubmit = (): boolean => {
-    if (switchValue === 'once') return startDate.length < 1;
+    if (switchValue === 'once')
+      return startDate.length < 1 || startDate === 'Invalid Date';
     switch (date.period) {
       case 'День':
         return date.minutes.length < 1 || date.hours.length < 1;
@@ -189,10 +192,6 @@ export function CronComponent(props: CronComponentPropsType) {
    */
   const buttonStyle = checkForSubmit() ? { background: '#e1e1e1' } : {};
 
-  useEffect(() => {
-    onChangeValue && !checkForSubmit() && onChangeValue(submitTime());
-  }, [date, startDate]);
-
   const choosePeriodFromArraySymbols = (arraySymbols: string[]) => {
     const lengthStar = arraySymbols.filter((symbol) => symbol === '*');
 
@@ -201,17 +200,56 @@ export function CronComponent(props: CronComponentPropsType) {
     else return 'Месяц';
   };
 
+  const prepareSymbolsForCronSelectors = (
+    value: string,
+    isDays = false
+  ): string[] | number[] => {
+    if (!isDays) return value ? value.split(',').map((el) => Number(el)) : [];
+    else
+      return value
+        ? value
+            .split(',')
+            .filter((el) => el !== '*')
+            .map((day) => DaysOfWeeks[+day])
+        : [];
+  };
+
+  //----------------------------------------------UseEffect----------------------------------------------
+
+  useEffect(() => {
+    onChangeValue && !checkForSubmit() && onChangeValue(submitTime());
+  }, [date, startDate]);
+
   useEffect(() => {
     if (chooseSwitchValue(defaultValue) === 'multiple') {
-      const arraySymbols = getArraySymbolsFromStringWithSpaces(defaultValue);
+      const arraySymbols = getArraySymbolsFromStringWithSpaces(
+        props.defaultValue as string
+      );
 
-      setDate({
-        day: [...date.minutes, arraySymbols[CronDateENUM.dayOfWeek]],
-        dayOfMonth: [...date.minutes, arraySymbols[CronDateENUM.days]],
-        hours: [...date.minutes, arraySymbols[CronDateENUM.hours]],
-        minutes: [...date.minutes, arraySymbols[CronDateENUM.minutes]],
+      const newDay = prepareSymbolsForCronSelectors(
+        arraySymbols[CronDateENUM.dayOfWeek],
+        true
+      );
+      const newDayOfMonth = prepareSymbolsForCronSelectors(
+        arraySymbols[CronDateENUM.months]
+      );
+      const newHours = prepareSymbolsForCronSelectors(
+        arraySymbols[CronDateENUM.hours]
+      );
+      const newMinutes = prepareSymbolsForCronSelectors(
+        arraySymbols[CronDateENUM.minutes]
+      );
+
+      const newDate = {
+        day: newDay,
+        dayOfMonth: newDayOfMonth,
+        hours: newHours,
+        minutes: newMinutes,
         period: choosePeriodFromArraySymbols(arraySymbols),
-      });
+      };
+
+      //@ts-ignore
+      setDate(newDate);
     }
   }, [props.defaultValue]);
 
@@ -226,9 +264,13 @@ export function CronComponent(props: CronComponentPropsType) {
       height={'auto'}
     >
       {props.defaultValue && !editMode ? (
-        <Block name={'Текущее расписание'} margin={'20px 0 0 0'}>
+        <Block
+          name={'Текущее расписание'}
+          margin={'20px 0 0 0'}
+          flexDirection={'column'}
+        >
           <Block name={'Тайтл'}>
-            Текущее расписание : {CronFormatInTimeRU(props.defaultValue)}
+            Текущее расписание :{CronFormatInTimeRU(props.defaultValue)}
           </Block>
           <BasicButton
             mode={'normal'}
@@ -313,7 +355,7 @@ export function CronComponent(props: CronComponentPropsType) {
                 <>
                   {/* eslint-disable-next-line no-nested-ternary */}
                   {date.hours.length <= 1 ? (
-                    date.hours.includes('21') || date.hours.includes('22') ? (
+                    date.hours.includes(21) || date.hours.includes(22) ? (
                       <Text>час в </Text>
                     ) : (
                       <Text> часов в</Text>

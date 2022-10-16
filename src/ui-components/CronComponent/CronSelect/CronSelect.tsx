@@ -7,10 +7,9 @@ import { BasicSelect } from '../../BasicSelect/BasicSelect';
 export type CronSelectType = {
   options: (string | number)[];
   mode?: 'once' | 'multiple';
-  value: string | string[];
+  value: string | number[] | string[];
   onSelect: (value: []) => void;
   theme?: DefaultTheme;
-  label: string;
   menuType?: 'vertical' | 'horizontal';
 };
 /**
@@ -22,7 +21,6 @@ export type CronSelectType = {
  * @param {( string | number) []} value - Текущие значение инпута ( обязательный )
  * @param {(value: string) => void} onSelect - функция выполняемая при выборе значения ( обязательный )
  * @param {DefaultTheme} theme - Тема для кастомизации классов material ui ( необязательный )
- * @param {string} label - Название селектора ( обязательный )
  * @param {'vertical' | 'horizontal'} menuType - ось отображение значений в селекте ( необязательный )
  */
 export const CronSelect = ({

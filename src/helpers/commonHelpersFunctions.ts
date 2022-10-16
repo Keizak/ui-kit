@@ -44,6 +44,7 @@ export const chooseColorFromStatus = (status: Statuses) => {
  * Функция получает строку символов разделеных пробелами и возвращает массив этих символов
  */
 export const getArraySymbolsFromStringWithSpaces = (string: string) => {
+  if (!string) return [];
   const dateArray = [];
   let worString = string;
   const countSymbols = string.split(' ').length - 1;

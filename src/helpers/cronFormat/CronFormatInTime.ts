@@ -5,6 +5,7 @@ import 'cronstrue/locales/ru';
  * Функция преобразует крон формат в массив нормальных дат
  */
 export const CronFormatInTimeRU = (cron: string) => {
+  if (!cron) return '';
   const countSpaces = cron.split(' ').length - 1;
 
   return cron && countSpaces === 4
@@ -17,6 +18,7 @@ export const CronFormatInTimeRU = (cron: string) => {
 };
 
 export const CronFormatInTimeEN = (cron: string) => {
+  if (!cron) return '';
   const countSpaces = cron.split(' ').length - 1;
 
   return cron && countSpaces === 4

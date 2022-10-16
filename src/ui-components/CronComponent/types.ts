@@ -7,9 +7,9 @@ export type DateItemsType =
 export type DateObjectType = {
   period: string;
   day: string[];
-  dayOfMonth: string[];
-  hours: string[];
-  minutes: string[];
+  dayOfMonth: number[];
+  hours: number[];
+  minutes: number[];
 };
 
 export enum DaysOfWeeks {
