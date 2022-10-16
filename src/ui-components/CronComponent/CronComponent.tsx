@@ -307,7 +307,6 @@ export function CronComponent(props: CronComponentPropsType) {
                 {date.period === periodOptions[2] && <Text>Каждый</Text>}
               </>
               <CronSelect
-                label={'Период'}
                 options={periodOptions}
                 onSelect={(e) => changeDate('period', e)}
                 mode={'once'}
@@ -319,7 +318,6 @@ export function CronComponent(props: CronComponentPropsType) {
                   <>
                     В
                     <CronSelect
-                      label={'День недели'}
                       options={daysOptions}
                       value={date.day}
                       onSelect={(e) => changeDate('day', e)}
@@ -331,7 +329,6 @@ export function CronComponent(props: CronComponentPropsType) {
                 {date.period === 'Месяц' && (
                   <>
                     <CronSelect
-                      label={'Число месяца'}
                       options={daysOfMonthOptions}
                       value={date.dayOfMonth}
                       onSelect={(e) => changeDate('dayOfMonth', e)}
@@ -345,7 +342,6 @@ export function CronComponent(props: CronComponentPropsType) {
               <>
                 В
                 <CronSelect
-                  label={'Часы'}
                   options={hoursOptions}
                   value={date.hours}
                   onSelect={(e) => changeDate('hours', e)}
@@ -364,7 +360,6 @@ export function CronComponent(props: CronComponentPropsType) {
                     <Text>часы в</Text>
                   )}
                   <CronSelect
-                    label={'Минуты'}
                     options={minutesOptions}
                     value={date.minutes}
                     onSelect={(e) => changeDate('minutes', e)}
