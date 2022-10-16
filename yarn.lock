@@ -964,6 +964,11 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
+"@datasert/cronjs-parser@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@datasert/cronjs-parser/-/cronjs-parser-1.2.0.tgz#1a399e1a015db5d09a533d7a23fe8abfa03631ea"
+  integrity sha512-7kzYh7F5V3ElX+k3W9w6SKS6WdjqJQ2gIY1y0evldnjAwZxnFzR/Yu9Mv9OeDaCQX+mGAq2MvEnJbwu9oj3CXQ==
+
 "@date-io/core@^2.15.0", "@date-io/core@^2.16.0":
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/@date-io/core/-/core-2.16.0.tgz#7871bfc1d9bca9aa35ad444a239505589d0f22f6"

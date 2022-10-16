@@ -21,7 +21,9 @@ export enum Statuses {
 }
 
 //----------------------------------------chooseColorFromStatus---------------------------------------------
-
+/**
+ * Функция выбирает цвет статуса на основе значения статуса
+ */
 export const chooseColorFromStatus = (status: Statuses) => {
   switch (status) {
     case Statuses.ACTIVE:
@@ -35,4 +37,27 @@ export const chooseColorFromStatus = (status: Statuses) => {
     default:
       return '#2068F8';
   }
+};
+
+//----------------------------------------getArraySymbolsFromStringWithSpaces-------------------------------------------
+/**
+ * Функция получает строку символов разделеных пробелами и возвращает массив этих символов
+ */
+export const getArraySymbolsFromStringWithSpaces = (string: string) => {
+  const dateArray = [];
+  let worString = string;
+  const countSymbols = string.split(' ').length - 1;
+
+  for (let i = 0; i < countSymbols + 1; i++) {
+    const spaceMatch = worString.search(' ');
+
+    if (spaceMatch > 0) {
+      dateArray.push(worString.slice(0, spaceMatch));
+      worString = worString.slice(spaceMatch + 1, worString.length);
+    }
+
+    if (spaceMatch < 0) dateArray.push(worString);
+  }
+
+  return dateArray;
 };

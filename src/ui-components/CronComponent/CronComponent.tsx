@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 import { createTheme, Switch } from '@mui/material';
+import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 
-import { dateToCron } from '../../helpers/cronFormat/CronFormatInTime';
+import {
+  CronDateENUM,
+  CronFormatInTimeRU,
+  cronToDate,
+  dateToCron,
+  getArraySymbolsFromStringWithSpaces,
+} from '../..';
 import { Block, Text } from '../../ui-styled-components/common';
 import { BasicButton } from '../BasicButton/BasicButton';
 
@@ -24,7 +31,8 @@ import {
 export function CronComponent(props: CronComponentPropsType) {
   //---------------------------------------------Инициализируем переменные--------------------------------------------
 
-  const { withButton = true, onChangeValue = false } = props;
+  const { withButton = true, onChangeValue = false, defaultValue = '' } = props;
+
   /**
    * Тема для отоюражение вариантов селекта в горизонтаьном виде
    */
@@ -43,6 +51,16 @@ export function CronComponent(props: CronComponentPropsType) {
       },
     },
   });
+  /**
+   * Условие для автоматического выбора типа интервью при первой отрисовке
+   */
+
+  const chooseSwitchValue = (defaultValue: string): 'once' | 'multiple' => {
+    if (!defaultValue) return 'once';
+    if (defaultValue.slice(-1) === '*' && defaultValue.slice(-3, -2) === '*')
+      return 'multiple';
+    else return 'once';
+  };
 
   /**
    * Режим редактирования
@@ -51,13 +69,19 @@ export function CronComponent(props: CronComponentPropsType) {
   /**
    * Выбор даты , единожды или с повторением
    */
-  const [switchValue, setSwitchValue] = useState(true);
+  const [switchValue, setSwitchValue] = useState<'once' | 'multiple'>(
+    chooseSwitchValue(defaultValue)
+  );
 
   //once
   /**
    * Дата при выборе единожды
    */
-  const [startDate, setStartDate] = useState<Date | string>('');
+  const [startDate, setStartDate] = useState<string>(
+    chooseSwitchValue(defaultValue) === 'once'
+      ? cronToDate(defaultValue).toString()
+      : ''
+  );
 
   //---every------------------------------------------------------------------------------------------------|
 
@@ -115,7 +139,7 @@ export function CronComponent(props: CronComponentPropsType) {
   const submitTime = () => {
     let cronDate = '';
 
-    if (switchValue) {
+    if (switchValue === 'multiple') {
       if (date.period === 'День')
         cronDate = `${date.minutes} ${date.hours} * * *`;
       if (date.period === 'Неделю') {
@@ -129,7 +153,7 @@ export function CronComponent(props: CronComponentPropsType) {
         cronDate = `${date.minutes} ${date.hours} ${dayOfMonth} * *`;
       }
     } else {
-      cronDate = dateToCron(startDate as Date);
+      cronDate = dateToCron(new Date(startDate));
     }
     props.onSubmit && props.onSubmit(cronDate);
 
@@ -140,7 +164,7 @@ export function CronComponent(props: CronComponentPropsType) {
    * Фукнкция отвечающая за дизейбл кнопки сабмита
    */
   const checkForSubmit = (): boolean => {
-    if (!switchValue) return startDate.toString().length < 1;
+    if (switchValue === 'once') return startDate.length < 1;
     switch (date.period) {
       case 'День':
         return date.minutes.length < 1 || date.hours.length < 1;
@@ -169,6 +193,28 @@ export function CronComponent(props: CronComponentPropsType) {
     onChangeValue && !checkForSubmit() && onChangeValue(submitTime());
   }, [date, startDate]);
 
+  const choosePeriodFromArraySymbols = (arraySymbols: string[]) => {
+    const lengthStar = arraySymbols.filter((symbol) => symbol === '*');
+
+    if (lengthStar.length === 3) return 'День';
+    if (lengthStar.length === 2 && arraySymbols[2] === '*') return 'Неделю';
+    else return 'Месяц';
+  };
+
+  useEffect(() => {
+    if (chooseSwitchValue(defaultValue) === 'multiple') {
+      const arraySymbols = getArraySymbolsFromStringWithSpaces(defaultValue);
+
+      setDate({
+        day: [...date.minutes, arraySymbols[CronDateENUM.dayOfWeek]],
+        dayOfMonth: [...date.minutes, arraySymbols[CronDateENUM.days]],
+        hours: [...date.minutes, arraySymbols[CronDateENUM.hours]],
+        minutes: [...date.minutes, arraySymbols[CronDateENUM.minutes]],
+        period: choosePeriodFromArraySymbols(arraySymbols),
+      });
+    }
+  }, [props.defaultValue]);
+
   //-----------------------------------------------------JSX----------------------------------------------------------
 
   return (
@@ -176,11 +222,13 @@ export function CronComponent(props: CronComponentPropsType) {
       name={'cron-container'}
       flexDirection={'column'}
       alignItems={'flex-start'}
+      minHeight={'300px'}
+      height={'auto'}
     >
       {props.defaultValue && !editMode ? (
         <Block name={'Текущее расписание'} margin={'20px 0 0 0'}>
           <Block name={'Тайтл'}>
-            Текущее расписание : {props.defaultValue}
+            Текущее расписание : {CronFormatInTimeRU(props.defaultValue)}
           </Block>
           <BasicButton
             mode={'normal'}
@@ -193,17 +241,19 @@ export function CronComponent(props: CronComponentPropsType) {
           <Block name={'switch-container'} height={'50px'} margin={'0 10px'}>
             <strong>Разовое интервью</strong>
             <Switch
-              checked={switchValue}
-              onChange={() => setSwitchValue(!switchValue)}
+              checked={switchValue === 'multiple'}
+              onChange={() =>
+                setSwitchValue(switchValue === 'once' ? 'multiple' : 'once')
+              }
             />
             <strong>Постоянные интервью</strong>
           </Block>
 
-          {!switchValue ? (
+          {switchValue === 'once' ? (
             <Block name={'datetime-container'} height={'50px'}>
               <input
                 type={'datetime-local'}
-                value={startDate as string}
+                value={dayjs(startDate).format('YYYY-MM-DDTHH:mm')}
                 onChange={(e) => setStartDate(e.currentTarget.value)}
               />
             </Block>
