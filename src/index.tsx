@@ -10,12 +10,10 @@ import {
   getArraySymbolsFromStringWithSpaces,
   Statuses,
 } from './helpers/commonHelpersFunctions';
-import {
-  CronFormatInTimeEN,
-  CronFormatInTimeRU,
-} from './helpers/cronFormat/CronFormatInTime';
+import { CronFormatInTime } from './helpers/cronFormat/CronFormatInTime';
 import { CronDateENUM, cronToDate } from './helpers/cronFormat/cronToDate';
 import { dateToCron } from './helpers/cronFormat/dateToCron';
+import { multiplyCronToSimplesCron } from './helpers/cronFormat/MultiplyCronToSimplesCron';
 import { BaseAPI } from './helpers/crud-reducer-creator/base-api/BaseApi';
 import { crudReducerCreator } from './helpers/crud-reducer-creator/CrudReducerCreator';
 import {
@@ -142,10 +140,10 @@ export {
   RequestStatuses,
   configurateCommonAsyncHandler,
   CronComponent,
-  CronFormatInTimeRU,
   dateToCron,
   getArraySymbolsFromStringWithSpaces,
   CronDateENUM,
   cronToDate,
-  CronFormatInTimeEN,
+  CronFormatInTime,
+  multiplyCronToSimplesCron,
 };

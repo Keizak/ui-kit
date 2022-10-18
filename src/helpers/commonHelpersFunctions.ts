@@ -44,21 +44,52 @@ export const chooseColorFromStatus = (status: Statuses) => {
  * Функция получает строку символов разделеных пробелами и возвращает массив этих символов
  */
 export const getArraySymbolsFromStringWithSpaces = (string: string) => {
+  /**
+   * в случае отрицательной строки, вернет пустой массив
+   */
   if (!string) return [];
+
+  /**
+   * Инициализируем значения :
+   * dateArray - Массив который мы будем наполнять символами из строки
+   * workString - строка с которой мы будем проводить манипуляции по вырезке символов
+   */
   const dateArray = [];
-  let worString = string;
-  const countSymbols = string.split(' ').length - 1;
+  let workString = string;
 
-  for (let i = 0; i < countSymbols + 1; i++) {
-    const spaceMatch = worString.search(' ');
+  /**
+   * Узнаем количество символов путем стирания пробелов в строке
+   */
+  const countSymbols = string.split(' ').length;
 
+  /**
+   * Запускаем цикл на количество символов в строке, для каждой итерации
+   * ищем первый пробел и вырезаем символы до него, вставляем в массив в порядке итерации
+   */
+  for (let i = 1; i < countSymbols + 1; i++) {
+    const spaceMatch = workString.search(' ');
+
+    /**
+     * Если символ пробела имеет индекс больше 0 , значит есть еще другие символы
+     */
     if (spaceMatch > 0) {
-      dateArray.push(worString.slice(0, spaceMatch));
-      worString = worString.slice(spaceMatch + 1, worString.length);
+      dateArray.push(workString.slice(0, spaceMatch));
+      workString = workString.slice(spaceMatch + 1, workString.length);
     }
-
-    if (spaceMatch < 0) dateArray.push(worString);
+    /**
+     * Если пробелов больше не осталось,значит остался одлин символ
+     */
+    if (spaceMatch < 0) dateArray.push(workString);
   }
 
   return dateArray;
+};
+
+//----------------------------------------------stringWithCommaToArray-------------------------------------------
+/**
+ * Функция получает строку символов разделенных запятой и преобразует в массив
+ * в случае отрицательной строки, вернет пустой массив
+ */
+export const stringWithCommaToArray = (str: string) => {
+  return str ? str.split(',') : [];
 };

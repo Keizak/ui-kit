@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 
 import {
   CronDateENUM,
-  CronFormatInTimeRU,
+  CronFormatInTime,
   cronToDate,
   dateToCron,
   getArraySymbolsFromStringWithSpaces,
@@ -270,7 +270,7 @@ export function CronComponent(props: CronComponentPropsType) {
           flexDirection={'column'}
         >
           <Block name={'Тайтл'}>
-            Текущее расписание :{CronFormatInTimeRU(props.defaultValue)}
+            Текущее расписание :{CronFormatInTime(props.defaultValue)}
           </Block>
           <BasicButton
             mode={'normal'}
