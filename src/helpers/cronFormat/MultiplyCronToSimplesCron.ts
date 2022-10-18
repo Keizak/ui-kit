@@ -1,5 +1,7 @@
-import { getArraySymbolsFromStringWithSpaces } from '../../../dist';
-import { stringWithCommaToArray } from '../commonHelpersFunctions';
+import {
+  getArraySymbolsFromStringWithSpaces,
+  stringWithCommaToArray,
+} from '../commonHelpersFunctions';
 
 /**
  * Функция преобразует строку крон формата содержащую мультизначения в массив одиночных крон формат строк
