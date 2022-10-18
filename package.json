@@ -50,6 +50,9 @@
     "type": "git",
     "url": "git+https://github.com/it-incubator/ui-kit.git"
   },
+  "publishConfig": {
+    "@it-incubator:registry": "https://npm.pkg.github.com"
+  },
   "devDependencies": {
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
