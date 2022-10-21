@@ -18,7 +18,7 @@ pipeline {
                     sh "npm version ${env.TYPE}"
                     git url: "https://github.com/it-incubator/ui-kit.git",
                         credentialsId: 'github_abazunts',
-                        branch: develop
+                        branch: 'develop'
                     sh "git commit -am 'change version'"
                     sh "git push"
                  }
