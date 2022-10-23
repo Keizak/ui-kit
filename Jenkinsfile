@@ -64,7 +64,7 @@ def publishNpmPackage(){
 
 	sh "npm set registry https://npm.pkg.github.com"
 
-	sh "npm version-tag patch"
+	sh "npm version patch"
 
 	sh "npm publish"
 }
