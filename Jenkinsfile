@@ -17,6 +17,10 @@ pipeline {
                  script {
                     sh "yarn install"
                     sh "npm version ${env.TYPE}"
+                    sh "npm login --scope=@OWNER --registry=https://npm.pkg.github.com"
+                    sh "abazunts"
+                    sh "ghp_eaYqMHmuRp0lsj"
+                    sh "bazunc@gmail.com"
 //                     checkout scm
 //                     sh "git commit -am 'change version'"
 //                     sh "git push"
