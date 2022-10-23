@@ -13,7 +13,7 @@ agent any
 
 	//checkout scm
 	steps {
-	 git branch: branch, credentialsId: credentialsId, url: url
+	  checkout scm
 	}
 
 
