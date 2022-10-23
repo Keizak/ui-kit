@@ -16,7 +16,7 @@ pipeline {
              steps {
                  script {
                     sh "npm version ${env.TYPE}"
-                    git url: "ssh://git@github.com:it-incubator/ui-kit.git",
+                    git url: "git@github.com:it-incubator/ui-kit.git",
                         credentialsId: 'github_ssh',
                         branch: 'develop'
                     sh "git commit -am 'change version'"
