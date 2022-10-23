@@ -5,15 +5,8 @@ def url = "https://$repositoryPath"
 def branch = "develop"
 def credentialsId = 'github_abazunts'
 
-node {
-    stage('Initialize'){
-
-	env.NODEJS_HOME = "${tool 'nodejs'}"
-
-	// on linux / mac
-	env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
-    }
-
+pipeline {
+ stages {
     stage('Clone repository') {
 	/* Let's make sure we have the repository cloned to our workspace */
 
@@ -51,6 +44,7 @@ node {
 //   		sh("git push https://${gitUserName}:${encoded_gitPassword}@$repositoryPath")
 // 	}
 //     }
+}
 }
 
 def publishNpmPackage(){
