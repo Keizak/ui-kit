@@ -1,5 +1,5 @@
 {
-  "version": "0.2.64",
+  "version": "0.2.65",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -51,7 +51,7 @@
     "url": "git+https://github.com/it-incubator/ui-kit.git"
   },
   "publishConfig": {
-    "@it-incubator:registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com/it-incubator"
   },
   "devDependencies": {
     "@emotion/react": "11.10.4",

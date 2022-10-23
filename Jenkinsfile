@@ -1,78 +1,52 @@
-import org.eclipse.jgit.transport.URIish
 def app
-def repositoryPath = "github.com/it-incubator/ui-kit.git"
-def url = "https://$repositoryPath"
-def branch = "develop"
-def credentialsId = 'github_abazunts'
 
 pipeline {
-agent any
- stages {
-    stage('Clone repository') {
-	/* Let's make sure we have the repository cloned to our workspace */
-
-	//checkout scm
-	steps {
-	  checkout scm
-	}
-
-
-
-	/*
-	try {
-	  sh "git checkout -b temp-branch"
-	} catch(Exception ex) {
-	  sh "git branch -D temp-branch"
-	  sh "git checkout -b temp-branch"
-	}
-	*/
-
-	//sh "git checkout $branch"
-
-	//sh "git merge temp-branch"
-
-	//sh "git branch -d temp-branch"
+    agent any
+    environment {
+        GITHUB_ACCESS_TOKEN = "${env.GITHUB_ACCESS_TOKEN}"
     }
-
-      stage('Install'){
-         steps {
-            sh "yarn install"
-         }
-
+    stages {
+        stage('Clone repository') {
+            steps {
+                checkout scm
+            }
         }
-
-    stage('Publish Npm Package'){
-     steps {
-        publishNpmPackage()
-     }
-
+        stage('Install') {
+            steps {
+                echo "Install started..."
+                    script {
+                         sh "yarn install"
+                    }
+                echo "Install finished..."
+            }
+        }
+//         stage('Prepared version') {
+//             steps {
+//                 echo "Prepared started..."
+//                     script {
+//                          sh "npm version patch"
+//                     }
+//                 echo "Prepared finished..."
+//             }
+//         }
+        stage('Preparing') {
+             steps {
+                 echo "Preparing started..."
+                     sh 'ls -ltr'
+                     sh 'pwd'
+                     sh "chmod +x preparing.sh"
+                     sh "./preparing.sh ${env.GITHUB_ACCESS_TOKEN}"
+                     sh "cat .npmrc"
+             }
+        }
+        stage('Publish package') {
+             steps {
+                 echo "Publish started..."
+                     script {
+                        sh "npm publish"
+                     }
+                 echo "Publish finished..."
+             }
+       }
     }
-
-//     stage('Push to Git'){
-//
-// 	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: credentialsId, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
-// 		String encoded_gitPassword = java.net.URLEncoder.encode(env.GIT_PASSWORD, "UTF-8")
-//   		String gitUserName = java.net.URLEncoder.encode(env.GIT_USERNAME, "UTF-8")
-//
-//   		sh("git push https://${gitUserName}:${encoded_gitPassword}@$repositoryPath")
-// 	}
-//     }
-}
-}
-
-def publishNpmPackage(){
-// 	sh "echo \"//npm.pkg.github.com/:username=abazunts\" >> ~/.npmrc"
-//
-// 	sh "echo \"//npm.pkg.github.com/:__authToken=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==\" > ~/.npmrc"
-//
-// 	sh "echo \"//npm.pkg.github.com/:email=bazunc@gmail.com\" >> ~/.npmrc"
-//
-// 	sh "echo \"//npm.pkg.github.com/:always-auth=true\" >> ~/.npmrc"
-//
-// 	sh "npm set registry https://npm.pkg.github.com"
-//
-// // 	sh "npm version patch"
-//     sh "cat .npmrc"
-
-	sh "npm publish"
 }
