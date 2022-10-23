@@ -34,6 +34,13 @@ agent any
 	//sh "git branch -d temp-branch"
     }
 
+      stage('Install'){
+         steps {
+            sh "yarn install"
+         }
+
+        }
+
     stage('Publish Npm Package'){
      steps {
         publishNpmPackage()
@@ -64,7 +71,7 @@ def publishNpmPackage(){
 
 	sh "npm set registry https://npm.pkg.github.com"
 
-	sh "npm version patch"
+// 	sh "npm version patch"
 
 	sh "npm publish"
 }
