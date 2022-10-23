@@ -11,8 +11,11 @@ pipeline {
 	/* Let's make sure we have the repository cloned to our workspace */
 
 	//checkout scm
+	step {
+	 git branch: branch, credentialsId: credentialsId, url: url
+	}
 
-	git branch: branch, credentialsId: credentialsId, url: url
+
 
 	/*
 	try {
@@ -31,8 +34,10 @@ pipeline {
     }
 
     stage('Publish Npm Package'){
+     step {
+        publishNpmPackage()
+     }
 
-	publishNpmPackage()
     }
 
 //     stage('Push to Git'){
