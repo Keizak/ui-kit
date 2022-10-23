@@ -61,18 +61,18 @@ agent any
 }
 
 def publishNpmPackage(){
-	sh "echo \"//it-incubator/:username=abazunts\" >> ~/.npmrc"
+	sh "echo \"//npm.pkg.github.com/:username=abazunts\" >> ~/.npmrc"
 
-	sh "echo \"//it-incubator/:_password=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==\" > ~/.npmrc"
+	sh "echo \"//npm.pkg.github.com/:__authToken=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==\" > ~/.npmrc"
 
-	sh "echo \"//it-incubator/:email=bazunc@gmail.com\" >> ~/.npmrc"
+	sh "echo \"//npm.pkg.github.com/:email=bazunc@gmail.com\" >> ~/.npmrc"
 
-	sh "echo \"//it-incubator/:always-auth=true\" >> ~/.npmrc"
+	sh "echo \"//npm.pkg.github.com/:always-auth=true\" >> ~/.npmrc"
 
 	sh "npm set registry https://npm.pkg.github.com"
 
 // 	sh "npm version patch"
     sh "cat .npmrc"
 
-// 	sh "npm publish"
+	sh "npm publish"
 }
