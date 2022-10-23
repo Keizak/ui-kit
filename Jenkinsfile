@@ -15,6 +15,7 @@ pipeline {
        stage('Change version') {
              steps {
                  script {
+                    sh "yarn install"
                     sh "npm version ${env.TYPE}"
 //                     checkout scm
 //                     sh "git commit -am 'change version'"
