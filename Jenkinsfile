@@ -34,12 +34,12 @@ agent any
 	//sh "git branch -d temp-branch"
     }
 
-//       stage('Install'){
-//          steps {
-//             sh "yarn install"
-//          }
-//
-//         }
+      stage('Install'){
+         steps {
+            sh "yarn install"
+         }
+
+        }
 
     stage('Publish Npm Package'){
      steps {
