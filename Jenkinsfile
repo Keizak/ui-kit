@@ -16,15 +16,16 @@ pipeline {
              steps {
                  script {
                     sh "npm version ${env.TYPE}"
-                    checkout scm
-                    sh "git commit -am 'change version'"
-                    sh "git push"
+//                     checkout scm
+//                     sh "git commit -am 'change version'"
+//                     sh "git push"
                  }
              }
         }
         stage('Publish package') {
              steps {
                  echo "Preparing started..."
+                  checkout scm
                      sh 'npm publish'
              }
 
