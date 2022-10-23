@@ -1,39 +1,70 @@
-def app
+import org.eclipse.jgit.transport.URIish
 
-pipeline {
-    agent any
-    environment {
-        TYPE = 'patch'
+def repositoryPath = "github.com/it-incubator/ui-kit.git"
+def url = "https://$repositoryPath"
+def branch = "develop"
+def credentialsId = 'github_abazunts'
+
+node {
+    stage('Initialize'){
+
+	env.NODEJS_HOME = "${tool 'nodejs'}"
+
+	// on linux / mac
+	env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
     }
 
-    stages {
-        stage('Clone repository') {
-            steps {
-                checkout scm
-            }
-        }
-       stage('Change version') {
-             steps {
-                 script {
-                    sh "yarn install"
-                    sh "npm version ${env.TYPE}"
-                    sh "npm login --scope=@OWNER --registry=https://npm.pkg.github.com"
-                    sh "abazunts"
-                    sh "ghp_eaYqMHmuRp0lsj"
-                    sh "bazunc@gmail.com"
-//                     checkout scm
-//                     sh "git commit -am 'change version'"
-//                     sh "git push"
-                 }
-             }
-        }
-        stage('Publish package') {
-             steps {
-                 echo "Preparing started..."
-                  checkout scm
-                     sh 'npm publish'
-             }
+    stage('Clone repository') {
+	/* Let's make sure we have the repository cloned to our workspace */
 
-        }
+	//checkout scm
+
+	git branch: branch, credentialsId: credentialsId, url: url
+
+	/*
+	try {
+	  sh "git checkout -b temp-branch"
+	} catch(Exception ex) {
+	  sh "git branch -D temp-branch"
+	  sh "git checkout -b temp-branch"
+	}
+	*/
+
+	//sh "git checkout $branch"
+
+	//sh "git merge temp-branch"
+
+	//sh "git branch -d temp-branch"
     }
+
+    stage('Publish Npm Package'){
+
+	publishNpmPackage()
+    }
+
+//     stage('Push to Git'){
+//
+// 	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: credentialsId, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+// 		String encoded_gitPassword = java.net.URLEncoder.encode(env.GIT_PASSWORD, "UTF-8")
+//   		String gitUserName = java.net.URLEncoder.encode(env.GIT_USERNAME, "UTF-8")
+//
+//   		sh("git push https://${gitUserName}:${encoded_gitPassword}@$repositoryPath")
+// 	}
+//     }
+}
+
+def publishNpmPackage(){
+	sh "echo \"//it-incubator/:username=abazunts\" >> ~/.npmrc"
+
+	sh "echo \"//it-incubator/:_password=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==\" > ~/.npmrc"
+
+	sh "echo \"//it-incubator/:email=bazunc@gmail.com\" >> ~/.npmrc"
+
+	sh "echo \"//it-incubator/:always-auth=true\" >> ~/.npmrc"
+
+	sh "npm set registry https://npm.pkg.github.com"
+
+	sh "npm version-tag patch"
+
+	sh "npm publish"
 }
