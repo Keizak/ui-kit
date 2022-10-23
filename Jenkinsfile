@@ -1,11 +1,12 @@
 import org.eclipse.jgit.transport.URIish
-
+def app
 def repositoryPath = "github.com/it-incubator/ui-kit.git"
 def url = "https://$repositoryPath"
 def branch = "develop"
 def credentialsId = 'github_abazunts'
 
 pipeline {
+agent any
  stages {
     stage('Clone repository') {
 	/* Let's make sure we have the repository cloned to our workspace */
