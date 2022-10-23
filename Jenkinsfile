@@ -3,7 +3,7 @@ def app
 pipeline {
     agent any
     environment {
-        GITHUB_ACCESS_TOKEN = "${env.GITHUB_ACCESS_TOKEN}"
+        GITHUB_ACCESS_TOKEN_WRITE = "${env.GITHUB_ACCESS_TOKEN_WRITE}"
     }
     stages {
         stage('Clone repository') {
@@ -35,7 +35,7 @@ pipeline {
                      sh 'ls -ltr'
                      sh 'pwd'
                      sh "chmod +x preparing.sh"
-                     sh "./preparing.sh ${env.GITHUB_ACCESS_TOKEN}"
+                     sh "./preparing.sh ${env.GITHUB_ACCESS_TOKEN_WRITE}"
                      sh "cat .npmrc"
              }
         }
