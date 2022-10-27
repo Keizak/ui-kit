@@ -93,3 +93,8 @@ export const getArraySymbolsFromStringWithSpaces = (string: string) => {
 export const stringWithCommaToArray = (str: string) => {
   return str ? str.split(',') : [];
 };
+
+export const randomIntFromInterval = (min: number, max: number) => {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};

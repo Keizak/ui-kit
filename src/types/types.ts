@@ -98,3 +98,18 @@ export type ThunkType<TAction extends Action, AppStateType> = ThunkAction<
   unknown,
   TAction
 >;
+
+export enum MonthRuENUM {
+  'Январь' = 1,
+  'Февраль',
+  'Апрель',
+  'Март',
+  'Май',
+  'Июнь',
+  'Июль',
+  'Август',
+  'Сентябрь',
+  'Октябрь',
+  'Ноябрь',
+  'Декабрь',
+}

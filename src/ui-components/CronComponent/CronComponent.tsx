@@ -20,6 +20,7 @@ import {
   DateItemsType,
   DateObjectType,
   DaysOfWeeks,
+  DaysOfWeeksKeysType,
 } from './types';
 
 /**
@@ -129,8 +130,7 @@ export function CronComponent(props: CronComponentPropsType) {
    * Функция преобразует массив Дней недели в словах в строку чисел по порядку недели
    */
   const arrayDaysOfWeekInStringNumbers = (array: string[]) => {
-    // @ts-ignore
-    const numberArr = array.map((el) => DaysOfWeeks[el]);
+    const numberArr = array.map((el) => DaysOfWeeks[el as DaysOfWeeksKeysType]);
 
     return numberArr.join(',');
   };

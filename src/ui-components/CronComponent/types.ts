@@ -22,6 +22,8 @@ export enum DaysOfWeeks {
   'Воскресенье',
 }
 
+export type DaysOfWeeksKeysType = keyof typeof DaysOfWeeks;
+
 export type CronComponentPropsType = {
   onSubmit?: (value: string) => void;
   onChangeValue?: (value: string) => void;
