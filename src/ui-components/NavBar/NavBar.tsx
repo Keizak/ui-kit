@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Block, Text } from '../../ui-styled-components/common';
 import { BasicButton } from '../BasicButton/BasicButton';
@@ -10,6 +10,9 @@ type NavBarPropsType = {
   selectOptions?: string[];
   userName?: string;
   onSelect: (value: string) => void;
+  currentCourse: string | boolean;
+  menuClick?: Function;
+  logout?: () => void;
 };
 /**
  * JSX Component ( NavBar )
@@ -19,13 +22,28 @@ type NavBarPropsType = {
 export const NavBar = (props: NavBarPropsType) => {
   const name = props.userName || 'Елизавета Спивак';
   const selectOptions = props.selectOptions || ['Front-end', 'Back-End'];
-  const [currentCourse, setCurrentCourse] = useState(selectOptions[0]);
+  const [currentCourse, setCurrentCourse] = useState(
+    props.currentCourse ? props.currentCourse : selectOptions[0]
+  );
+  const localstorageKey = 'it-incubator-course';
 
-  const onSelectHandler = (value: string | number) => {
-    props.onSelect && props.onSelect(value.toString());
+  const onSelectHandler = (value: string) => {
+    props.onSelect && props.onSelect(value);
     setCurrentCourse(value.toString());
-    console.log(currentCourse, '-selected');
+    sessionStorage.setItem(localstorageKey, value);
   };
+
+  useEffect(() => {
+    const localCurrentCourse = sessionStorage.getItem(localstorageKey);
+
+    if (localCurrentCourse) {
+      setCurrentCourse(localCurrentCourse);
+    }
+  }, []);
+
+  useEffect(() => {
+    props.onSelect(currentCourse.toString());
+  }, [currentCourse]);
 
   return (
     <Block
@@ -46,6 +64,7 @@ export const NavBar = (props: NavBarPropsType) => {
           name={'LeftHalf'}
           justifyContent={'flex-start'}
           margin={'10px 10px 10px 0'}
+          onClick={() => props.menuClick && props.menuClick()}
         >
           <MenuBaraSvg />
         </Block>
@@ -61,7 +80,7 @@ export const NavBar = (props: NavBarPropsType) => {
             margin={'10px 40px 10px 0'}
           >
             <BasicSelect
-              label={currentCourse}
+              label={currentCourse.toString()}
               options={selectOptions}
               onSelect={onSelectHandler}
             />
@@ -69,7 +88,12 @@ export const NavBar = (props: NavBarPropsType) => {
           <Block name={'NameItem'} margin={'10px 30px 10px 0'}>
             <Text fontSize={'16px'}>{name}</Text>
           </Block>
-          <BasicButton mode={'normal'} icon={<LogoutSVG />} text={'Sign out'} />
+          <BasicButton
+            mode={'normal'}
+            icon={<LogoutSVG />}
+            text={'Sign out'}
+            onClick={() => props.logout && props.logout()}
+          />
         </Block>
       </Block>
     </Block>

@@ -115,7 +115,7 @@ export function BasicSelect(props: BasicSelectProps) {
                       color: props.colorText,
                     }}
                   >
-                    {props.label}-
+                    {props.label}
                   </em>
                 )
               }
