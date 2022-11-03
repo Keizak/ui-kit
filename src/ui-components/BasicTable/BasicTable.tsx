@@ -29,6 +29,7 @@ export type BasicTablePropsType = {
   rows: TableRowType[];
   minWidthTable: number | string;
   paginationOptions?: BasicPaginationPropsType;
+  pagination?: boolean;
 };
 
 //---------------------------------------------------------------------------------------------------------
@@ -40,8 +41,10 @@ export type BasicTablePropsType = {
  * @param {TableRowType[]} props.rows - Строки таблицы ( данные ) ( обязательный )
  * @param { number | string} props.minWidthTable - Минимальная ширина таблицы
  * @param {BasicPaginationPropsType} props.paginationOptions - Настройки пагинатора ( необязательный )
+ * @param {boolean} props.pagination - включает и выключает блок с пагинатором
  */
 export const BasicTable = (props: BasicTablePropsType) => {
+  const { pagination = true } = props;
   //-------------------------------------------------JSX-----------------------------------------------------
 
   return (
@@ -63,14 +66,16 @@ export const BasicTable = (props: BasicTablePropsType) => {
         />
       </Block>
 
-      <Block
-        name={'Pagination'}
-        width={'100%'}
-        justifyContent={'flex-start'}
-        margin={'38px 0 50px 0 '}
-      >
-        <BasicPagination {...props.paginationOptions} />
-      </Block>
+      {pagination && (
+        <Block
+          name={'Pagination'}
+          width={'100%'}
+          justifyContent={'flex-start'}
+          margin={'38px 0 50px 0 '}
+        >
+          <BasicPagination {...props.paginationOptions} />
+        </Block>
+      )}
     </Block>
   );
 };
