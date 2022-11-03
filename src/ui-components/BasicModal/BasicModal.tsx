@@ -28,6 +28,7 @@ export type BasicModalPropsType = {
   onSubmit?: () => void;
   onSubmitText?: string;
   customFooter?: ReactNode;
+  submitDisabled?: boolean;
 };
 /**
  * JSX Component( BasicModal )
@@ -46,6 +47,7 @@ export type BasicModalPropsType = {
  * @param {string} props.onCancelText Текст для кнопки отмены по дефолту = Cancel
  * @param {string} props.onSubmitText Текст для кнопки потверждения по дефолту = Submit
  * @param {string} props.customFooter Можно передать свой кастомный футер для модалки,
+ * @param {string} props.submitDisabled Параметр который дизейблит кнопку сабмита
  * тогда пропсы ( onSubmitText,onSubmit,onCancelText,onCancel) становяться не актуальны
  */
 export const BasicModal = ({
@@ -62,6 +64,7 @@ export const BasicModal = ({
   onCancelText = 'Cancel',
   onSubmitText = 'Submit',
   customFooter,
+  submitDisabled = false,
 }: BasicModalPropsType) => {
   //--------------------------------------------------Инициализуем значения---------------------------------------------
 
@@ -164,6 +167,7 @@ export const BasicModal = ({
             <BasicButton
               mode={'red'}
               text={onSubmitText}
+              disabled={submitDisabled}
               onClick={submitHandler}
             />
           </Block>
