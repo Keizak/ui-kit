@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   Box,
@@ -107,7 +107,14 @@ export function BasicSelect(props: BasicSelectProps) {
               size={size}
               renderValue={(value) =>
                 value ? (
-                  (selectValue as ReactNode)
+                  <span
+                    style={{
+                      opacity: props.opacityText,
+                      color: props.colorText,
+                    }}
+                  >
+                    {selectValue}
+                  </span>
                 ) : (
                   <em
                     style={{
