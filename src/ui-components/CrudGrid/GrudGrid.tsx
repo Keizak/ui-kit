@@ -295,9 +295,12 @@ export const withCRUDGrid = <TUpdate,
                             {gridStructureData.map((d, i) => {
                                 let Component = d.editModeComponent && d.editModeComponent;
 
-                                const registeredObj = d.name && d.props!.register
-                                    ? register(d.name)
-                                    : {}
+                                let registeredObj = {}
+
+                                if (Component) {
+                                    registeredObj = d.name && d.props!.register
+                                        && register(d.name)
+                                }
 
                                 //const registeredObj = register(d.name !== null ? d.name : '');
 
