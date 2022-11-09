@@ -295,10 +295,8 @@ export const withCRUDGrid = <TUpdate,
                             {gridStructureData.map((d, i) => {
                                 let Component = d.editModeComponent && d.editModeComponent;
 
-                                const registeredObj = d.props && d.name && d.props.register
-                                    ? register(d.name, {
-                                        valueAsNumber: d.props.type === 'number',
-                                    })
+                                const registeredObj = d.name && d.props!.register
+                                    ? register(d.name)
                                     : {}
 
                                 //const registeredObj = register(d.name !== null ? d.name : '');
@@ -317,7 +315,6 @@ export const withCRUDGrid = <TUpdate,
                                                 <form>
                                                     {Component ? (
                                                         <Component
-                                                            {...registeredObj}
                                                             name={d.name}
                                                             defaultValue={null}
                                                             control={control}
@@ -332,6 +329,7 @@ export const withCRUDGrid = <TUpdate,
                                                                     d.editModePropType ? d.editModePropType : '1'
                                                                 )
                                                             }
+                                                            {...registeredObj}
                                                         />
                                                     ) : null}
                                                 </form>
