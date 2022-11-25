@@ -1,42 +1,42 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 import {
-  Box,
-  createTheme,
-  FormControl,
-  MenuItem,
-  OutlinedInput,
-  SelectChangeEvent,
-  Theme,
-  ThemeProvider,
+    Box,
+    createTheme,
+    FormControl,
+    MenuItem,
+    OutlinedInput,
+    SelectChangeEvent,
+    Theme,
+    ThemeProvider,
 } from '@mui/material';
-import { DefaultTheme, SxProps } from '@mui/system';
-import { nanoid } from 'nanoid';
+import {DefaultTheme, SxProps} from '@mui/system';
+import {nanoid} from 'nanoid';
 
 import {
-  Block,
-  StyledKeyboardArrowDownIcon,
-  StyledSelect,
+    Block,
+    StyledKeyboardArrowDownIcon,
+    StyledSelect,
 } from '../../ui-styled-components/common';
 
 export type BasicSelectProps = {
-  label: string;
-  options: Array<string | number>;
-  onSelect: (value: any) => void;
-  minWidth?: number | string;
-  size?: 'small' | 'medium' | undefined;
-  opacityText?: number;
-  margin?: number | string;
-  height?: number | string;
-  colorIcon?: string;
-  colorText?: string;
-  sx?: SxProps<Theme>;
-  value?: string | string[] | number[];
-  defaultValue?: string | string[];
-  menuType?: 'vertical' | 'horizontal';
-  menuItemWidth?: string;
-  theme?: DefaultTheme;
-  mode?: 'once' | 'multiple';
+    label: string;
+    options: Array<string | number>;
+    onSelect: (value: any) => void;
+    minWidth?: number | string;
+    size?: 'small' | 'medium' | undefined;
+    opacityText?: number;
+    margin?: number | string;
+    height?: number | string;
+    colorIcon?: string;
+    colorText?: string;
+    sx?: SxProps<Theme>;
+    value?: string | string[] | number[];
+    defaultValue?: string | string[];
+    menuType?: 'vertical' | 'horizontal';
+    menuItemWidth?: string;
+    theme?: DefaultTheme;
+    mode?: 'once' | 'multiple';
 };
 
 /**
@@ -62,108 +62,108 @@ export type BasicSelectProps = {
  * @param  {DefaultTheme} props.theme - Тема для кастомизации классов material ui ( необязательный )
  */
 export function BasicSelect(props: BasicSelectProps) {
-  //--------------------------------------------Инициализируем переменные--------------------------------------------
-  const {
-    minWidth = 224,
-    size = 'small',
-    height = '36px',
-    mode = 'once',
-    value = '',
-    menuItemWidth = '50px',
-    menuType = 'vertical',
-    theme = createTheme({}),
-    defaultValue = '',
-  } = props;
+    //--------------------------------------------Инициализируем переменные--------------------------------------------
+    const {
+        minWidth = 224,
+        size = 'small',
+        height = '36px',
+        mode = 'once',
+        value = '',
+        menuItemWidth = '50px',
+        menuType = 'vertical',
+        theme = createTheme({}),
+        defaultValue = '',
+    } = props;
 
-  const [selectValue, setSelectValue] = useState<string | string[] | number[]>(
-    value
-  );
+    const [selectValue, setSelectValue] = useState<string | string[] | number[]>(
+        value
+    );
 
-  //---------------------------------------------Дополнительные функции---------------------------------------------
+    //---------------------------------------------Дополнительные функции---------------------------------------------
 
-  /**
-   * Функция обработчик выбора значения
-   */
-  const handleChange = (event: SelectChangeEvent<any>) => {
-    let value = event.target.value;
+    /**
+     * Функция обработчик выбора значения
+     */
+    const handleChange = (event: SelectChangeEvent<any>) => {
+        let value = event.target.value;
 
-    setSelectValue(value);
-    props.onSelect && props.onSelect(value);
-  };
+        setSelectValue(value);
+        props.onSelect && props.onSelect(value);
+    };
 
-  //-----------------------------------------------JSX-----------------------------------------------
+    //-----------------------------------------------JSX-----------------------------------------------
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ minWidth: minWidth, margin: props.margin }}>
-        <FormControl fullWidth sx={{ height: height, ...props.sx }}>
-          {mode === 'once' ? (
-            <StyledSelect
-              displayEmpty
-              value={selectValue}
-              defaultValue={defaultValue}
-              onChange={handleChange}
-              input={<OutlinedInput />}
-              size={size}
-              renderValue={(value) =>
-                value ? (
-                  <span
-                    style={{
-                      opacity: props.opacityText,
-                      color: props.colorText,
-                    }}
-                  >
-                    {selectValue}
-                  </span>
-                ) : (
-                  <em
-                    style={{
-                      opacity: props.opacityText,
-                      color: props.colorText,
-                    }}
-                  >
-                    {props.label}
-                  </em>
-                )
-              }
-              IconComponent={(classes) => {
-                return (
-                  <StyledKeyboardArrowDownIcon
-                    className={classes.className}
-                    sx={{ color: props.colorIcon }}
-                  />
-                );
-              }}
-            >
-              {props.options.map((option) => (
-                <MenuItem key={nanoid()} value={option}>
-                  {menuType === 'vertical' ? (
-                    option
-                  ) : (
-                    <Block name={'item'} width={menuItemWidth} key={nanoid()}>
-                      {option}
-                    </Block>
-                  )}
-                </MenuItem>
-              ))}
-            </StyledSelect>
-          ) : (
-            <StyledSelect
-              multiple
-              value={selectValue}
-              onChange={handleChange}
-              input={<OutlinedInput />}
-              defaultValue={defaultValue}
-            >
-              {props.options.map((name) => (
-                <MenuItem key={name} value={name}>
-                  {name}
-                </MenuItem>
-              ))}
-            </StyledSelect>
-          )}
-        </FormControl>
-      </Box>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <Box sx={{minWidth: minWidth, margin: props.margin}}>
+                <FormControl fullWidth sx={{height: height, ...props.sx}}>
+                    {mode === 'once' ? (
+                        <StyledSelect
+                            displayEmpty
+                            value={selectValue}
+                            defaultValue={defaultValue}
+                            onChange={handleChange}
+                            input={<OutlinedInput/>}
+                            size={size}
+                            renderValue={(value) =>
+                                value ? (
+                                    <span
+                                        style={{
+                                            opacity: props.opacityText,
+                                            color: props.colorText,
+                                        }}
+                                    >
+                            {selectValue}
+                                </span>
+                                ) : (
+                                    <em
+                                        style={{
+                                            opacity: props.opacityText,
+                                            color: props.colorText,
+                                        }}
+                                    >
+                                        {props.label}
+                                    </em>
+                                )
+                            }
+                            IconComponent={(classes) => {
+                                return (
+                                    <StyledKeyboardArrowDownIcon
+                                        className={classes.className}
+                                        sx={{color: props.colorIcon}}
+                                    />
+                                );
+                            }}
+                        >
+                            {props.options.map((option) => (
+                                <MenuItem key={nanoid()} value={option}>
+                                    {menuType === 'vertical' ? (
+                                        option
+                                    ) : (
+                                        <Block name={'item'} width={menuItemWidth} key={nanoid()}>
+                                            {option}
+                                        </Block>
+                                    )}
+                                </MenuItem>
+                            ))}
+                        </StyledSelect>
+                    ) : (
+                        <StyledSelect
+                            multiple
+                            value={selectValue}
+                            onChange={handleChange}
+                            input={<OutlinedInput/>}
+                            defaultValue={defaultValue}
+                        >
+                            {props.options.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                    {name}
+                                </MenuItem>
+                            ))}
+                        </StyledSelect>
+                    )}
+                </FormControl>
+            </Box>
+        </ThemeProvider>
+    );
 }
