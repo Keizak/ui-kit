@@ -16,6 +16,7 @@ import { dateToCron } from './helpers/cronFormat/dateToCron';
 import { multiplyCronToSimplesCron } from './helpers/cronFormat/MultiplyCronToSimplesCron';
 import { BaseAPI } from './helpers/crud-reducer-creator/base-api/BaseApi';
 import { crudReducerCreator } from './helpers/crud-reducer-creator/CrudReducerCreator';
+import { useCustomSearchParams } from './helpers/useCustomSearchParams';
 import { useDebounce } from './helpers/useDebounce/useDebounce';
 import {
   BasicButton,
@@ -154,4 +155,5 @@ export {
   BasicLink,
   BasicLinkPropsType,
   useDebounce,
+  useCustomSearchParams
 };
