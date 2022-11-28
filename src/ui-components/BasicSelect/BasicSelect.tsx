@@ -53,11 +53,8 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
                                                             menuType = 'vertical',
                                                             menuItemWidth = '50px',
                                                             minWidth = 224,
-                                                            label,
                                                             size = 'small',
-                                                            colorText,
                                                             colorIcon,
-                                                            opacityText,
                                                             options,
                                                             nullableTitle = 'Not selected',
                                                             addNullableValue = false
@@ -105,27 +102,6 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
                             onChange={handleChange}
                             input={<OutlinedInput/>}
                             size={size}
-                            renderValue={(value) =>
-                                value ? (
-                                    <span
-                                        style={{
-                                            opacity: opacityText,
-                                            color: colorText,
-                                        }}
-                                    >
-                            {selectValue}
-                                </span>
-                                ) : (
-                                    <em
-                                        style={{
-                                            opacity: opacityText,
-                                            color: colorText,
-                                        }}
-                                    >
-                                        {label}
-                                    </em>
-                                )
-                            }
                             IconComponent={(classes) => {
                                 return (
                                     <StyledKeyboardArrowDownIcon
