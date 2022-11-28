@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Block } from '../../ui-styled-components/common';
 import { BasicInput } from '../BasicInput/BasicInput';
-import { BasicSelect } from '../BasicSelect/BasicSelect';
+import { BasicObsoleteSelect } from '../BasicObsoleteSelect/BasicObsoleteSelect';
 
 export type FilterPanelPropsType = {
   firstSelectLabel: string;
@@ -48,13 +48,13 @@ export const FilterPanel = (props: FilterPanelPropsType) => {
       margin={'24px 0 0 0'}
       justifyContent={'space-between'}
     >
-      <BasicSelect
+      <BasicObsoleteSelect
         label={props.firstSelectLabel}
         options={props.firstSelectOptions}
         onSelect={props.firstSelectOnSelect}
         {...commonSelectStyle}
       />
-      <BasicSelect
+      <BasicObsoleteSelect
         label={props.secondSelectLabel}
         options={props.secondSelectOptions}
         onSelect={props.secondSelectOnSelect}

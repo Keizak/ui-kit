@@ -1,27 +1,20 @@
-import React, {useState} from 'react';
-
 import {
     Box,
     createTheme,
-    FormControl,
-    MenuItem,
-    OutlinedInput,
+    FormControl, MenuItem, OutlinedInput,
     SelectChangeEvent,
     Theme,
-    ThemeProvider,
-} from '@mui/material';
-import {DefaultTheme, SxProps} from '@mui/system';
-import {nanoid} from 'nanoid';
-
-import {
-    Block,
-    StyledKeyboardArrowDownIcon,
-    StyledSelect,
-} from '../../ui-styled-components/common';
+    ThemeProvider
+} from "@mui/material";
+import React, {useState} from "react";
+import {DefaultTheme, SxProps} from "@mui/system";
+import {nanoid} from "nanoid";
+import {Block} from "@mui/icons-material";
+import {StyledKeyboardArrowDownIcon, StyledSelect } from "../../ui-styled-components/common";
 
 export type BasicSelectProps = {
     label: string;
-    options: Array<string | number>;
+    options: OptionType[];
     onSelect: (value: any) => void;
     minWidth?: number | string;
     size?: 'small' | 'medium' | undefined;
@@ -37,47 +30,46 @@ export type BasicSelectProps = {
     menuItemWidth?: string;
     theme?: DefaultTheme;
     mode?: 'once' | 'multiple';
+    nullableTitle?: string
+    addNullableValue?: boolean
 };
 
-/**
- * JSX Component ( BasicSelect )
- * Универсальтный селектор подогнанный под текущий дизайн
- * Принимает следующие пропсы
- * @param  {string} props.label - Название селектора ( обязательный )
- * @param  {Array<string | number>} props.options - Параметры для выбора ( обязательный )
- * @param  { (value: number | string) => void} props.onSelect - функция выполняемая при выборе значения ( обязательный )
- * @param  {string} props.opacityText - Прозрачнасть текста ( необязательный )
- * @param  {number | string} props.minWidth - Минимальная ширина селектора ( необязательный )
- * @param  {"small" | "medium" | undefined} props.size - Общий размер селектора ( необязательный )
- * @param  {number | string} props.margin - Отстпы снаружи ( необязательный )
- * @param  {number | string} props.height - Высота селектора ( необязательный )
- * @param  {string} props.colorIcon - Цвет иконки ( необязательный )
- * @param  {string} props.colorText - Цвет текста в селекторе ( необязательный )
- * @param  {SxProps<Theme>} props.sx - дополнительные стили которые можно наложить поверх действующих ( необязательный )
- * @param  {'once' | 'multiple'} props.mode - Режим выбора значения одиночный или множественный( необязательный )
- * @param  {string | string[]} props.value - Текущие значение инпута ( необязательный )
- * @param  {string | string[]} props.defaultValue - значение инпута по умолчанию( необязательный )
- * @param  {'vertical' | 'horizontal'} props.menuType - ось отображение значений в селекте ( необязательный )
- * @param  {string} props.menuItemWidth - Ширина одного значение в меню, по дефолту 50px ( необязательный )
- * @param  {DefaultTheme} props.theme - Тема для кастомизации классов material ui ( необязательный )
- */
-export function BasicSelect(props: BasicSelectProps) {
-    //--------------------------------------------Инициализируем переменные--------------------------------------------
-    const {
-        minWidth = 224,
-        size = 'small',
-        height = '36px',
-        mode = 'once',
-        value = '',
-        menuItemWidth = '50px',
-        menuType = 'vertical',
-        theme = createTheme({}),
-        defaultValue = '',
-    } = props;
+type OptionType = {
+    title: string
+    value: string | number
+}
+
+export const NullString = '___65DYD3DGQWDG__'
+
+export const BasicSelect: React.FC<BasicSelectProps> = ({
+                                                            theme = createTheme({}),
+                                                            onSelect,
+                                                            mode,
+                                                            value,
+                                                            defaultValue,
+                                                            height,
+                                                            margin,
+                                                            sx,
+                                                            menuType,
+                                                            menuItemWidth,
+                                                            minWidth,
+                                                            label,
+                                                            size,
+                                                            colorText,
+                                                            colorIcon,
+                                                            opacityText,
+                                                            options,
+                                                            nullableTitle = 'Not selected',
+                                                            addNullableValue = false
+                                                        }) => {
 
     const [selectValue, setSelectValue] = useState<string | string[] | number[]>(
-        value
+        !value ? NullString : value
     );
+
+    let nullableItem = {value: NullString, title: nullableTitle}
+
+    defaultValue = defaultValue === null ? NullString : defaultValue
 
     //---------------------------------------------Дополнительные функции---------------------------------------------
 
@@ -88,15 +80,16 @@ export function BasicSelect(props: BasicSelectProps) {
         let value = event.target.value;
 
         setSelectValue(value);
-        props.onSelect && props.onSelect(value);
+        onSelect && onSelect(value);
     };
 
     //-----------------------------------------------JSX-----------------------------------------------
 
+
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{minWidth: minWidth, margin: props.margin}}>
-                <FormControl fullWidth sx={{height: height, ...props.sx}}>
+            <Box sx={{minWidth: minWidth, margin: margin}}>
+                <FormControl fullWidth sx={{height: height, ...sx}}>
                     {mode === 'once' ? (
                         <StyledSelect
                             displayEmpty
@@ -109,8 +102,8 @@ export function BasicSelect(props: BasicSelectProps) {
                                 value ? (
                                     <span
                                         style={{
-                                            opacity: props.opacityText,
-                                            color: props.colorText,
+                                            opacity: opacityText,
+                                            color: colorText,
                                         }}
                                     >
                             {selectValue}
@@ -118,11 +111,11 @@ export function BasicSelect(props: BasicSelectProps) {
                                 ) : (
                                     <em
                                         style={{
-                                            opacity: props.opacityText,
-                                            color: props.colorText,
+                                            opacity: opacityText,
+                                            color: colorText,
                                         }}
                                     >
-                                        {props.label}
+                                        {label}
                                     </em>
                                 )
                             }
@@ -130,18 +123,20 @@ export function BasicSelect(props: BasicSelectProps) {
                                 return (
                                     <StyledKeyboardArrowDownIcon
                                         className={classes.className}
-                                        sx={{color: props.colorIcon}}
+                                        sx={{color: colorIcon}}
                                     />
                                 );
                             }}
                         >
-                            {props.options.map((option) => (
-                                <MenuItem key={nanoid()} value={option}>
+                            {addNullableValue && <MenuItem
+                                value={nullableItem.value}>{nullableItem.title}</MenuItem>}
+                            {options.map((option) => (
+                                <MenuItem key={nanoid()} value={option.value}>
                                     {menuType === 'vertical' ? (
-                                        option
+                                        option.title
                                     ) : (
                                         <Block name={'item'} width={menuItemWidth} key={nanoid()}>
-                                            {option}
+                                            {option.title}
                                         </Block>
                                     )}
                                 </MenuItem>
@@ -155,9 +150,11 @@ export function BasicSelect(props: BasicSelectProps) {
                             input={<OutlinedInput/>}
                             defaultValue={defaultValue}
                         >
-                            {props.options.map((name) => (
-                                <MenuItem key={name} value={name}>
-                                    {name}
+                            {addNullableValue && <MenuItem
+                                value={nullableItem.value}>{nullableItem.title}</MenuItem>}
+                            {options.map((name) => (
+                                <MenuItem key={name.value} value={name.value}>
+                                    {name.title}
                                 </MenuItem>
                             ))}
                         </StyledSelect>
@@ -165,5 +162,5 @@ export function BasicSelect(props: BasicSelectProps) {
                 </FormControl>
             </Box>
         </ThemeProvider>
-    );
-}
+    )
+};

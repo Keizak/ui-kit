@@ -43,9 +43,8 @@ import {
   BasicPaginationPropsType,
 } from './ui-components/BasicPagination/BasicPagination';
 import {
-  BasicSelect,
-  BasicSelectProps,
-} from './ui-components/BasicSelect/BasicSelect';
+  BasicObsoleteSelect, BasicObsoleteSelectProps,
+} from './ui-components/BasicObsoleteSelect/BasicObsoleteSelect';
 import {
   BasicTable,
   BasicTablePropsType,
@@ -88,6 +87,7 @@ import {
   StyledSvg,
   Text,
 } from './ui-styled-components/common';
+import { BasicSelect, BasicSelectProps } from './ui-components/BasicSelect/BasicSelect';
 
 export {
   BasicButton,
@@ -98,8 +98,8 @@ export {
   BasicModalPropsType,
   BasicPagination,
   BasicPaginationPropsType,
-  BasicSelect,
-  BasicSelectProps,
+  BasicObsoleteSelect,
+  BasicObsoleteSelectProps,
   BasicTable,
   BasicTablePropsType,
   TableRowType,
@@ -155,5 +155,7 @@ export {
   BasicLink,
   BasicLinkPropsType,
   useDebounce,
-  useCustomSearchParams
+  useCustomSearchParams,
+  BasicSelect,
+  BasicSelectProps
 };

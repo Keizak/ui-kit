@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Block, Text } from '../../ui-styled-components/common';
 import { BasicButton } from '../BasicButton/BasicButton';
-import { BasicSelect } from '../BasicSelect/BasicSelect';
+import { BasicObsoleteSelect } from '../BasicObsoleteSelect/BasicObsoleteSelect';
 import { LogoutSVG } from '../Svg/LogoutSvg';
 import { MenuBaraSvg } from '../Svg/MenuBaraSvg';
 
@@ -79,7 +79,7 @@ export const NavBar = (props: NavBarPropsType) => {
             justifyContent={'flex-start'}
             margin={'10px 40px 10px 0'}
           >
-            <BasicSelect
+            <BasicObsoleteSelect
               label={currentCourse.toString()}
               options={selectOptions}
               onSelect={onSelectHandler}
