@@ -10,7 +10,7 @@ import React, {useState} from "react";
 import {DefaultTheme, SxProps} from "@mui/system";
 import {nanoid} from "nanoid";
 import {Block} from "@mui/icons-material";
-import {StyledKeyboardArrowDownIcon, StyledSelect } from "../../ui-styled-components/common";
+import {StyledKeyboardArrowDownIcon, StyledSelect} from "../../ui-styled-components/common";
 
 export type BasicSelectProps = {
     label: string;
@@ -24,8 +24,8 @@ export type BasicSelectProps = {
     colorIcon?: string;
     colorText?: string;
     sx?: SxProps<Theme>;
-    value?: string | string[] | number[];
-    defaultValue?: string | string[];
+    value?: string | string[] | number[] | null;
+    defaultValue?: string | string[] | null;
     menuType?: 'vertical' | 'horizontal';
     menuItemWidth?: string;
     theme?: DefaultTheme;
@@ -44,17 +44,17 @@ export const NullString = '___65DYD3DGQWDG__'
 export const BasicSelect: React.FC<BasicSelectProps> = ({
                                                             theme = createTheme({}),
                                                             onSelect,
-                                                            mode,
-                                                            value,
-                                                            defaultValue,
-                                                            height,
+                                                            mode = 'once',
+                                                            value = null,
+                                                            defaultValue = null,
+                                                            height = '36px',
                                                             margin,
                                                             sx,
-                                                            menuType,
-                                                            menuItemWidth,
-                                                            minWidth,
+                                                            menuType = 'vertical',
+                                                            menuItemWidth = '50px',
+                                                            minWidth = 224,
                                                             label,
-                                                            size,
+                                                            size = 'small',
                                                             colorText,
                                                             colorIcon,
                                                             opacityText,
