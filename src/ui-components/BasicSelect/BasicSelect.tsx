@@ -29,7 +29,6 @@ export type BasicSelectProps = {
     menuType?: 'vertical' | 'horizontal';
     menuItemWidth?: string;
     theme?: DefaultTheme;
-    mode?: 'once' | 'multiple';
     nullableTitle?: string
     addNullableValue?: boolean
 };
@@ -44,7 +43,6 @@ export const NullString = '___65DYD3DGQWDG__'
 export const BasicSelect: React.FC<BasicSelectProps> = ({
                                                             theme = createTheme({}),
                                                             onSelect,
-                                                            mode = 'once',
                                                             value = null,
                                                             defaultValue = null,
                                                             height = '36px',
@@ -56,12 +54,16 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
                                                             size = 'small',
                                                             colorIcon,
                                                             options,
+                                                            label,
+                                                            opacityText, colorText,
                                                             nullableTitle = 'Not selected',
                                                             addNullableValue = false
                                                         }) => {
 
-    const [selectValue, setSelectValue] = useState<string | string[] | number[]>(
-        !value ? NullString : value
+    const parsedValue = !value && !addNullableValue ? label : !value && addNullableValue ? NullString : value
+
+    const [selectValue, setSelectValue] = useState<string | string[] | number[] | null>(
+        parsedValue
     );
 
     let nullableItem = {value: NullString, title: nullableTitle}
@@ -94,54 +96,57 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
         <ThemeProvider theme={theme}>
             <Box sx={{minWidth: minWidth, margin: margin}}>
                 <FormControl fullWidth sx={{height: height, ...sx}}>
-                    {mode === 'once' ? (
-                        <StyledSelect
-                            displayEmpty
-                            value={selectValue}
-                            defaultValue={defaultValue}
-                            onChange={handleChange}
-                            input={<OutlinedInput/>}
-                            size={size}
-                            IconComponent={(classes) => {
-                                return (
-                                    <StyledKeyboardArrowDownIcon
-                                        className={classes.className}
-                                        sx={{color: colorIcon}}
-                                    />
-                                );
-                            }}
-                        >
-                            {addNullableValue && <MenuItem
-                                value={nullableItem.value}>{nullableItem.title}</MenuItem>}
-                            {options.map((option) => (
-                                <MenuItem key={nanoid()} value={option.value}>
-                                    {menuType === 'vertical' ? (
-                                        option.title
-                                    ) : (
-                                        <Block name={'item'} width={menuItemWidth} key={nanoid()}>
-                                            {option.title}
-                                        </Block>
-                                    )}
-                                </MenuItem>
-                            ))}
-                        </StyledSelect>
-                    ) : (
-                        <StyledSelect
-                            multiple
-                            value={selectValue}
-                            onChange={handleChange}
-                            input={<OutlinedInput/>}
-                            defaultValue={defaultValue}
-                        >
-                            {addNullableValue && <MenuItem
-                                value={nullableItem.value}>{nullableItem.title}</MenuItem>}
-                            {options.map((name) => (
-                                <MenuItem key={name.value} value={name.value}>
-                                    {name.title}
-                                </MenuItem>
-                            ))}
-                        </StyledSelect>
-                    )}
+                    <StyledSelect
+                        displayEmpty
+                        value={selectValue}
+                        defaultValue={defaultValue}
+                        onChange={handleChange}
+                        input={<OutlinedInput/>}
+                        size={size}
+                        renderValue={(value) =>
+                            value ? (
+                                <span
+                                    style={{
+                                        opacity: opacityText,
+                                        color: colorText,
+                                    }}
+                                >
+                            {selectValue === NullString ? nullableItem.title : selectValue}
+                                </span>
+                            ) : (
+                                <em
+                                    style={{
+                                        opacity: opacityText,
+                                        color: colorText,
+                                    }}
+                                >
+                                    {label}
+                                </em>
+                            )
+                        }
+                        IconComponent={(classes) => {
+                            return (
+                                <StyledKeyboardArrowDownIcon
+                                    className={classes.className}
+                                    sx={{color: colorIcon}}
+                                />
+                            );
+                        }}
+                    >
+                        {addNullableValue && <MenuItem
+                            value={nullableItem.value}>{nullableItem.title}</MenuItem>}
+                        {options.map((option) => (
+                            <MenuItem key={nanoid()} value={option.value}>
+                                {menuType === 'vertical' ? (
+                                    option.title
+                                ) : (
+                                    <Block name={'item'} width={menuItemWidth} key={nanoid()}>
+                                        {option.title}
+                                    </Block>
+                                )}
+                            </MenuItem>
+                        ))}
+                    </StyledSelect>
                 </FormControl>
             </Box>
         </ThemeProvider>
