@@ -60,7 +60,7 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
                                                             addNullableValue = false
                                                         }) => {
 
-    const [selectValue, setSelectValue] = useState<string | string[] | number[] | null>(
+    const [selectValue, setSelectValue] = useState<string | string[] | number[]>(
         !value ? NullString : value
     );
 
@@ -80,7 +80,7 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
 
         if (value === NullString) {
             onSelect(null)
-            setSelectValue(null)
+            setSelectValue(NullString)
         } else {
             onSelect(value)
             setSelectValue(value)
