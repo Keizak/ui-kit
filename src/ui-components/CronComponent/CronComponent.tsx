@@ -143,11 +143,11 @@ export function CronComponent(props: CronComponentPropsType) {
 
     if (switchValue === 'multiple') {
       if (date.period === 'День')
-        cronDate = `* ${date.minutes} ${date.hours} * * * *`;
+        cronDate = `* ${date.minutes} ${date.hours} ? * * *`;
       if (date.period === 'Неделю') {
         const days = arrayDaysOfWeekInStringNumbers(date.day);
 
-        cronDate = `* ${date.minutes} ${date.hours} * * ${days} *`;
+        cronDate = `* ${date.minutes} ${date.hours} ? * ${days} *`;
       }
       if (date.period === 'Месяц') {
         const dayOfMonth = date.dayOfMonth.join(',');
