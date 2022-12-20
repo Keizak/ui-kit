@@ -16,5 +16,5 @@ export const dateToCron = (date: Date): string => {
   /**
    * Формируем из отдельных значения крон выражения формата "m h d m dw"
    */
-  return `${minutes} ${hours} ${days} ${months} ${dayOfWeek}`;
+  return `* ${minutes} ${hours} ${days} ${months} ${dayOfWeek} *`;
 };

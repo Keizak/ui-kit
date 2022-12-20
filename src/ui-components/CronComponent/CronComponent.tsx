@@ -143,16 +143,16 @@ export function CronComponent(props: CronComponentPropsType) {
 
     if (switchValue === 'multiple') {
       if (date.period === 'День')
-        cronDate = `${date.minutes} ${date.hours} * * *`;
+        cronDate = `* ${date.minutes} ${date.hours} * * * *`;
       if (date.period === 'Неделю') {
         const days = arrayDaysOfWeekInStringNumbers(date.day);
 
-        cronDate = `${date.minutes} ${date.hours} * * ${days}`;
+        cronDate = `* ${date.minutes} ${date.hours} * * ${days} *`;
       }
       if (date.period === 'Месяц') {
         const dayOfMonth = date.dayOfMonth.join(',');
 
-        cronDate = `${date.minutes} ${date.hours} ${dayOfMonth} * *`;
+        cronDate = `* ${date.minutes} ${date.hours} ${dayOfMonth} * * *`;
       }
     } else {
       cronDate = dateToCron(new Date(startDate));
