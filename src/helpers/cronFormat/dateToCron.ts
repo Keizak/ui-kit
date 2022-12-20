@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 
-enum MonthEnum {
+export enum MonthEnum {
     JAN = 1,
     FEB = 2,
     MAR = 3,

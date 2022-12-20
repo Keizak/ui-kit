@@ -60,7 +60,7 @@ export function CronComponent(props: CronComponentPropsType) {
     else {
       const arraySymbols = getArraySymbolsFromStringWithSpaces(defaultValue);
 
-      if (arraySymbols[4] === '*' || arraySymbols[3] === '*') return 'multiple';
+      if (arraySymbols[4] === '1/1' || arraySymbols[3] === '?') return 'multiple';
       else return 'once';
     }
   };
@@ -150,9 +150,9 @@ export function CronComponent(props: CronComponentPropsType) {
         cronDate = `* ${date.minutes} ${date.hours} ? * ${days} *`;
       }
       if (date.period === 'Месяц') {
-        const dayOfMonth = date.dayOfMonth.join(',');
+        const dayOfMonth = date.dayOfMonth.filter(d => !isNaN(d));
 
-        cronDate = `* ${date.minutes} ${date.hours} ${dayOfMonth} * * *`;
+        cronDate = `* ${date.minutes} ${date.hours} ${dayOfMonth} 1/1 ? *`;
       }
     } else {
       cronDate = dateToCron(new Date(startDate));
@@ -194,9 +194,10 @@ export function CronComponent(props: CronComponentPropsType) {
 
   const choosePeriodFromArraySymbols = (arraySymbols: string[]) => {
     const lengthStar = arraySymbols.filter((symbol) => symbol === '*');
+    console.log(lengthStar, 'lengthStar')
 
-    if (lengthStar.length === 3) return 'День';
-    if (lengthStar.length === 2 && arraySymbols[2] === '*') return 'Неделю';
+    if (lengthStar.length === 4) return 'День';
+    if (lengthStar.length === 3 && arraySymbols[3] === '?') return 'Неделю';
     else return 'Месяц';
   };
 
@@ -226,13 +227,17 @@ export function CronComponent(props: CronComponentPropsType) {
         props.defaultValue as string
       );
 
+      console.log(arraySymbols, 'arraySymbols')
+
       const newDay = prepareSymbolsForCronSelectors(
         arraySymbols[CronDateENUM.dayOfWeek],
         true
       );
+      console.log(newDay, 'newDay')
       const newDayOfMonth = prepareSymbolsForCronSelectors(
-        arraySymbols[CronDateENUM.months]
+        arraySymbols[CronDateENUM.days]
       );
+      console.log(newDayOfMonth, 'newDayOfMonth')
       const newHours = prepareSymbolsForCronSelectors(
         arraySymbols[CronDateENUM.hours]
       );
