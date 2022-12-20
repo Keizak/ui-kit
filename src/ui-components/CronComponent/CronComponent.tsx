@@ -233,11 +233,11 @@ export function CronComponent(props: CronComponentPropsType) {
         arraySymbols[CronDateENUM.dayOfWeek],
         true
       );
-      console.log(newDay, 'newDay')
+
       const newDayOfMonth = prepareSymbolsForCronSelectors(
         arraySymbols[CronDateENUM.days]
       );
-      console.log(newDayOfMonth, 'newDayOfMonth')
+
       const newHours = prepareSymbolsForCronSelectors(
         arraySymbols[CronDateENUM.hours]
       );
