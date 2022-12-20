@@ -71,7 +71,6 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
     defaultValue = defaultValue === null ? NullString : defaultValue
 
     //---------------------------------------------Дополнительные функции---------------------------------------------
-
     /**
      * Функция обработчик выбора значения
      */
