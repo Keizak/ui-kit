@@ -4,7 +4,8 @@ import { getArraySymbolsFromStringWithSpaces } from '../commonHelpersFunctions';
  * Енам обозначающая позиции елиниц времени в крон выражение
  */
 export enum CronDateENUM {
-  minutes = 0,
+  seconds = 0,
+  minutes,
   hours,
   days,
   months,
