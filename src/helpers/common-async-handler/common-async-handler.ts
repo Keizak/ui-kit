@@ -10,8 +10,8 @@ export enum RequestStatuses {
 
 export interface IActions {
   setRequestStatus?: (value: RequestStatuses) => void;
-  showError?: (message: string) => void;
-  showSuccess?: (message: string) => void;
+  showError?: (messages: string[]) => void;
+  showSuccess?: (messages: string[]) => void;
 }
 
 type ErrorType = {
@@ -35,14 +35,14 @@ export const withHandlingErrorResultCode = function <T>(
       result.messages &&
       result.messages.length > 0
     ) {
-      actions.showError && dispatch(actions.showError(result.messages[0]));
+      actions.showError && dispatch(actions.showError(result.messages));
       // dispatch(showError(result.messages[0]))
     } else if (result && result.resultCode == ActionResultCodes.Success) {
       actions.showSuccess &&
         dispatch(
           actions.showSuccess(
-            result.messages && result.messages[0]
-              ? result.messages[0]
+            result.messages && result.messages.length > 0
+              ? result.messages
               : 'Success'
           )
         );
@@ -62,7 +62,7 @@ export const withTryCatch =
     } catch (error) {
       let err = error as ErrorType;
 
-      actions.showError && dispatch(actions.showError(err.message));
+      actions.showError && dispatch(actions.showError([err.message]));
 
       return null;
     }
@@ -146,7 +146,7 @@ export let configurateCommonAsyncHandler = (actions: IActions) => {
       } catch (error) {
         let err = error as ErrorType;
 
-        actions.showError && dispatch(actions.showError(err.message));
+        actions.showError && dispatch(actions.showError([err.message]));
 
         return null;
       }
