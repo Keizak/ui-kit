@@ -43,7 +43,7 @@ export const withHandlingErrorResultCode = function <T>(
           actions.showSuccess(
             result.messages && result.messages.length > 0
               ? result.messages
-              : 'Success'
+              : ['Success']
           )
         );
       //dispatch(showSuccess(result.messages && result.messages[0] ? result.messages[0] : "Success"))
@@ -127,7 +127,7 @@ export let configurateCommonAsyncHandler = (actions: IActions) => {
             actions.showSuccess(
                 result.messages && result.messages.length
                 ? result.messages
-                : 'Success'
+                : ['Success']
             )
           );
         //dispatch(showSuccess(result.messages && result.messages[0] ? result.messages[0] : "Success"))
