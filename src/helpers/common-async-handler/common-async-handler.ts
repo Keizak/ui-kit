@@ -119,14 +119,14 @@ export let configurateCommonAsyncHandler = (actions: IActions) => {
         result.messages &&
         result.messages.length > 0
       ) {
-        actions.showError && dispatch(actions.showError(result.messages[0]));
+        actions.showError && dispatch(actions.showError(result.messages));
         // dispatch(showError(result.messages[0]))
       } else if (result && result.resultCode == ActionResultCodes.Success) {
         actions.showSuccess &&
           dispatch(
             actions.showSuccess(
-              result.messages && result.messages[0]
-                ? result.messages[0]
+                result.messages && result.messages.length
+                ? result.messages
                 : 'Success'
             )
           );
