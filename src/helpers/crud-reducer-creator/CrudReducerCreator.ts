@@ -222,10 +222,6 @@ export const crudReducerCreator = <
     async (dispatch) => {
       await commonAsyncHandler(
         async () => {
-          console.log('===============Inside thunk===================');
-          console.log(editingItemId);
-          console.log(updateModel);
-
           const result = await api.path(editingItemId, updateModel);
 
           if (result.resultCode === 0) {

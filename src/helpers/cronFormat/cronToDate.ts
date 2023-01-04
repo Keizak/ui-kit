@@ -18,14 +18,11 @@ export enum CronDateENUM {
  * Функция приобразующая формат Даты в крон формат
  */
 export const cronToDate = (cron: string): Date => {
-  console.log(cron, 'cron')
   /**
    * Делаем из строки крон выражения , массив элементов в порядке позиций
    * 15 12,30 3 4 5 => ["15","12,30","3","4","5"]
    */
   const arrayDateValues = getArraySymbolsFromStringWithSpaces(cron);
-
-  console.log(arrayDateValues, 'arrayDateValues')
   /**
    * С помощью енам выражения определяем значения позиций
    */

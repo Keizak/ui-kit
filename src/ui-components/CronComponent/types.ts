@@ -12,15 +12,29 @@ export type DateObjectType = {
   minutes: number[];
 };
 
-export enum DaysOfWeeks {
-  'Понедельник' = 1,
-  'Вторник',
-  'Среда',
-  'Четверг',
-  'Пятница',
-  'Суббота',
-  'Воскресенье',
+export enum DaysOfWeeksForSave {
+  'Понедельник' = "MON",
+  'Вторник' = 'TUE',
+  'Среда' = 'WED',
+  'Четверг' = 'THU',
+  'Пятница' = 'FRI',
+  'Суббота' = 'SAT',
+  'Воскресенье' = 'SUN',
 }
+
+export enum DaysOfWeeks {
+  'MON'=  'Понедельник',
+  'TUE' =  'Вторник',
+  'WED' = 'Среда',
+  'THU' =  'Четверг',
+  'FRI' = 'Пятница' ,
+  'SAT' = 'Суббота',
+ 'SUN' =  'Воскресенье',
+}
+
+export type DaysOfWeeksValues = 'MON'|'TUE'| 'WED'| 'THU'| 'FRI'| 'SAT'| 'SUN'
+
+
 
 export type DaysOfWeeksKeysType = keyof typeof DaysOfWeeks;
 

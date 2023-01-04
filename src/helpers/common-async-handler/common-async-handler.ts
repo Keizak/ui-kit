@@ -62,7 +62,6 @@ export const withTryCatch =
     } catch (error) {
       let err = error as ErrorType;
 
-      console.log(err, 'err');
       actions.showError && dispatch(actions.showError(err.message));
 
       return null;
@@ -147,7 +146,6 @@ export let configurateCommonAsyncHandler = (actions: IActions) => {
       } catch (error) {
         let err = error as ErrorType;
 
-        console.log(err, 'err');
         actions.showError && dispatch(actions.showError(err.message));
 
         return null;

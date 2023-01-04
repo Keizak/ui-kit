@@ -19,8 +19,8 @@ import {
   CronComponentPropsType,
   DateItemsType,
   DateObjectType,
-  DaysOfWeeks,
-  DaysOfWeeksKeysType,
+  DaysOfWeeks, DaysOfWeeksForSave,
+  DaysOfWeeksValues,
 } from './types';
 
 /**
@@ -130,9 +130,15 @@ export function CronComponent(props: CronComponentPropsType) {
    * Функция преобразует массив Дней недели в словах в строку чисел по порядку недели
    */
   const arrayDaysOfWeekInStringNumbers = (array: string[]) => {
-    const numberArr = array.map((el) => DaysOfWeeks[el as DaysOfWeeksKeysType]);
+    const numberArr = array.filter(el => DaysOfWeeksForSave[el as keyof typeof DaysOfWeeksForSave]).map((el) => DaysOfWeeksForSave[el as keyof typeof DaysOfWeeksForSave]);
 
-    return numberArr.join(',');
+    //const daysOgWeek = numberArr.map((el) => WeekEnum[el])
+
+    if (numberArr.length > 1 ){
+      return numberArr.join(',');
+    }else {
+      return numberArr[0]
+    }
   };
 
   /**
@@ -143,16 +149,16 @@ export function CronComponent(props: CronComponentPropsType) {
 
     if (switchValue === 'multiple') {
       if (date.period === 'День')
-        cronDate = `* ${date.minutes} ${date.hours} ? * * *`;
+        cronDate = `0 ${date.minutes} ${date.hours} ? * * *`;
       if (date.period === 'Неделю') {
         const days = arrayDaysOfWeekInStringNumbers(date.day);
 
-        cronDate = `* ${date.minutes} ${date.hours} ? * ${days} *`;
+        cronDate = `0 ${date.minutes} ${date.hours} ? * ${days} *`;
       }
       if (date.period === 'Месяц') {
         const dayOfMonth = date.dayOfMonth.filter(d => !isNaN(d));
 
-        cronDate = `* ${date.minutes} ${date.hours} ${dayOfMonth} 1/1 ? *`;
+        cronDate = `0 ${date.minutes} ${date.hours} ${dayOfMonth} 1/1 ? *`;
       }
     } else {
       cronDate = dateToCron(new Date(startDate));
@@ -194,10 +200,9 @@ export function CronComponent(props: CronComponentPropsType) {
 
   const choosePeriodFromArraySymbols = (arraySymbols: string[]) => {
     const lengthStar = arraySymbols.filter((symbol) => symbol === '*');
-    console.log(lengthStar, 'lengthStar')
 
-    if (lengthStar.length === 4) return 'День';
-    if (lengthStar.length === 3 && arraySymbols[3] === '?') return 'Неделю';
+    if (lengthStar.length === 3) return 'День';
+    if (lengthStar.length === 2 && arraySymbols[3] === '?') return 'Неделю';
     else return 'Месяц';
   };
 
@@ -211,7 +216,7 @@ export function CronComponent(props: CronComponentPropsType) {
         ? value
             .split(',')
             .filter((el) => el !== '*')
-            .map((day) => DaysOfWeeks[+day])
+            .map((day) => DaysOfWeeks[day as DaysOfWeeksValues])
         : [];
   };
 
@@ -226,8 +231,6 @@ export function CronComponent(props: CronComponentPropsType) {
       const arraySymbols = getArraySymbolsFromStringWithSpaces(
         props.defaultValue as string
       );
-
-      console.log(arraySymbols, 'arraySymbols')
 
       const newDay = prepareSymbolsForCronSelectors(
         arraySymbols[CronDateENUM.dayOfWeek],

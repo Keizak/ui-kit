@@ -163,7 +163,6 @@ export const withCRUDGrid = <TUpdate,
                             <Fab
                                 size="small"
                                 color="primary"
-                                onClick={() => console.log('item.id', item)}
                             >
                                 <Visibility/>
                             </Fab>
