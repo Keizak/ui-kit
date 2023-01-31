@@ -73,7 +73,7 @@ export const withCRUDGrid = <TUpdate,
     mdtp: { [key: string]: (...args: any[]) => any } = {},
     settings: {
         sortBy?: string | null;
-        showCreate?: boolean | null;
+        showCreate?: () => boolean;
         showRefresh?: boolean | null;
         showEdit?: boolean | null;
         showDetails?: boolean | null;
@@ -255,7 +255,7 @@ export const withCRUDGrid = <TUpdate,
                                 {props.renderContentAboveTable &&
                                     props.renderContentAboveTable()}
                             </Grid>
-                            {settings?.showCreate ? (
+                            {settings?.showCreate && settings.showCreate() ? (
                                 <Grid>
                                     {entityName && (
                                         <Button
