@@ -34,8 +34,6 @@ export enum DaysOfWeeks {
 
 export type DaysOfWeeksValues = 'MON'|'TUE'| 'WED'| 'THU'| 'FRI'| 'SAT'| 'SUN'
 
-
-
 export type DaysOfWeeksKeysType = keyof typeof DaysOfWeeks;
 
 export type CronComponentPropsType = {
