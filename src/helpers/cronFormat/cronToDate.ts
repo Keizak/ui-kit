@@ -31,7 +31,7 @@ export const cronToDate = (cron: string): Date => {
   const days = +arrayDateValues[CronDateENUM.days];
   const months = arrayDateValues[CronDateENUM.months];
   // @ts-ignore
-  const monthToNumber = MonthEnum[months]
+  const monthToNumber = MonthEnum[months] - 1
 
   const year =
       arrayDateValues[CronDateENUM.year] === '*' ?  new Date().getFullYear() : +arrayDateValues[CronDateENUM.year]
