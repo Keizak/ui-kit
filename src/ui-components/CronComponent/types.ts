@@ -13,7 +13,7 @@ export type DateObjectType = {
 };
 
 export enum DaysOfWeeksForSave {
-  'Понедельник' = "MON",
+  'Понедельник' = 'MON',
   'Вторник' = 'TUE',
   'Среда' = 'WED',
   'Четверг' = 'THU',
@@ -23,16 +23,23 @@ export enum DaysOfWeeksForSave {
 }
 
 export enum DaysOfWeeks {
-  'MON'=  'Понедельник',
-  'TUE' =  'Вторник',
+  'MON' = 'Понедельник',
+  'TUE' = 'Вторник',
   'WED' = 'Среда',
-  'THU' =  'Четверг',
-  'FRI' = 'Пятница' ,
+  'THU' = 'Четверг',
+  'FRI' = 'Пятница',
   'SAT' = 'Суббота',
- 'SUN' =  'Воскресенье',
+  'SUN' = 'Воскресенье',
 }
 
-export type DaysOfWeeksValues = 'MON'|'TUE'| 'WED'| 'THU'| 'FRI'| 'SAT'| 'SUN'
+export type DaysOfWeeksValues =
+  | 'MON'
+  | 'TUE'
+  | 'WED'
+  | 'THU'
+  | 'FRI'
+  | 'SAT'
+  | 'SUN';
 
 export type DaysOfWeeksKeysType = keyof typeof DaysOfWeeks;
 

@@ -17,7 +17,7 @@ export const CronFormatInTime = (cron: string, locale: string = 'ru') => {
    */
   const countSpaces = cron.split(' ');
 
-  const parsedCron = `${countSpaces[1]} ${countSpaces[2]} ${countSpaces[3]} ${countSpaces[4]} ${countSpaces[5]}`
+  const parsedCron = `${countSpaces[1]} ${countSpaces[2]} ${countSpaces[3]} ${countSpaces[4]} ${countSpaces[5]}`;
 
   /**
    * Преобразуем выражение крон в текстовый формат с помощью пакета cronstrue

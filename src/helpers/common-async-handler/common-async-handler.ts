@@ -125,7 +125,7 @@ export let configurateCommonAsyncHandler = (actions: IActions) => {
         actions.showSuccess &&
           dispatch(
             actions.showSuccess(
-                result.messages && result.messages.length
+              result.messages && result.messages.length
                 ? result.messages
                 : ['Success']
             )

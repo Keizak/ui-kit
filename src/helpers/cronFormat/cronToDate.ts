@@ -1,5 +1,6 @@
 import { getArraySymbolsFromStringWithSpaces } from '../commonHelpersFunctions';
-import {MonthEnum} from "./dateToCron";
+
+import { MonthEnum } from './dateToCron';
 
 /**
  * Енам обозначающая позиции елиниц времени в крон выражение
@@ -32,10 +33,12 @@ export const cronToDate = (cron: string): Date => {
   const days = +arrayDateValues[CronDateENUM.days];
   const months = arrayDateValues[CronDateENUM.months];
   // @ts-ignore
-  const monthToNumber = MonthEnum[months] - 1
+  const monthToNumber = MonthEnum[months] - 1;
 
   const year =
-      arrayDateValues[CronDateENUM.year] === '*' ?  new Date().getFullYear() : +arrayDateValues[CronDateENUM.year]
+    arrayDateValues[CronDateENUM.year] === '*'
+      ? new Date().getFullYear()
+      : +arrayDateValues[CronDateENUM.year];
 
   /**
    * Формируем и возращаем дату
