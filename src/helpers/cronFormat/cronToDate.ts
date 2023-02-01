@@ -4,6 +4,7 @@ import {MonthEnum} from "./dateToCron";
 /**
  * Енам обозначающая позиции елиниц времени в крон выражение
  */
+
 export enum CronDateENUM {
   seconds = 0,
   minutes,
