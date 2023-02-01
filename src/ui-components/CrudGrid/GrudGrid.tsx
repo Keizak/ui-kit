@@ -414,6 +414,7 @@ export const withCRUDGrid = <TUpdate,
                                                             {c(row.item, {
                                                                 ...mdtp,
                                                                 dispatch,
+                                                                state
                                                             })}
                                                         </TableCell>
                                                     ))}
