@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+import { List } from '@mui/material';
+
 import { Block, Text } from '../../ui-styled-components/common';
 import { BasicButton } from '../BasicButton/BasicButton';
 import { BasicObsoleteSelect } from '../BasicObsoleteSelect/BasicObsoleteSelect';
+import { DrawerList } from '../DrawerComponent/Drawer-list';
+import { DrawerComponent } from '../DrawerComponent/DrawerComponent';
 import { LogoutSVG } from '../Svg/LogoutSvg';
 import { MenuBaraSvg } from '../Svg/MenuBaraSvg';
 
@@ -11,8 +15,8 @@ type NavBarPropsType = {
   userName?: string;
   onSelect: (value: string) => void;
   currentCourse: string | boolean;
-  menuClick?: Function;
   logout?: () => void;
+  linkComponent?: JSX.Element;
 };
 /**
  * JSX Component ( NavBar )
@@ -45,6 +49,28 @@ export const NavBar = (props: NavBarPropsType) => {
     props.onSelect(currentCourse.toString());
   }, [currentCourse]);
 
+  const [isOpenLeftDrawer, setIsOpenLeftDrawer] = useState(false);
+
+  const toggleDrawer =
+    (isDrawer: boolean, isRight = false) =>
+    (event: any) => {
+      if (
+        event.type === 'keydown' &&
+        (event.key === 'Tab' || event.key === 'Shift')
+      ) {
+        return;
+      }
+      !isRight && setIsOpenLeftDrawer(isDrawer);
+    };
+
+  const listLeft = (LinksComponent: JSX.Element) => {
+    return (
+      <DrawerList toggleDrawer={toggleDrawer} isRight={false}>
+        <List>{LinksComponent}</List>
+      </DrawerList>
+    );
+  };
+
   return (
     <Block
       name={'NavBarContainer'}
@@ -64,10 +90,16 @@ export const NavBar = (props: NavBarPropsType) => {
           name={'LeftHalf'}
           justifyContent={'flex-start'}
           margin={'10px 10px 10px 0'}
-          onClick={() => props.menuClick && props.menuClick()}
+          onClick={() => setIsOpenLeftDrawer(true)}
         >
           <MenuBaraSvg />
         </Block>
+        <DrawerComponent
+          isOpenDrawer={isOpenLeftDrawer}
+          toggleDrawer={toggleDrawer}
+          list={props.linkComponent ? listLeft(props.linkComponent) : <></>}
+          anchor="left"
+        />
         <Block
           name={'RightHalf'}
           justifyContent={'flex-start'}
