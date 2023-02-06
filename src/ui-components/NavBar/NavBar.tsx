@@ -4,20 +4,25 @@ import { List } from '@mui/material';
 
 import { Block, Text } from '../../ui-styled-components/common';
 import { BasicButton } from '../BasicButton/BasicButton';
-import { BasicObsoleteSelect } from '../BasicObsoleteSelect/BasicObsoleteSelect';
 import { DrawerList } from '../DrawerComponent/Drawer-list';
 import { DrawerComponent } from '../DrawerComponent/DrawerComponent';
 import { LogoutSVG } from '../Svg/LogoutSvg';
 import { MenuBaraSvg } from '../Svg/MenuBaraSvg';
+import {BasicSelect} from "../BasicSelect/BasicSelect";
 
 type NavBarPropsType = {
-  selectOptions?: string[];
+  selectOptions?: SelectOptionsType[];
   userName?: string;
   onSelect: (value: string) => void;
   currentCourse: string | boolean;
   logout?: () => void;
   linkComponent?: JSX.Element;
 };
+
+type SelectOptionsType = {
+  value: number
+  title: string
+}
 /**
  * JSX Component ( NavBar )
  * Всегда отрисовывается сверху сайта
@@ -25,9 +30,9 @@ type NavBarPropsType = {
  */
 export const NavBar = (props: NavBarPropsType) => {
   const name = props.userName || 'Елизавета Спивак';
-  const selectOptions = props.selectOptions || ['Front-end', 'Back-End'];
+  const selectOptions = props.selectOptions || [{value: 1, title:'Front-end'}, {value: 3, title: 'Back-End'}];
   const [currentCourse, setCurrentCourse] = useState(
-    props.currentCourse ? props.currentCourse : selectOptions[0]
+    props.currentCourse ? props.currentCourse : selectOptions[0].value
   );
   const localstorageKey = 'course-id';
 
@@ -71,6 +76,8 @@ export const NavBar = (props: NavBarPropsType) => {
     );
   };
 
+  const label = selectOptions.find(o => o.value === currentCourse)
+
   return (
     <Block
       name={'NavBarContainer'}
@@ -111,8 +118,8 @@ export const NavBar = (props: NavBarPropsType) => {
             justifyContent={'flex-start'}
             margin={'10px 40px 10px 0'}
           >
-            <BasicObsoleteSelect
-              label={currentCourse.toString()}
+            <BasicSelect
+              label={label ? label.title : ''}
               options={selectOptions}
               onSelect={onSelectHandler}
             />
