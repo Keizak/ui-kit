@@ -29,16 +29,16 @@ export const NavBar = (props: NavBarPropsType) => {
   const [currentCourse, setCurrentCourse] = useState(
     props.currentCourse ? props.currentCourse : selectOptions[0]
   );
-  const localstorageKey = 'it-incubator-course';
+  const localstorageKey = 'course-id';
 
   const onSelectHandler = (value: string) => {
     props.onSelect && props.onSelect(value);
     setCurrentCourse(value.toString());
-    sessionStorage.setItem(localstorageKey, value);
+    localStorage.setItem(localstorageKey, value);
   };
 
   useEffect(() => {
-    const localCurrentCourse = sessionStorage.getItem(localstorageKey);
+    const localCurrentCourse = localStorage.getItem(localstorageKey);
 
     if (localCurrentCourse) {
       setCurrentCourse(localCurrentCourse);
