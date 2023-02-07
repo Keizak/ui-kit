@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Block } from '@mui/icons-material';
 import {
@@ -20,7 +20,6 @@ import {
 } from '../../ui-styled-components/common';
 
 export type BasicSelectProps = {
-  label: string;
   options: OptionType[];
   onSelect: (value: any) => void;
   minWidth?: number | string;
@@ -31,8 +30,8 @@ export type BasicSelectProps = {
   colorIcon?: string;
   colorText?: string;
   sx?: SxProps<Theme>;
-  value?: string | string[] | number[] | null;
-  defaultValue?: string | string[] | null;
+  value?: string | string[] | number[] | number | null ;
+  defaultValue?: string | string[] | number | null;
   menuType?: 'vertical' | 'horizontal';
   menuItemWidth?: string;
   theme?: DefaultTheme;
@@ -61,23 +60,22 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
   size = 'small',
   colorIcon,
   options,
-  label,
-  opacityText,
-  colorText,
+  //opacityText,
+  //colorText,
   nullableTitle = 'Not selected',
-  addNullableValue = false,
+  addNullableValue = true,
 }) => {
   const parsedValue =
     // eslint-disable-next-line no-nested-ternary
     !value && !addNullableValue
-      ? label
+      ? NullString
       : !value && addNullableValue
       ? NullString
       : value;
 
-  const [selectValue, setSelectValue] = useState<
-    string | string[] | number[] | null
-  >(parsedValue);
+  // const [selectValue, setSelectValue] = useState<
+  //   string | string[] | number[] | null | number
+  // >(parsedValue);
 
   let nullableItem = { value: NullString, title: nullableTitle };
 
@@ -94,10 +92,10 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
 
     if (value === NullString) {
       onSelect(null);
-      setSelectValue(NullString);
+      //setSelectValue(NullString);
     } else {
       onSelect(value);
-      setSelectValue(value);
+      //setSelectValue(value);
     }
   };
 
@@ -109,34 +107,11 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
         <FormControl fullWidth sx={{ height: height, ...sx }}>
           <StyledSelect
             displayEmpty
-            value={selectValue}
+            value={parsedValue}
             defaultValue={defaultValue}
             onChange={handleChange}
             input={<OutlinedInput />}
             size={size}
-            renderValue={(value) =>
-              value ? (
-                <span
-                  style={{
-                    opacity: opacityText,
-                    color: colorText,
-                  }}
-                >
-                  {selectValue === NullString
-                    ? nullableItem.title
-                    : selectValue}
-                </span>
-              ) : (
-                <em
-                  style={{
-                    opacity: opacityText,
-                    color: colorText,
-                  }}
-                >
-                  {label}
-                </em>
-              )
-            }
             IconComponent={(classes) => {
               return (
                 <StyledKeyboardArrowDownIcon
@@ -152,7 +127,7 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
               </MenuItem>
             )}
             {options.map((option) => (
-              <MenuItem key={nanoid()} value={option.value}>
+              <MenuItem key={option.value} value={option.value}>
                 {menuType === 'vertical' ? (
                   option.title
                 ) : (
