@@ -2,7 +2,6 @@ import {
   commonAsyncHandler,
   configurateCommonAsyncHandler,
   IActions,
-  RequestStatuses,
 } from './api/commonAsyncHandler/common-async-handler';
 import {
   chooseColorFromStatus,
@@ -28,7 +27,6 @@ export {
   BaseAPI,
   commonAsyncHandler,
   IActions,
-  RequestStatuses,
   configurateCommonAsyncHandler,
   dateToCron,
   getArraySymbolsFromStringWithSpaces,
@@ -40,3 +38,5 @@ export {
   useCustomSearchParams,
   createRows,
 };
+
+export * from './api/newCommonAsyncHandler';

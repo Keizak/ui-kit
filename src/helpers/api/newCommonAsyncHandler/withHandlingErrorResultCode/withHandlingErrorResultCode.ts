@@ -1,5 +1,6 @@
+import { ActionResultCodes } from '../../../../types';
 import { commonAsyncHandlerSettingsType } from '../common-async-handler';
-import { ActionResultCodes, OperationType } from '../types';
+import { OperationType } from '../types';
 
 export interface HandlingErrorResultCodeActions {
   showError: (message: string) => void;
