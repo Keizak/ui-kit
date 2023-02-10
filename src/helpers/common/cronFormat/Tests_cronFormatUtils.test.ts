@@ -1,4 +1,4 @@
-import { MonthRuENUM } from '../../types/types';
+import { MonthRuENUM } from '../../../types';
 import { randomIntFromInterval } from '../commonHelpersFunctions';
 
 import { CronFormatInTime } from './CronFormatInTime';

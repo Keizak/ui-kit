@@ -5,8 +5,8 @@ import {
   IBaseEntity,
   ICreateActionResult,
   IItemsResult,
-} from '../../../types/types';
-import { QueryStringUtils } from '../../query-sring-util/query-string-util';
+} from '../../../types';
+import { QueryStringUtils } from '../../api/query-sring-util/query-string-util';
 
 export interface IGetParams {
   [key: string]:

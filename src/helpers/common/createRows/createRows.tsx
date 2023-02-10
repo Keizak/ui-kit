@@ -1,4 +1,4 @@
-import { RowDataType } from '../types/types';
+import { RowDataType } from '../../../types';
 
 export function createRows<T, V, D>(
   item: T,

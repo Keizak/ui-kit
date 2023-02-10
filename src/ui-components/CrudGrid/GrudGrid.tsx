@@ -17,15 +17,14 @@ import {
 import { createStyles, makeStyles } from '@mui/styles';
 import { Link, Outlet, useParams } from 'react-router-dom';
 
-import { createRows } from '../../helpers/createRows';
-import { useCustomSearchParams } from '../../helpers/useCustomSearchParams';
+import { createRows, useCustomSearchParams } from '../../helpers';
 import {
   CrudStateType,
   FormElementType,
   GridItemElementType,
   IBaseEntity,
   RowDataType,
-} from '../../types/types';
+} from '../../types';
 import CellValueWithControl from '../CellValueWithControl/CellValueWithControl';
 import { PaginationWithSelectRows } from '../PaginationWithSelectedRows/PaginationWithSelectedRows';
 import { EnhancedTableHead } from '../TableHead/TableHead';

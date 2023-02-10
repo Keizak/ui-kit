@@ -149,7 +149,7 @@ export const StyledSelect = styled(Select)`
 
 // -------------------------------------------------Text-----------------------------------------------------
 
-type TextProps = {
+export type TextProps = {
   fontSize?: string | number;
   fontWeight?: string | number;
   font?: string;
@@ -192,7 +192,7 @@ export const Text = styled.span`
 
 // -------------------------------------------------StyledButton-----------------------------------------------------
 
-type StyledButtonProps = {
+export type StyledButtonProps = {
   width?: number | string;
   height?: number | string;
   borderRadius?: number | string;
