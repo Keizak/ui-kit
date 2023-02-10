@@ -1,9 +1,9 @@
 import { commonAsyncHandler } from './common-async-handler';
 import { OperationType, RequestStatusesType } from './types';
 
-type asyncHandlerActionsType = {
-  showError: (error: string) => void;
-  showSuccess: (success: string) => void;
+export type asyncHandlerActionsType = {
+  showError: (error: string | string[]) => void;
+  showSuccess: (success: string | string[]) => void;
   setRequestStatus: (requestStatus: RequestStatusesType) => void;
 };
 type customCommonAsyncHandlerSettingsType = {
