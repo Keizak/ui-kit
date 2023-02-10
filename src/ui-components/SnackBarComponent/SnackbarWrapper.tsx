@@ -10,6 +10,7 @@ type SnackbarComponentPropsType = {
   error: string | string[];
   success: string;
   resetNotifications: () => void;
+  maxSnack?: number;
 };
 /**
  * SnackbarComponent -
@@ -27,7 +28,10 @@ export const SnackbarComponent = (props: SnackbarComponentPropsType) => {
   const autoHideDuration = 2000;
 
   return (
-    <SnackbarProvider maxSnack={3} autoHideDuration={autoHideDuration}>
+    <SnackbarProvider
+      maxSnack={props.maxSnack ? props.maxSnack : 3}
+      autoHideDuration={autoHideDuration}
+    >
       <GlobalLoading requestStatus={props.requestStatus} />
       <Notifications
         autoHideDuration={autoHideDuration}

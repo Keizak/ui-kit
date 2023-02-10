@@ -26,10 +26,7 @@ export const Notifications = (props: NotificationsPropsType) => {
    * showNotification - causes the message to pop up and after the specified timer resets all values in the state
    */
   const showNotification = (message: string, type: 'error' | 'success') => {
-    enqueueSnackbar(message, {
-      variant: 'customSnackbar',
-      status: type,
-    });
+    enqueueSnackbar(message, { variant: type });
     /**
      * reset state
      */
