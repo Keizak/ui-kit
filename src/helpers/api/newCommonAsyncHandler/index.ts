@@ -1,4 +1,7 @@
-import { asyncHandlerWithDefaultSettings } from './app-common-async-handler';
+import {
+  asyncHandlerActionsType,
+  asyncHandlerWithDefaultSettings,
+} from './app-common-async-handler';
 import { RequestStatuses, RequestStatusesType, OperationType } from './types';
 import {
   withHandlingErrorResultCode,
@@ -24,4 +27,5 @@ export type {
   HandlingErrorResultCodeActions,
   withProcessVisualizationActions,
   withTryCatchActions,
+  asyncHandlerActionsType,
 };
