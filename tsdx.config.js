@@ -1,5 +1,5 @@
 const alias = require('rollup-plugin-alias');
-// const { visualizer } = require('rollup-plugin-visualizer');
+const { visualizer } = require('rollup-plugin-visualizer');
 
 const extensions = ['.js', '.ts', '.jsx', '.tsx'];
 
@@ -15,11 +15,11 @@ module.exports = {
       writeMeta: false,
       transpileOnly: true,
     };
-    // config.plugins.push(
-    //   visualizer({
-    //     filename: 'stats.html',
-    //   })
-    // );
+    config.plugins.push(
+      visualizer({
+        filename: 'stats.html',
+      })
+    );
     config.plugins.push(
       alias({
         resolve: extensions,

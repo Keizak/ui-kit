@@ -1,4 +1,4 @@
-import { ActionResultCodes } from '../../types/types';
+import { ActionResultCodes } from '../../../types';
 
 export type OperationType<T> = () => Promise<T>;
 

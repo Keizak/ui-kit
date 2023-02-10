@@ -5,11 +5,11 @@ import {
   IItemsResult,
   InferActionsTypes,
   ThunkType,
-} from '../../types/types';
+} from '../../types';
 import {
   commonAsyncHandler,
   IActions,
-} from '../common-async-handler/common-async-handler';
+} from '../api/commonAsyncHandler/common-async-handler';
 
 import { BaseAPI } from './base-api/BaseApi';
 

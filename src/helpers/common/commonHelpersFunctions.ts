@@ -1,4 +1,4 @@
-import { TableTitleType } from '../ui-components/BasicTable/BasicTable';
+import { TableTitleType } from '../../ui-components';
 
 //----------------------------------------createTitle---------------------------------------------
 
