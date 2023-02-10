@@ -12,7 +12,7 @@ type customCommonAsyncHandlerSettingsType = {
   actions: asyncHandlerActionsType;
 };
 
-export const asyncHandler = async (
+export const asyncHandlerWithDefaultSettings = async (
   request: OperationType<any>,
   actions: asyncHandlerActionsType,
   customSettings?: customCommonAsyncHandlerSettingsType
