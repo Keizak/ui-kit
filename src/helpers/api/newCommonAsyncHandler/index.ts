@@ -1,4 +1,4 @@
-import { asyncHandler } from './app-common-async-handler';
+import { asyncHandlerWithDefaultSettings } from './app-common-async-handler';
 import {
   ActionResultCodes,
   RequestStatuses,
@@ -19,7 +19,7 @@ export {
   withHandlingErrorResultCode,
   withProcessVisualization,
   withTryCatch,
-  asyncHandler,
+  asyncHandlerWithDefaultSettings,
   RequestStatuses,
 };
 
