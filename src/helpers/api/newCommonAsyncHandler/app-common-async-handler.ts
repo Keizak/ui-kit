@@ -6,10 +6,10 @@ export type asyncHandlerActionsType = {
   showSuccess: (success: string | string[]) => void;
   setRequestStatus: (requestStatus: RequestStatusesType) => void;
 };
+
 type customCommonAsyncHandlerSettingsType = {
   withProcessVisualization?: boolean;
   withNotification?: boolean;
-  actions: asyncHandlerActionsType;
 };
 
 export const asyncHandlerWithDefaultSettings = async (

@@ -8,9 +8,10 @@ import { Notifications } from './Notifications';
 type SnackbarComponentPropsType = {
   requestStatus: number;
   error: string | string[];
-  success: string;
+  success: string | string[];
   resetNotifications: () => void;
   maxSnack?: number;
+  action?: React.ReactNode;
 };
 /**
  * SnackbarComponent -
@@ -31,6 +32,7 @@ export const SnackbarComponent = (props: SnackbarComponentPropsType) => {
     <SnackbarProvider
       maxSnack={props.maxSnack ? props.maxSnack : 3}
       autoHideDuration={autoHideDuration}
+      action={props.action}
     >
       <GlobalLoading requestStatus={props.requestStatus} />
       <Notifications
