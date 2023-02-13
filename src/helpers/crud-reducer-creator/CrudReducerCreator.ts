@@ -1,4 +1,4 @@
-import { Action } from 'redux';
+import { Action, Dispatch } from 'redux';
 
 import {
   IBaseEntity,
@@ -9,7 +9,8 @@ import {
 import {
   asyncHandlerActionsType,
   asyncHandlerWithDefaultSettings,
-} from '../api/newCommonAsyncHandler/app-common-async-handler';
+  RequestStatusesType,
+} from '../api/newCommonAsyncHandler';
 
 import { BaseAPI } from './base-api/BaseApi';
 
@@ -75,6 +76,17 @@ export const crudReducerCreator = <
     sortDirection: null,
     searchTerms: [],
   };
+
+  const appActionsWithDispatch = (
+    dispatch: Dispatch<any>
+  ): asyncHandlerActionsType => ({
+    showError: (message: string | string[]) =>
+      dispatch(AppActions.showError(message)),
+    setRequestStatus: (requestStatus: RequestStatusesType) =>
+      dispatch(AppActions.setRequestStatus(requestStatus)),
+    showSuccess: (message: string | string[]) =>
+      dispatch(AppActions.showSuccess(message)),
+  });
 
   const actions = {
     createSuccess: (item: TEntity) =>
@@ -220,19 +232,16 @@ export const crudReducerCreator = <
       updateModel: TPatch
     ): ThunkType<any, AppStateType> =>
     async (dispatch) => {
-      await asyncHandlerWithDefaultSettings(
-        async () => {
-          const result = await api.path(editingItemId, updateModel);
+      await asyncHandlerWithDefaultSettings(async () => {
+        const result = await api.path(editingItemId, updateModel);
 
-          if (result.resultCode === 0) {
-            dispatch(actions.patchSuccess(result.data));
-            AppActions.setEditingEntityStatus(EditingEntityStatuses.Success);
-          }
+        if (result.resultCode === 0) {
+          dispatch(actions.patchSuccess(result.data));
+          AppActions.setEditingEntityStatus(EditingEntityStatuses.Success);
+        }
 
-          return result;
-        },
-        { ...AppActions }
-      );
+        return result;
+      }, appActionsWithDispatch(dispatch));
     };
 
   const updateItem: any =
@@ -241,58 +250,49 @@ export const crudReducerCreator = <
       updateModel: TUpdate
     ): ThunkType<ActionsTypes, AppStateType> =>
     async (dispatch) => {
-      await asyncHandlerWithDefaultSettings(
-        async () => {
-          const result = await api.update(editingItemId, updateModel);
+      await asyncHandlerWithDefaultSettings(async () => {
+        const result = await api.update(editingItemId, updateModel);
 
-          if (result.resultCode === 0) {
-            let data = await api.getById(editingItemId);
+        if (result.resultCode === 0) {
+          let data = await api.getById(editingItemId);
 
-            // @ts-ignore
-            dispatch(actions.updateSuccess(data, editingItemId));
+          // @ts-ignore
+          dispatch(actions.updateSuccess(data, editingItemId));
 
-            return data;
-          }
+          return data;
+        }
 
-          return result;
-        },
-        { ...AppActions }
-      );
+        return result;
+      }, appActionsWithDispatch(dispatch));
     };
 
   const deleteItem: any =
     (editingItemId: string): ThunkType<ActionsTypes, AppStateType> =>
     async (dispatch) => {
-      await asyncHandlerWithDefaultSettings(
-        async () => {
-          const result = await api.delete(editingItemId);
+      await asyncHandlerWithDefaultSettings(async () => {
+        const result = await api.delete(editingItemId);
 
-          if (result.resultCode === 0) {
-            // @ts-ignore
-            dispatch(actions.deleteSuccess(editingItemId));
-            AppActions.setEditingEntityStatus(EditingEntityStatuses.Success);
-          }
+        if (result.resultCode === 0) {
+          // @ts-ignore
+          dispatch(actions.deleteSuccess(editingItemId));
+          AppActions.setEditingEntityStatus(EditingEntityStatuses.Success);
+        }
 
-          return result;
-        },
-        { ...AppActions }
-      );
+        return result;
+      }, appActionsWithDispatch(dispatch));
     };
 
   const getItemById: any =
     (userId: number): ((dispatch: any) => Promise<TEntity | null>) =>
     async (dispatch: any) => {
-      return asyncHandlerWithDefaultSettings(
-        async () => {
-          let data = await api.getById(userId);
+      return asyncHandlerWithDefaultSettings(async () => {
+        let data = await api.getById(userId);
 
-          // @ts-ignore
-          dispatch(actions.getByIdSuccess(data));
+        // @ts-ignore
+        dispatch(actions.getByIdSuccess(data));
 
-          return data;
-        },
-        { ...AppActions }
-      );
+        return data;
+      }, appActionsWithDispatch(dispatch));
     };
 
   const getItems: any =
@@ -304,56 +304,50 @@ export const crudReducerCreator = <
       getState: () => AppStateType
     ) => Promise<IItemsResult<TEntity> | null>) =>
     async (dispatch: any, getState: () => AppStateType) => {
-      return asyncHandlerWithDefaultSettings(
-        async () => {
+      return asyncHandlerWithDefaultSettings(async () => {
+        // @ts-ignore
+        let sortBy = getState().labsReducers[reducerName].sortBy;
+        let sortDirection =
           // @ts-ignore
-          let sortBy = getState().labsReducers[reducerName].sortBy;
-          let sortDirection =
-            // @ts-ignore
-            getState().labsReducers[reducerName].sortDirection;
-          // @ts-ignore
-          let pageSize = newPageSize
-            ? newPageSize
-            : // @ts-ignore
-              getState().labsReducers[reducerName].pageSize;
-          // @ts-ignore
-          let currentPage = getState().labsReducers[reducerName].currentPage;
-          // @ts-ignore
-          let searchTerms = getState().labsReducers[reducerName].searchTerms;
+          getState().labsReducers[reducerName].sortDirection;
+        // @ts-ignore
+        let pageSize = newPageSize
+          ? newPageSize
+          : // @ts-ignore
+            getState().labsReducers[reducerName].pageSize;
+        // @ts-ignore
+        let currentPage = getState().labsReducers[reducerName].currentPage;
+        // @ts-ignore
+        let searchTerms = getState().labsReducers[reducerName].searchTerms;
 
-          const data = await api.getAll(currentPage, pageSize, {
-            sortBy: sortBy,
-            sortDirection: sortDirection,
-            searchTerms: searchTerms,
-            ...extraQueryParams,
-            //labStudentId: id ? id : null,//
-            //searchTerms: [{propName: 'title', propValue: '6'}]
-          });
+        const data = await api.getAll(currentPage, pageSize, {
+          sortBy: sortBy,
+          sortDirection: sortDirection,
+          searchTerms: searchTerms,
+          ...extraQueryParams,
+          //labStudentId: id ? id : null,//
+          //searchTerms: [{propName: 'title', propValue: '6'}]
+        });
 
-          dispatch(actions.getAllSuccess(data));
-          newPageSize && dispatch(actions.setPageSize(newPageSize));
+        dispatch(actions.getAllSuccess(data));
+        newPageSize && dispatch(actions.setPageSize(newPageSize));
 
-          return data;
-        },
-        { ...AppActions }
-      );
+        return data;
+      }, appActionsWithDispatch(dispatch));
     };
 
   const createItem: any =
     (): ThunkType<ActionsTypes, AppActionsType> => async (dispatch) => {
-      await asyncHandlerWithDefaultSettings(
-        async () => {
-          const result = await api.create();
+      await asyncHandlerWithDefaultSettings(async () => {
+        const result = await api.create();
 
-          if (result.resultCode === 0) {
-            // @ts-ignore
-            dispatch(actions.createSuccess(result.data.item));
-          }
+        if (result.resultCode === 0) {
+          // @ts-ignore
+          dispatch(actions.createSuccess(result.data.item));
+        }
 
-          return result;
-        },
-        { ...AppActions }
-      );
+        return result;
+      }, appActionsWithDispatch(dispatch));
     };
 
   return {

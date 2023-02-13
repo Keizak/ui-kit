@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SnackbarProvider } from 'notistack';
+import { SnackbarAction, SnackbarProvider } from 'notistack';
 
 import { GlobalLoading } from './GlobalLoading';
 import { Notifications } from './Notifications';
@@ -11,7 +11,7 @@ type SnackbarComponentPropsType = {
   success: string | string[];
   resetNotifications: () => void;
   maxSnack?: number;
-  action?: React.ReactNode;
+  action?: SnackbarAction;
 };
 /**
  * SnackbarComponent -
