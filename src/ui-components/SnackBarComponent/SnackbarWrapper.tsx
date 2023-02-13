@@ -45,7 +45,7 @@ export const SnackbarComponent = (props: SnackbarComponentPropsType) => {
     >
       <GlobalLoading
         requestStatus={props.requestStatus}
-        colorGlobalLoading={colorGlobalLoading}
+        colorGlobalLoading={props.colorGlobalLoading}
       />
       <Notifications
         autoHideDuration={autoHideDuration}

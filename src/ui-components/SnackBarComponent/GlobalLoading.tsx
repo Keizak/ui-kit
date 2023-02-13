@@ -4,7 +4,7 @@ import { Box, LinearProgress } from '@mui/material';
 
 type GlobalLoadingPropsType = {
   requestStatus: number;
-  colorGlobalLoading:
+  colorGlobalLoading?:
     | 'primary'
     | 'secondary'
     | 'error'
