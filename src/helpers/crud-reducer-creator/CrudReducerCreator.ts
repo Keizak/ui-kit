@@ -237,7 +237,9 @@ export const crudReducerCreator = <
 
         if (result.resultCode === 0) {
           dispatch(actions.patchSuccess(result.data));
-          AppActions.setEditingEntityStatus(EditingEntityStatuses.Success);
+          dispatch(
+            AppActions.setEditingEntityStatus(EditingEntityStatuses.Success)
+          );
         }
 
         return result;
@@ -273,9 +275,12 @@ export const crudReducerCreator = <
         const result = await api.delete(editingItemId);
 
         if (result.resultCode === 0) {
-          // @ts-ignore
+          //@ts-ignore
           dispatch(actions.deleteSuccess(editingItemId));
-          AppActions.setEditingEntityStatus(EditingEntityStatuses.Success);
+          dispatch(
+            //@ts-ignore
+            AppActions.setEditingEntityStatus(EditingEntityStatuses.Success)
+          );
         }
 
         return result;
