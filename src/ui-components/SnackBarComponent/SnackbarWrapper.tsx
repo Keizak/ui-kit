@@ -12,6 +12,14 @@ type SnackbarComponentPropsType = {
   resetNotifications: () => void;
   maxSnack?: number;
   action?: SnackbarAction;
+  colorGlobalLoading?:
+    | 'primary'
+    | 'secondary'
+    | 'error'
+    | 'info'
+    | 'success'
+    | 'warning'
+    | 'inherit';
 };
 /**
  * SnackbarComponent -
@@ -22,6 +30,7 @@ type SnackbarComponentPropsType = {
  * <LinearProgress/> - отвечает за отображения статуса запроса
  * <Notifications/> - отвечает за всплытие сообщение
  */
+
 export const SnackbarComponent = (props: SnackbarComponentPropsType) => {
   /**
    * autoHideDuration - The time after which the pop-up window with the text will disappear
@@ -34,7 +43,10 @@ export const SnackbarComponent = (props: SnackbarComponentPropsType) => {
       autoHideDuration={autoHideDuration}
       action={props.action}
     >
-      <GlobalLoading requestStatus={props.requestStatus} />
+      <GlobalLoading
+        requestStatus={props.requestStatus}
+        colorGlobalLoading={colorGlobalLoading}
+      />
       <Notifications
         autoHideDuration={autoHideDuration}
         resetNotifications={props.resetNotifications}
