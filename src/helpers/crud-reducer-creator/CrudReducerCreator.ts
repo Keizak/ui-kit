@@ -256,6 +256,10 @@ export const crudReducerCreator = <
         const result = await api.update(editingItemId, updateModel);
 
         if (result.resultCode === 0) {
+          dispatch(
+            // @ts-ignore
+            AppActions.setEditingEntityStatus(EditingEntityStatuses.Success)
+          );
           let data = await api.getById(editingItemId);
 
           // @ts-ignore
@@ -349,6 +353,10 @@ export const crudReducerCreator = <
         if (result.resultCode === 0) {
           // @ts-ignore
           dispatch(actions.createSuccess(result.data.item));
+          dispatch(
+            // @ts-ignore
+            AppActions.setEditingEntityStatus(EditingEntityStatuses.Success)
+          );
         }
 
         return result;

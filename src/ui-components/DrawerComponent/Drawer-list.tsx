@@ -11,7 +11,11 @@ interface IDrawerList {
 
 export function DrawerList({ children, toggleDrawer, isRight }: IDrawerList) {
   return (
-    <div role="presentation" onKeyDown={toggleDrawer(false, isRight)}>
+    <div
+      role="presentation"
+      onKeyDown={toggleDrawer(false, isRight)}
+      onClick={toggleDrawer(false, isRight)}
+    >
       {children}
     </div>
   );
