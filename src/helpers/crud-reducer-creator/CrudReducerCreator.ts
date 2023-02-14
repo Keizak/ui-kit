@@ -294,14 +294,18 @@ export const crudReducerCreator = <
   const getItemById: any =
     (userId: number): ((dispatch: any) => Promise<TEntity | null>) =>
     async (dispatch: any) => {
-      return asyncHandlerWithDefaultSettings(async () => {
-        let data = await api.getById(userId);
+      return asyncHandlerWithDefaultSettings(
+        async () => {
+          let data = await api.getById(userId);
 
-        // @ts-ignore
-        dispatch(actions.getByIdSuccess(data));
+          // @ts-ignore
+          dispatch(actions.getByIdSuccess(data));
 
-        return data;
-      }, appActionsWithDispatch(dispatch));
+          return data;
+        },
+        appActionsWithDispatch(dispatch),
+        { withNotification: false }
+      );
     };
 
   const getItems: any =
@@ -313,36 +317,40 @@ export const crudReducerCreator = <
       getState: () => AppStateType
     ) => Promise<IItemsResult<TEntity> | null>) =>
     async (dispatch: any, getState: () => AppStateType) => {
-      return asyncHandlerWithDefaultSettings(async () => {
-        // @ts-ignore
-        let sortBy = getState().labsReducers[reducerName].sortBy;
-        let sortDirection =
+      return asyncHandlerWithDefaultSettings(
+        async () => {
           // @ts-ignore
-          getState().labsReducers[reducerName].sortDirection;
-        // @ts-ignore
-        let pageSize = newPageSize
-          ? newPageSize
-          : // @ts-ignore
-            getState().labsReducers[reducerName].pageSize;
-        // @ts-ignore
-        let currentPage = getState().labsReducers[reducerName].currentPage;
-        // @ts-ignore
-        let searchTerms = getState().labsReducers[reducerName].searchTerms;
+          let sortBy = getState().labsReducers[reducerName].sortBy;
+          let sortDirection =
+            // @ts-ignore
+            getState().labsReducers[reducerName].sortDirection;
+          // @ts-ignore
+          let pageSize = newPageSize
+            ? newPageSize
+            : // @ts-ignore
+              getState().labsReducers[reducerName].pageSize;
+          // @ts-ignore
+          let currentPage = getState().labsReducers[reducerName].currentPage;
+          // @ts-ignore
+          let searchTerms = getState().labsReducers[reducerName].searchTerms;
 
-        const data = await api.getAll(currentPage, pageSize, {
-          sortBy: sortBy,
-          sortDirection: sortDirection,
-          searchTerms: searchTerms,
-          ...extraQueryParams,
-          //labStudentId: id ? id : null,//
-          //searchTerms: [{propName: 'title', propValue: '6'}]
-        });
+          const data = await api.getAll(currentPage, pageSize, {
+            sortBy: sortBy,
+            sortDirection: sortDirection,
+            searchTerms: searchTerms,
+            ...extraQueryParams,
+            //labStudentId: id ? id : null,//
+            //searchTerms: [{propName: 'title', propValue: '6'}]
+          });
 
-        dispatch(actions.getAllSuccess(data));
-        newPageSize && dispatch(actions.setPageSize(newPageSize));
+          dispatch(actions.getAllSuccess(data));
+          newPageSize && dispatch(actions.setPageSize(newPageSize));
 
-        return data;
-      }, appActionsWithDispatch(dispatch));
+          return data;
+        },
+        appActionsWithDispatch(dispatch),
+        { withNotification: false }
+      );
     };
 
   const createItem: any =

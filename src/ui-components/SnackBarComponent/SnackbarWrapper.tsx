@@ -12,6 +12,8 @@ type SnackbarComponentPropsType = {
   resetNotifications: () => void;
   maxSnack?: number;
   action?: SnackbarAction;
+  resetMessagesDuration?: number;
+  autoHideDuration?: number;
   colorGlobalLoading?:
     | 'primary'
     | 'secondary'
@@ -35,12 +37,20 @@ export const SnackbarComponent = (props: SnackbarComponentPropsType) => {
   /**
    * autoHideDuration - The time after which the pop-up window with the text will disappear
    */
-  const autoHideDuration = 2000;
+  const defaultAutoHideDuration = props.autoHideDuration
+    ? props.autoHideDuration
+    : 2000;
+
+  const defaultMaxSnack = props.maxSnack ? props.maxSnack : 3;
+
+  const defaultResetMessagesDuration = props.resetMessagesDuration
+    ? props.resetMessagesDuration
+    : 3000;
 
   return (
     <SnackbarProvider
-      maxSnack={props.maxSnack ? props.maxSnack : 3}
-      autoHideDuration={autoHideDuration}
+      maxSnack={defaultMaxSnack}
+      autoHideDuration={defaultAutoHideDuration}
       action={props.action}
     >
       <GlobalLoading
@@ -48,7 +58,7 @@ export const SnackbarComponent = (props: SnackbarComponentPropsType) => {
         colorGlobalLoading={props.colorGlobalLoading}
       />
       <Notifications
-        autoHideDuration={autoHideDuration}
+        autoHideDuration={defaultResetMessagesDuration}
         resetNotifications={props.resetNotifications}
         success={props.success}
         error={props.error}
