@@ -1,8 +1,8 @@
-export const RequestStatuses = {
-  None: 0,
-  InProgress: 1,
-  Finished: 2,
-} as const;
+export enum RequestStatuses {
+  None,
+  InProgress,
+  Finished,
+}
 
 export type RequestStatusesType =
   typeof RequestStatuses[keyof typeof RequestStatuses];

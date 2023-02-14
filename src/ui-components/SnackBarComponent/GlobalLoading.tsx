@@ -4,6 +4,14 @@ import { Box, LinearProgress } from '@mui/material';
 
 type GlobalLoadingPropsType = {
   requestStatus: number;
+  colorGlobalLoading?:
+    | 'primary'
+    | 'secondary'
+    | 'error'
+    | 'info'
+    | 'success'
+    | 'warning'
+    | 'inherit';
 };
 export const GlobalLoading = (props: GlobalLoadingPropsType) => {
   /**
@@ -22,7 +30,11 @@ export const GlobalLoading = (props: GlobalLoadingPropsType) => {
             zIndex: 9999,
           }}
         >
-          <LinearProgress color="success" />
+          <LinearProgress
+            color={
+              props.colorGlobalLoading ? props.colorGlobalLoading : 'success'
+            }
+          />
         </Box>
       )}
     </>

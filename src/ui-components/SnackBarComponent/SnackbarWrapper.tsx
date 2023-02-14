@@ -4,13 +4,24 @@ import { SnackbarProvider } from 'notistack';
 
 import { GlobalLoading } from './GlobalLoading';
 import { Notifications } from './Notifications';
+import { CloseSnackbarAction } from './SnackBarClose';
 
 type SnackbarComponentPropsType = {
   requestStatus: number;
   error: string | string[];
-  success: string;
+  success: string | string[];
   resetNotifications: () => void;
   maxSnack?: number;
+  resetMessagesDuration?: number;
+  autoHideDuration?: number;
+  colorGlobalLoading?:
+    | 'primary'
+    | 'secondary'
+    | 'error'
+    | 'info'
+    | 'success'
+    | 'warning'
+    | 'inherit';
 };
 /**
  * SnackbarComponent -
@@ -21,20 +32,33 @@ type SnackbarComponentPropsType = {
  * <LinearProgress/> - отвечает за отображения статуса запроса
  * <Notifications/> - отвечает за всплытие сообщение
  */
+
 export const SnackbarComponent = (props: SnackbarComponentPropsType) => {
   /**
    * autoHideDuration - The time after which the pop-up window with the text will disappear
    */
-  const autoHideDuration = 2000;
+  const defaultAutoHideDuration = props.autoHideDuration
+    ? props.autoHideDuration
+    : 2000;
+
+  const defaultMaxSnack = props.maxSnack ? props.maxSnack : 3;
+
+  const defaultResetMessagesDuration = props.resetMessagesDuration
+    ? props.resetMessagesDuration
+    : 3000;
 
   return (
     <SnackbarProvider
-      maxSnack={props.maxSnack ? props.maxSnack : 3}
-      autoHideDuration={autoHideDuration}
+      maxSnack={defaultMaxSnack}
+      autoHideDuration={defaultAutoHideDuration}
+      action={(id) => <CloseSnackbarAction id={id} />}
     >
-      <GlobalLoading requestStatus={props.requestStatus} />
+      <GlobalLoading
+        requestStatus={props.requestStatus}
+        colorGlobalLoading={props.colorGlobalLoading}
+      />
       <Notifications
-        autoHideDuration={autoHideDuration}
+        autoHideDuration={defaultResetMessagesDuration}
         resetNotifications={props.resetNotifications}
         success={props.success}
         error={props.error}

@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 type NotificationsPropsType = {
   autoHideDuration: number;
   error: string | string[];
-  success: string;
+  success: string | string[];
   resetNotifications: () => void;
 };
 
@@ -33,18 +33,24 @@ export const Notifications = (props: NotificationsPropsType) => {
     setTimeout(() => props.resetNotifications(), props.autoHideDuration);
   };
 
-  const checkForArrayErrorMessages = (error: string | string[]) => {
-    if (Array.isArray(error))
-      error.forEach((message) => showNotification(message, 'error'));
-    else showNotification(error, 'error');
+  const checkForArrayErrorMessages = (
+    messages: string | string[],
+    type: 'error' | 'success'
+  ) => {
+    if (Array.isArray(messages)) {
+      messages.length > 0 &&
+        messages.forEach((message) => showNotification(message, type));
+    } else {
+      showNotification(messages, type);
+    }
   };
 
   useEffect(() => {
-    props.error && checkForArrayErrorMessages(props.error);
+    props.error && checkForArrayErrorMessages(props.error, 'error');
   }, [props.error]);
 
   useEffect(() => {
-    props.success && showNotification(props.success, 'success');
+    props.success && checkForArrayErrorMessages(props.success, 'success');
   }, [props.success]);
 
   return <></>;
