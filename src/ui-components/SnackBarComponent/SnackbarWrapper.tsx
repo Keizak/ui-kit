@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { SnackbarAction, SnackbarProvider } from 'notistack';
+import { SnackbarProvider } from 'notistack';
 
 import { GlobalLoading } from './GlobalLoading';
 import { Notifications } from './Notifications';
+import { CloseSnackbarAction } from './SnackBarClose';
 
 type SnackbarComponentPropsType = {
   requestStatus: number;
@@ -11,7 +12,6 @@ type SnackbarComponentPropsType = {
   success: string | string[];
   resetNotifications: () => void;
   maxSnack?: number;
-  action?: SnackbarAction;
   resetMessagesDuration?: number;
   autoHideDuration?: number;
   colorGlobalLoading?:
@@ -51,7 +51,7 @@ export const SnackbarComponent = (props: SnackbarComponentPropsType) => {
     <SnackbarProvider
       maxSnack={defaultMaxSnack}
       autoHideDuration={defaultAutoHideDuration}
-      action={props.action}
+      action={(id) => <CloseSnackbarAction id={id} />}
     >
       <GlobalLoading
         requestStatus={props.requestStatus}
