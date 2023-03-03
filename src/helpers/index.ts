@@ -13,6 +13,7 @@ import { BaseAPI } from './crud-reducer-creator/base-api/BaseApi';
 import { crudReducerCreator } from './crud-reducer-creator/CrudReducerCreator';
 import { useCustomSearchParams } from './hooks/useCustomSearchParams';
 import { useDebounce } from './hooks/useDebounce/useDebounce';
+import { useDebounceOrThrottle } from './hooks/useDebounceOrThrottle/useDebounceOrThrottle';
 
 export {
   chooseColorFromStatus,
@@ -29,6 +30,7 @@ export {
   useDebounce,
   useCustomSearchParams,
   createRows,
+  useDebounceOrThrottle,
 };
 
 export * from './api/newCommonAsyncHandler';
