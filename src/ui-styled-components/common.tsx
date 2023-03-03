@@ -2,7 +2,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Select } from '@mui/material';
 import styled from 'styled-components';
 
-// -------------------------------------------------Block-----------------------------------------------------
+// -------------------------------------------------Block------------------------------------------------------
 
 export interface BlockProps {
   name: string;
