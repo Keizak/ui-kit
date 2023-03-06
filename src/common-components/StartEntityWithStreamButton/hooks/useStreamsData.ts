@@ -27,7 +27,9 @@ export const useStreamsData = (params: useStreamsDataParams) => {
   };
 
   useEffect(() => {
-    getStreamsForThisUser(params.userId).then((res) => setStreams(res));
+    getStreamsForThisUser(params.userId)
+      .then((res) => setStreams(res))
+      .catch((err) => console.log(err, 'errr'));
   }, []);
 
   return { streams, setStreams, getStreamsForThisUser, updateStream };
