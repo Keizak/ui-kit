@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 const tokenKey = 'auth-token';
+const courseIdKey = 'course-id';
 
 export const getToken = () => {
   return sessionStorage.getItem(tokenKey);
@@ -8,6 +9,8 @@ export const getToken = () => {
 export const saveToken = (token: string) => {
   sessionStorage.setItem(tokenKey, token);
 };
+
+export let getCourseId = () => Number(sessionStorage.getItem(courseIdKey));
 
 type OptionsType = {
   baseURL: string;
@@ -33,7 +36,7 @@ export class BaseAxiosInstance {
         }
 
         // @ts-ignore
-        config.headers!['course-id'] = await getCourseId();
+        config.headers!['course-id'] = getCourseId();
 
         return config;
       },
