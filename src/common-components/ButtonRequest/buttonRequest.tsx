@@ -7,6 +7,7 @@ import { RequestStatuses } from '../../helpers';
 
 type ButtonRequestPropsType = ButtonProps & {
   requestStatus: RequestStatuses;
+  typeUiButton: 'Mui' | 'classic';
 };
 export const ButtonRequest = (props: ButtonRequestPropsType) => {
   const [localDisabled, setLocalDisabled] = React.useState(false);
@@ -26,7 +27,15 @@ export const ButtonRequest = (props: ButtonRequestPropsType) => {
     }
   }, [props.requestStatus]);
 
-  return (
+  return props.typeUiButton === 'classic' ? (
+    <button
+      {...props}
+      disabled={buttonDisabled}
+      onClick={(e) => onClickHandler(e)}
+    >
+      {props.children}
+    </button>
+  ) : (
     <Button
       {...props}
       disabled={buttonDisabled}
