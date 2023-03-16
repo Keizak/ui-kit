@@ -17,15 +17,14 @@ import {
 import { createStyles, makeStyles } from '@mui/styles';
 import { Link, Outlet, useParams } from 'react-router-dom';
 
-import { createRows } from '../../helpers/createRows';
-import { useCustomSearchParams } from '../../helpers/useCustomSearchParams';
+import { createRows, useCustomSearchParams } from '../../helpers';
 import {
   CrudStateType,
   FormElementType,
   GridItemElementType,
   IBaseEntity,
   RowDataType,
-} from '../../types/types';
+} from '../../types';
 import CellValueWithControl from '../CellValueWithControl/CellValueWithControl';
 import { PaginationWithSelectRows } from '../PaginationWithSelectedRows/PaginationWithSelectedRows';
 import { EnhancedTableHead } from '../TableHead/TableHead';
@@ -75,7 +74,7 @@ export const withCRUDGrid = <
   mdtp: { [key: string]: (...args: any[]) => any } = {},
   settings: {
     sortBy?: string | null;
-    showCreate?: boolean | null;
+    showCreate?: () => boolean;
     showRefresh?: boolean | null;
     showEdit?: boolean | null;
     showDetails?: boolean | null;
@@ -161,11 +160,7 @@ export const withCRUDGrid = <
                 item?.id
               )}
             >
-              <Fab
-                size="small"
-                color="primary"
-                onClick={() => console.log('item.id', item)}
-              >
+              <Fab size="small" color="primary">
                 <Visibility />
               </Fab>
             </Link>
@@ -257,7 +252,7 @@ export const withCRUDGrid = <
                 {props.renderContentAboveTable &&
                   props.renderContentAboveTable()}
               </Grid>
-              {settings?.showCreate ? (
+              {settings?.showCreate && settings.showCreate() ? (
                 <Grid>
                   {entityName && (
                     <Button
@@ -296,7 +291,14 @@ export const withCRUDGrid = <
               {gridStructureData.map((d, i) => {
                 let Component = d.editModeComponent && d.editModeComponent;
 
-                const registeredObj = register(d.name !== null ? d.name : '');
+                let registeredObj = {};
+
+                if (Component) {
+                  registeredObj =
+                    d.name && d.props!.register && register(d.name);
+                }
+
+                //const registeredObj = register(d.name !== null ? d.name : '');
 
                 return (
                   <div key={i}>
@@ -312,7 +314,6 @@ export const withCRUDGrid = <
                         <form>
                           {Component ? (
                             <Component
-                              {...registeredObj}
                               name={d.name}
                               defaultValue={null}
                               control={control}
@@ -327,6 +328,7 @@ export const withCRUDGrid = <
                                   d.editModePropType ? d.editModePropType : '1'
                                 )
                               }
+                              {...registeredObj}
                             />
                           ) : null}
                         </form>
@@ -409,6 +411,7 @@ export const withCRUDGrid = <
                               {c(row.item, {
                                 ...mdtp,
                                 dispatch,
+                                state,
                               })}
                             </TableCell>
                           ))}

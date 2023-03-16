@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState, memo } from 'react';
 import { Pagination } from '@mui/material';
 
 import { Block, Text } from '../../ui-styled-components/common';
-import { BasicSelect } from '../BasicSelect/BasicSelect';
+import { BasicObsoleteSelect } from '../BasicObsoleteSelect/BasicObsoleteSelect';
 
 export type BasicPaginationPropsType = {
   currentPage?: number;
@@ -83,7 +83,7 @@ export const BasicPagination = memo(
         />
         <Block name={'ShowCount'} margin={'0 15px 0 15px'}>
           <Text margin={'0 10px 0 0'}>Show</Text>
-          <BasicSelect
+          <BasicObsoleteSelect
             label={defaultCountOnPages.toString()}
             options={optionsCountOnPage}
             onSelect={changeCountOnPageHandler}

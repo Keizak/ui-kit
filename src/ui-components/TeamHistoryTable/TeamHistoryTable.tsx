@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createTitle } from '../../helpers/commonHelpersFunctions';
+import { createTitle } from '../../helpers';
 import { BasicTable } from '../BasicTable/BasicTable';
 
 /**

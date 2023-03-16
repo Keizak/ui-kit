@@ -2,7 +2,7 @@ import React from 'react';
 
 import { DefaultTheme } from 'styled-components';
 
-import { BasicSelect } from '../../BasicSelect/BasicSelect';
+import { BasicObsoleteSelect } from '../../BasicObsoleteSelect/BasicObsoleteSelect';
 
 export type CronSelectType = {
   options: (string | number)[];
@@ -32,7 +32,7 @@ export const CronSelect = ({
   mode = 'multiple',
 }: CronSelectType) => {
   return (
-    <BasicSelect
+    <BasicObsoleteSelect
       label={value as string}
       options={options}
       value={value}

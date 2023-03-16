@@ -1,4 +1,4 @@
-import { IGetParams } from '../crud-reducer-creator/base-api/BaseApi';
+import { IGetParams } from '../../crud-reducer-creator/base-api/BaseApi';
 
 export const typesUtils = {
   isObject(data: any) {
