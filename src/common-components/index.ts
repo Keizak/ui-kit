@@ -8,5 +8,5 @@ import {
   StartEntityWithStreamButton,
 } from './StartEntityWithStreamButton/createStreamButton';
 
-export type { createStreamButtonPropsType, StreamStatusType, StreamTypes };
-export { StartEntityWithStreamButton, ButtonRequest };
+export type { createStreamButtonPropsType, StreamStatusType };
+export { StartEntityWithStreamButton, ButtonRequest, StreamTypes };
