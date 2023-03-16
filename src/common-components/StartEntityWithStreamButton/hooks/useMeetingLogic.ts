@@ -17,45 +17,45 @@ export type meetingLogicStateType = {
   createMeetingLoading: boolean;
 };
 
-export type meetingLogicStateKeysType = keyof meetingLogicStateType;
 export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
   const { selectedStream, setSelectedStream, updateStream } = params;
 
-  const [meetingLogicState, setMeetingLogicState] =
-    useState<meetingLogicStateType>({
-      createMeetingStatusModal: false,
-      settingsStreamStatusModal: false,
-      meetingCreatingStatus: null,
-      createMeeting: false,
-      createMeetingLoading: false,
+  const [settingsStreamStatusModal, setSettingsStreamStatusModal] =
+    useState(false);
+  const [meetingCreatingStatus, setMeetingCreatingStatus] = useState<
+    string | null
+  >(null);
+  const [createMeeting, setCreateMeeting] = useState(false);
+  const [createMeetingLoading, setCreateMeetingLoading] = useState(false);
+
+  const changeMeetingLogicState = (fields: Record<string, any>) => {
+    Object.keys(fields).forEach((key) => {
+      switch (key) {
+        case 'settingsStreamStatusModal':
+          return setSettingsStreamStatusModal(fields[key]);
+        case 'meetingCreatingStatus':
+          return setMeetingCreatingStatus(fields[key]);
+        case 'createMeeting':
+          return setCreateMeeting(fields[key]);
+        case 'createMeetingLoading':
+          return setCreateMeetingLoading(fields[key]);
+        default:
+          break;
+      }
     });
-
-  const changeMeetingLogicState = async (
-    fields: meetingLogicStateKeysType | meetingLogicStateKeysType[],
-    value: any
-  ) => {
-    const newState: any = { ...meetingLogicState };
-
-    if (Array.isArray(fields)) {
-      await fields.forEach((field, index) => (newState[field] = value[index]));
-      setMeetingLogicState(newState);
-    } else {
-      setMeetingLogicState({ ...meetingLogicState, [fields]: value });
-    }
   };
 
   useEffect(() => {
+    supportBookingAPI.open().finally();
     supportBookingAPI.subscribe(
       'ZoomMeetingCreatingStatusChanged',
       ({ message }: { message: string }) => {
-        changeMeetingLogicState(
-          [
-            'createMeetingStatusModal',
-            'meetingCreatingStatus',
-            'createMeetingLoading',
-          ],
-          [false, message, 'true']
-        );
+        console.log(message, '-message');
+        changeMeetingLogicState({
+          createMeetingStatusModal: false,
+          meetingCreatingStatus: message,
+          createMeetingLoading: true,
+        });
       }
     );
     supportBookingAPI.subscribe(
@@ -65,21 +65,28 @@ export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
           setSelectedStream({ ...selectedStream, link: url });
           updateStream(url, selectedStream).finally();
         }
-        changeMeetingLogicState(
-          ['createMeeting', 'createMeetingLoading', 'createMeetingStatusModal'],
-          [true, false, false]
-        );
+        changeMeetingLogicState({
+          createMeeting: true,
+          createMeetingLoading: false,
+          createMeetingStatusModal: false,
+        });
       }
     );
 
     return () => {
+      supportBookingAPI.close().finally();
       supportBookingAPI.unsubscribe('ZoomMeetingCreatingStatusChanged');
       supportBookingAPI.unsubscribe('ZoomMeetingStarted');
     };
-  }, [selectedStream]);
+  }, []);
 
   return {
     changeMeetingLogicState,
-    meetingLogicState,
+    meetingLogicState: {
+      settingsStreamStatusModal,
+      meetingCreatingStatus,
+      createMeetingLoading,
+      createMeeting,
+    },
   };
 };

@@ -1,35 +1,34 @@
 import { axiosInstance, IStream } from '../api/api';
 
-import { meetingLogicStateKeysType } from './useMeetingLogic';
-
 type useLocalHandlersParamsType = {
-  changeMeetingLogicState: (
-    fields: meetingLogicStateKeysType | meetingLogicStateKeysType[],
-    value: any
-  ) => void;
-  streamStatus: boolean;
+  changeMeetingLogicState: (fields: Record<string, any>) => void;
   selectedStream: IStream | null;
   setSelectedStream: (stream: IStream) => void;
   updateStream: (link: string, currentStream: IStream) => Promise<void>;
-  toggleStreamStatus: () => void;
   getStreams: () => void;
 };
 export const useLocalHandlers = ({
   changeMeetingLogicState,
-  streamStatus,
   selectedStream,
   updateStream,
   setSelectedStream,
-  toggleStreamStatus,
   getStreams,
 }: useLocalHandlersParamsType) => {
+  const toggleSelectedStreamStatus = () => {
+    if (selectedStream)
+      return setSelectedStream({
+        ...selectedStream,
+        startedStreamSession: !selectedStream.startedStreamSession,
+      });
+    else return null;
+  };
   const changeStatusStream = async (streamId: number, status: boolean) => {
-    changeMeetingLogicState('meetingCreatingStatus', '');
+    changeMeetingLogicState({ meetingCreatingStatus: '' });
     if (status) {
       return await axiosInstance.put(`streams/${streamId}/stop`).then((res) => {
         if (res.status === 200 && res.data?.resultCode === 0) {
-          toggleStreamStatus();
-          changeMeetingLogicState('createMeeting', false);
+          toggleSelectedStreamStatus();
+          changeMeetingLogicState({ createMeeting: false });
           if (selectedStream) {
             updateStream('', selectedStream);
             setSelectedStream({
@@ -45,11 +44,11 @@ export const useLocalHandlers = ({
         .put(`streams/${streamId}/start`)
         .then((res) => {
           if (res.status === 200 && res.data?.resultCode === 0) {
-            toggleStreamStatus();
-            changeMeetingLogicState(
-              ['createMeeting', 'createMeetingStatusModal'],
-              [true, false]
-            );
+            toggleSelectedStreamStatus();
+            changeMeetingLogicState({
+              createMeeting: true,
+              createMeetingStatusModal: false,
+            });
             if (selectedStream) {
               updateStream(selectedStream.link, selectedStream);
             }
@@ -58,15 +57,19 @@ export const useLocalHandlers = ({
     }
   };
   const createStreamHandler = () => {
-    changeMeetingLogicState('createMeetingStatusModal', true);
+    changeMeetingLogicState({ createMeetingStatusModal: true });
   };
 
   const clickSettingsHandler = () => {
-    changeMeetingLogicState('settingsStreamStatusModal', true);
+    changeMeetingLogicState({ settingsStreamStatusModal: true });
   };
 
   const clickStartStopStreamHandler = () => {
-    selectedStream && changeStatusStream(selectedStream?.id, streamStatus);
+    selectedStream &&
+      changeStatusStream(
+        selectedStream?.id,
+        !!selectedStream.startedStreamSession
+      );
   };
 
   return {

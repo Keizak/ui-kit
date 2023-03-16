@@ -7,14 +7,12 @@ import { IStream } from '../api/api';
 
 type statStopStreamButtonPropsType = {
   selectedStream: IStream;
-  streamStatus: boolean;
   entityTitle: string;
   clickStartStopStreamHandler: () => void;
   clickSettingsHandler: () => void;
 };
 export const StartStopStreamButton = ({
   selectedStream,
-  streamStatus,
   entityTitle,
   clickStartStopStreamHandler,
   clickSettingsHandler,
@@ -36,7 +34,7 @@ export const StartStopStreamButton = ({
           }
         >
           <>
-            {streamStatus ? 'Stop ' : 'Start '}
+            {selectedStream.startedStreamSession ? 'Stop ' : 'Start '}
             {entityTitle}
           </>
         </Tooltip>

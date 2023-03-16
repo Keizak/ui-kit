@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button } from '@mui/material';
 import { ButtonProps } from '@mui/material/Button/Button';
@@ -10,10 +10,13 @@ type ButtonRequestPropsType = ButtonProps & {
   typeUiButton?: 'Mui' | 'classic';
 };
 export const ButtonRequest = (props: ButtonRequestPropsType) => {
-  const [localDisabled, setLocalDisabled] = React.useState(false);
+  const [localDisabled, setLocalDisabled] = useState(false);
   const { typeUiButton = 'Mui' } = props;
 
-  const buttonDisabled = localDisabled && props.disabled;
+  const getButtonDisabled = () => {
+    if (localDisabled) return true;
+    else return props.disabled;
+  };
 
   const onClickHandler = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -31,7 +34,7 @@ export const ButtonRequest = (props: ButtonRequestPropsType) => {
   return typeUiButton === 'classic' ? (
     <button
       {...props}
-      disabled={buttonDisabled}
+      disabled={getButtonDisabled()}
       onClick={(e) => onClickHandler(e)}
     >
       {props.children}
@@ -39,7 +42,7 @@ export const ButtonRequest = (props: ButtonRequestPropsType) => {
   ) : (
     <Button
       {...props}
-      disabled={buttonDisabled}
+      disabled={getButtonDisabled()}
       onClick={(e) => onClickHandler(e)}
     >
       {props.children}
