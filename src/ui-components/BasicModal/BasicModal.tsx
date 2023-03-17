@@ -11,7 +11,7 @@ import {
   useTheme,
 } from '@mui/material';
 
-import { Block } from '../../ui-styled-components/common';
+import { Block } from '../../ui-styled-components';
 import { BasicButton } from '../BasicButton/BasicButton';
 
 export type BasicModalPropsType = {
