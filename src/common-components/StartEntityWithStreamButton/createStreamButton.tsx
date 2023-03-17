@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 
 import { useMutation } from 'react-query';
 
@@ -12,12 +12,17 @@ import { useStreamsData } from './hooks/useStreamsData';
 import { SettingStreamModal } from './modals/SettingStreamModal';
 import { StartStopStreamButton } from './startStopStreamButton/startStopStreamButton';
 
+type StatusesPositionType = 'top' | 'right' | 'left' | 'bottom';
 export type createStreamButtonPropsType = {
   title?: string;
   entityTitle?: string;
   type: StreamTypes;
   userId: number;
   requestStatus: RequestStatuses;
+  customButtonStyle?: CSSProperties;
+  asyncHandler: (operation: any) => Promise<any>;
+
+  statusPosition?: StatusesPositionType;
 };
 export const StartEntityWithStreamButton = (
   props: createStreamButtonPropsType
@@ -25,9 +30,12 @@ export const StartEntityWithStreamButton = (
   const {
     title = 'Create Zoom-meeting',
     entityTitle = 'stream',
+    statusPosition = 'right',
     userId,
     requestStatus,
     type,
+    customButtonStyle,
+    asyncHandler,
   } = props;
 
   const [selectedStream, setSelectedStream] = useState<IStream | null>(null);
@@ -51,6 +59,7 @@ export const StartEntityWithStreamButton = (
     clickStartStopStreamHandler,
   } = useLocalHandlers({
     changeMeetingLogicState,
+    asyncHandler,
     selectedStream,
     setSelectedStream,
     updateStream,
@@ -91,27 +100,38 @@ export const StartEntityWithStreamButton = (
     return disabled;
   };
 
-  //
-  // useEffect(() => {
-  //   console.log(meetingLogicState, 'meetingLogicState');
-  // }, [meetingLogicState]);
+  const getContainerStyle = (
+    statusPosition: StatusesPositionType
+  ): CSSProperties => {
+    console.log(statusPosition, 'statusPosition');
+    const defaultStyle = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    };
+
+    if (statusPosition === 'right' || statusPosition === 'left')
+      return defaultStyle;
+    else return { ...defaultStyle, flexDirection: 'column' };
+  };
+
+  const getPositionStatusBlock = (statusPosition: StatusesPositionType) => {
+    if (statusPosition === 'left' || statusPosition === 'top') return 'top';
+    else return 'bottom';
+  };
 
   return (
-    <div
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-    >
-      <div style={{ marginBottom: '5px' }}>
-        {meetingLogicState.meetingCreatingStatus}
-      </div>
-      {selectedStream && selectedStream.startedStreamSession && (
-        <div style={{ marginBottom: '5px' }}>
-          Стрим : {selectedStream.title}
+    <div style={getContainerStyle(statusPosition)}>
+      {getPositionStatusBlock(statusPosition) === 'top' && (
+        <div style={{ marginLeft: '10px' }}>
+          {meetingLogicState.meetingCreatingStatus}
         </div>
       )}
       <div>
         {(meetingLogicState.createMeeting && selectedStream) ||
         selectedStream?.startedStreamSession ? (
           <StartStopStreamButton
+            requestStatus={requestStatus}
             selectedStream={selectedStream}
             entityTitle={entityTitle}
             clickSettingsHandler={clickSettingsHandler}
@@ -128,11 +148,17 @@ export const StartEntityWithStreamButton = (
               selectedStream
             )}
             requestStatus={requestStatus}
+            style={customButtonStyle}
           >
             {title}
           </ButtonRequest>
         )}
       </div>
+      {getPositionStatusBlock(statusPosition) === 'bottom' && (
+        <div style={{ marginLeft: '10px' }}>
+          {meetingLogicState.meetingCreatingStatus}
+        </div>
+      )}
       {/*<CreateSettingStreamModal*/}
       {/*  onSubmit={(id, status) => changeStatusStream(id, status)}*/}
       {/*  open={meetingLogicState.createMeetingStatusModal}*/}

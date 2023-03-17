@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@mui/material';
 import { ButtonProps } from '@mui/material/Button/Button';
+import styled from 'styled-components';
 
 import { RequestStatuses } from '../../helpers';
 
@@ -40,12 +41,18 @@ export const ButtonRequest = (props: ButtonRequestPropsType) => {
       {props.children}
     </button>
   ) : (
-    <Button
+    <CustomButton
       {...props}
       disabled={getButtonDisabled()}
       onClick={(e) => onClickHandler(e)}
     >
       {props.children}
-    </Button>
+    </CustomButton>
   );
 };
+
+const CustomButton = styled(Button)`
+  :disabled {
+    background: gray !important;
+  }
+`;

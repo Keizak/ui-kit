@@ -4,8 +4,9 @@ type useLocalHandlersParamsType = {
   changeMeetingLogicState: (fields: Record<string, any>) => void;
   selectedStream: IStream | null;
   setSelectedStream: (stream: IStream) => void;
-  updateStream: (link: string, currentStream: IStream) => Promise<void>;
+  updateStream: (newStream: IStream) => Promise<void>;
   getStreams: () => void;
+  asyncHandler: (operation: any) => Promise<any>;
 };
 export const useLocalHandlers = ({
   changeMeetingLogicState,
@@ -13,6 +14,7 @@ export const useLocalHandlers = ({
   updateStream,
   setSelectedStream,
   getStreams,
+  asyncHandler,
 }: useLocalHandlersParamsType) => {
   const toggleSelectedStreamStatus = () => {
     if (selectedStream)
@@ -25,24 +27,25 @@ export const useLocalHandlers = ({
   const changeStatusStream = async (streamId: number, status: boolean) => {
     changeMeetingLogicState({ meetingCreatingStatus: '' });
     if (status) {
-      return await axiosInstance.put(`streams/${streamId}/stop`).then((res) => {
-        if (res.status === 200 && res.data?.resultCode === 0) {
-          toggleSelectedStreamStatus();
-          changeMeetingLogicState({ createMeeting: false });
-          if (selectedStream) {
-            updateStream('', selectedStream);
-            setSelectedStream({
-              ...selectedStream,
-              startedStreamSession: false,
-            });
+      return await asyncHandler(
+        axiosInstance.put(`streams/${streamId}/stop`).then((res) => {
+          if (res.status === 200 && res.data?.resultCode === 0) {
+            toggleSelectedStreamStatus();
+            changeMeetingLogicState({ createMeeting: false });
+            if (selectedStream) {
+              updateStream({ ...selectedStream, link: '' });
+              setSelectedStream({
+                ...selectedStream,
+                startedStreamSession: false,
+              });
+            }
+            getStreams();
           }
-          getStreams();
-        }
-      });
+        })
+      );
     } else {
-      return await axiosInstance
-        .put(`streams/${streamId}/start`)
-        .then((res) => {
+      return await asyncHandler(
+        axiosInstance.put(`streams/${streamId}/start`).then((res) => {
           if (res.status === 200 && res.data?.resultCode === 0) {
             toggleSelectedStreamStatus();
             changeMeetingLogicState({
@@ -50,10 +53,11 @@ export const useLocalHandlers = ({
               createMeetingStatusModal: false,
             });
             if (selectedStream) {
-              updateStream(selectedStream.link, selectedStream);
+              updateStream(selectedStream);
             }
           }
-        });
+        })
+      );
     }
   };
   const createStreamHandler = () => {

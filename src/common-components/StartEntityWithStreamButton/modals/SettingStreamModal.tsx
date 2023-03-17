@@ -13,16 +13,20 @@ export const SettingStreamModal = (props: AddLinkToStreamModalPropsType) => {
 
   return (
     <BasicModal
+      width={1000}
       onClose={() => {
         props.setOpen(false);
       }}
-      title={'Stream settings'}
+      title={'Stream info'}
       open={props.open}
       customFooter={<></>}
     >
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        Zoom-meeting Url:{' '}
-        <a href={selectedStream.link}>{selectedStream.link}</a>
+        <span>Стрим: {selectedStream.title}</span>
+        <span>
+          Zoom-meeting Url:{' '}
+          <a href={selectedStream.link}>{selectedStream.link}</a>
+        </span>
       </div>
     </BasicModal>
   );

@@ -1,8 +1,11 @@
 import React from 'react';
 
-import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
-import { Button, Tooltip } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+import { Tooltip } from '@mui/material';
+import styled from 'styled-components';
 
+import { RequestStatuses } from '../../../helpers';
+import { ButtonRequest } from '../../ButtonRequest/buttonRequest';
 import { IStream } from '../api/api';
 
 type statStopStreamButtonPropsType = {
@@ -10,12 +13,14 @@ type statStopStreamButtonPropsType = {
   entityTitle: string;
   clickStartStopStreamHandler: () => void;
   clickSettingsHandler: () => void;
+  requestStatus: RequestStatuses;
 };
 export const StartStopStreamButton = ({
   selectedStream,
   entityTitle,
   clickStartStopStreamHandler,
   clickSettingsHandler,
+  requestStatus,
 }: statStopStreamButtonPropsType) => {
   return (
     <div
@@ -25,7 +30,20 @@ export const StartStopStreamButton = ({
         justifyContent: 'center',
       }}
     >
-      <Button variant="contained" onClick={clickStartStopStreamHandler}>
+      <CustomButton
+        requestStatus={requestStatus}
+        variant={'outlined'}
+        onClick={clickStartStopStreamHandler}
+        sx={{
+          backgroundColor: selectedStream.startedStreamSession
+            ? 'red'
+            : 'green',
+          color: 'white',
+          hover: {
+            color: 'black',
+          },
+        }}
+      >
         <Tooltip
           title={
             selectedStream.link
@@ -38,11 +56,22 @@ export const StartStopStreamButton = ({
             {entityTitle}
           </>
         </Tooltip>
-      </Button>
-      <SettingsApplicationsIcon
+      </CustomButton>
+      <InfoIcon
         onClick={clickSettingsHandler}
-        sx={{ marginLeft: '15px', color: '#1976d2', fontSize: '42px' }}
+        sx={{
+          marginLeft: '15px',
+          color: '#1976d2',
+          fontSize: '36px',
+          cursor: 'pointer',
+        }}
       />
     </div>
   );
 };
+
+const CustomButton = styled(ButtonRequest)`
+  :hover {
+    color: black;
+  }
+`;
