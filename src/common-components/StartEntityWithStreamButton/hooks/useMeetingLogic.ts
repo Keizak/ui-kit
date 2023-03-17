@@ -6,7 +6,7 @@ import { supportBookingAPI } from '../api/supportBookingApi';
 type useMeetingLogicParamsType = {
   selectedStream: IStream | null;
   setSelectedStream: (stream: IStream) => void;
-  updateStream: (link: string, currentStream: IStream) => Promise<void>;
+  updateStream: (newStream: IStream) => Promise<void>;
 };
 
 export type meetingLogicStateType = {
@@ -46,39 +46,44 @@ export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
   };
 
   useEffect(() => {
-    supportBookingAPI.open().finally();
-    supportBookingAPI.subscribe(
-      'ZoomMeetingCreatingStatusChanged',
-      ({ message }: { message: string }) => {
-        console.log(message, '-message');
-        changeMeetingLogicState({
-          createMeetingStatusModal: false,
-          meetingCreatingStatus: message,
-          createMeetingLoading: true,
-        });
-      }
-    );
-    supportBookingAPI.subscribe(
-      'ZoomMeetingStarted',
-      ({ url }: { url: string }) => {
-        if (selectedStream) {
-          setSelectedStream({ ...selectedStream, link: url });
-          updateStream(url, selectedStream).finally();
+    if (selectedStream) {
+      supportBookingAPI.open().finally();
+      supportBookingAPI.subscribe(
+        'ZoomMeetingCreatingStatusChanged',
+        ({ message }: { message: string }) => {
+          console.log(message, '-message');
+          changeMeetingLogicState({
+            meetingCreatingStatus: message,
+            createMeetingLoading: true,
+          });
         }
-        changeMeetingLogicState({
-          createMeeting: true,
-          createMeetingLoading: false,
-          createMeetingStatusModal: false,
-        });
-      }
-    );
+      );
+      supportBookingAPI.subscribe(
+        'ZoomMeetingStarted',
+        ({ url }: { url: string }) => {
+          if (selectedStream) {
+            const changedStream = { ...selectedStream, link: url };
+
+            setSelectedStream(changedStream);
+            updateStream(changedStream).finally();
+          }
+          changeMeetingLogicState({
+            createMeeting: true,
+            createMeetingLoading: false,
+            meetingCreatingStatus: '',
+          });
+        }
+      );
+    }
 
     return () => {
-      supportBookingAPI.close().finally();
-      supportBookingAPI.unsubscribe('ZoomMeetingCreatingStatusChanged');
-      supportBookingAPI.unsubscribe('ZoomMeetingStarted');
+      if (selectedStream) {
+        supportBookingAPI.close().finally();
+        supportBookingAPI.unsubscribe('ZoomMeetingCreatingStatusChanged');
+        supportBookingAPI.unsubscribe('ZoomMeetingStarted');
+      }
     };
-  }, []);
+  }, [selectedStream]);
 
   return {
     changeMeetingLogicState,

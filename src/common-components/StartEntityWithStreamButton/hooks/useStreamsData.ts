@@ -10,19 +10,22 @@ type useStreamsDataParams = {
 export const useStreamsData = (params: useStreamsDataParams) => {
   const [streams, setStreams] = useState<IStream[]>([]);
 
-  const updateStream = async (link: string, currentStream: IStream) => {
-    await axiosInstance.put(`streams/${currentStream.id}`, {
-      ...currentStream,
-      link,
-    });
+  const updateStream = async (newStream: IStream) => {
+    await axiosInstance.put(`streams/${newStream.id}`, newStream);
   };
   const getStreamsWithNeededTypeForThisUser = async (
     userId: number,
     type: StreamTypes
   ): Promise<any> => {
-    const { data } = await axiosInstance.get<{ items: IStream[] }>(`streams/`);
+    const { data } = await axiosInstance.get<{ items: IStream[] }>(
+      `streams?PageSize=100`
+    );
 
-    const filteredTypeStreams = data.items.filter(
+    const filteredByIdStreams = data.items.filter(
+      (stream: IStream) => stream.userId === userId
+    );
+
+    const filteredTypeStreams = filteredByIdStreams.filter(
       (stream: IStream) => stream.type === type
     );
 
