@@ -1,18 +1,21 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties } from 'react';
 
-import { useMutation } from 'react-query';
+import { CircularProgress } from '@mui/material';
 
 import { RequestStatuses } from '../../helpers';
 import { ButtonRequest } from '../ButtonRequest/buttonRequest';
 
-import { IStream, streamsAPI, StreamTypes } from './api/api';
+import { StreamTypes } from './api/api';
 import { useLocalHandlers } from './hooks/useLocalHandlers';
 import { useMeetingLogic } from './hooks/useMeetingLogic';
 import { useStreamsData } from './hooks/useStreamsData';
+import {
+  StatusesPositionType,
+  useStyleFunctions,
+} from './hooks/useStyleFunctions';
 import { SettingStreamModal } from './modals/SettingStreamModal';
 import { StartStopStreamButton } from './startStopStreamButton/startStopStreamButton';
 
-type StatusesPositionType = 'top' | 'right' | 'left' | 'bottom';
 export type createStreamButtonPropsType = {
   title?: string;
   entityTitle?: string;
@@ -20,7 +23,7 @@ export type createStreamButtonPropsType = {
   userId: number;
   requestStatus: RequestStatuses;
   customButtonStyle?: CSSProperties;
-  asyncHandler: (operation: any) => Promise<any>;
+  asyncHandler: (operation: () => Promise<any>) => Promise<any>;
 
   statusPosition?: StatusesPositionType;
 };
@@ -38,87 +41,49 @@ export const StartEntityWithStreamButton = (
     asyncHandler,
   } = props;
 
-  const [selectedStream, setSelectedStream] = useState<IStream | null>(null);
-
-  const { setStreams, getStreamsWithNeededTypeForThisUser, updateStream } =
-    useStreamsData({
-      type,
-      setSelectedStream,
-      userId,
-    });
-
-  const { changeMeetingLogicState, meetingLogicState } = useMeetingLogic({
-    setSelectedStream,
-    selectedStream,
-    updateStream,
-  });
+  //------------------------------------------------useStyleFunctions---------------------------------------------------
 
   const {
-    changeStatusStream,
-    clickSettingsHandler,
-    clickStartStopStreamHandler,
-  } = useLocalHandlers({
+    getContainerStyle,
+    getPositionStatusBlock,
+    getDisabledStartStreamButton,
+  } = useStyleFunctions();
+
+  //-------------------------------------------------useStreamsData-----------------------------------------------------
+
+  const streamsDataParams = {
+    type,
+    userId,
+  };
+
+  const { streamsApi, selectedStream, loading } =
+    useStreamsData(streamsDataParams);
+
+  //-------------------------------------------------useMeetingLogic----------------------------------------------------
+
+  const meetingLogicParams = {
+    selectedStream,
+    updateStream: streamsApi.updateStream,
+  };
+
+  const { changeMeetingLogicState, meetingLogicState } =
+    useMeetingLogic(meetingLogicParams);
+
+  //-------------------------------------------------useLocalHandlers---------------------------------------------------
+  const localHandlersParams = {
     changeMeetingLogicState,
     asyncHandler,
     selectedStream,
-    setSelectedStream,
-    updateStream,
-    getStreams: () => {
-      getStreamsWithNeededTypeForThisUser(userId, type).then((res) =>
-        setStreams(res)
-      );
-    },
-  });
-
-  const createMeeting = useMutation<any, any, {}, any>(
-    () => {
-      if (selectedStream) return streamsAPI.createMeeting(selectedStream.id);
-      else return new Promise((resolve) => resolve(null));
-    },
-    {
-      onSuccess: () => {
-        changeStatusStream(
-          selectedStream?.id ? selectedStream?.id : NaN,
-          false
-        ).finally();
-      },
-      onError: (error) => {
-        console.error(error, 'error');
-      },
-    }
-  );
-
-  const getDisabledStartStreamButton = (
-    meetingLoading: boolean,
-    selectedStream: IStream | null
-  ) => {
-    let disabled = false;
-
-    if (!selectedStream) disabled = true;
-    if (meetingLoading) disabled = true;
-
-    return disabled;
+    streamsApi,
   };
 
-  const getContainerStyle = (
-    statusPosition: StatusesPositionType
-  ): CSSProperties => {
-    console.log(statusPosition, 'statusPosition');
-    const defaultStyle = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    };
+  const { handlers } = useLocalHandlers(localHandlersParams);
 
-    if (statusPosition === 'right' || statusPosition === 'left')
-      return defaultStyle;
-    else return { ...defaultStyle, flexDirection: 'column' };
-  };
+  //-------------------------------------------------------JSX----------------------------------------------------------
 
-  const getPositionStatusBlock = (statusPosition: StatusesPositionType) => {
-    if (statusPosition === 'left' || statusPosition === 'top') return 'top';
-    else return 'bottom';
-  };
+  if (loading.state) {
+    return <CircularProgress />;
+  }
 
   return (
     <div style={getContainerStyle(statusPosition)}>
@@ -128,24 +93,24 @@ export const StartEntityWithStreamButton = (
         </div>
       )}
       <div>
-        {(meetingLogicState.createMeeting && selectedStream) ||
-        selectedStream?.startedStreamSession ? (
+        {(meetingLogicState.createMeeting && selectedStream.state) ||
+        selectedStream.state?.startedStreamSession ? (
           <StartStopStreamButton
             requestStatus={requestStatus}
-            selectedStream={selectedStream}
+            selectedStream={selectedStream.state}
             entityTitle={entityTitle}
-            clickSettingsHandler={clickSettingsHandler}
-            clickStartStopStreamHandler={clickStartStopStreamHandler}
+            clickSettingsHandler={handlers.clickSettingsHandler}
+            clickStartStopStreamHandler={handlers.clickStartStopStreamHandler}
           />
         ) : (
           <ButtonRequest
             variant="contained"
             onClick={() => {
-              createMeeting.mutateAsync({}).finally();
+              handlers.createMeeting.mutateAsync({}).finally();
             }}
             disabled={getDisabledStartStreamButton(
               meetingLogicState.createMeetingLoading,
-              selectedStream
+              selectedStream.state
             )}
             requestStatus={requestStatus}
             style={customButtonStyle}
@@ -159,27 +124,13 @@ export const StartEntityWithStreamButton = (
           {meetingLogicState.meetingCreatingStatus}
         </div>
       )}
-      {/*<CreateSettingStreamModal*/}
-      {/*  onSubmit={(id, status) => changeStatusStream(id, status)}*/}
-      {/*  open={meetingLogicState.createMeetingStatusModal}*/}
-      {/*  setOpen={(value) =>*/}
-      {/*    changeMeetingLogicState('createMeetingStatusModal', value)*/}
-      {/*  }*/}
-      {/*  streams={streams}*/}
-      {/*  setStreamStatus={setStreamStatus}*/}
-      {/*  setMeetingCreatingStatus={(value) =>*/}
-      {/*    changeMeetingLogicState('meetingCreatingStatus', value)*/}
-      {/*  }*/}
-      {/*  setSelectedStream={setSelectedStream}*/}
-      {/*  selectedStream={selectedStream}*/}
-      {/*/>*/}
-      {selectedStream && (
+      {selectedStream.state && (
         <SettingStreamModal
           open={meetingLogicState.settingsStreamStatusModal}
           setOpen={(value) =>
             changeMeetingLogicState({ settingsStreamStatusModal: value })
           }
-          selectedStream={selectedStream}
+          selectedStream={selectedStream.state}
         />
       )}
     </div>

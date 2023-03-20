@@ -4,21 +4,15 @@ import { IStream } from '../api/api';
 import { supportBookingAPI } from '../api/supportBookingApi';
 
 type useMeetingLogicParamsType = {
-  selectedStream: IStream | null;
-  setSelectedStream: (stream: IStream) => void;
-  updateStream: (newStream: IStream) => Promise<void>;
-};
-
-export type meetingLogicStateType = {
-  createMeetingStatusModal: boolean;
-  settingsStreamStatusModal: boolean;
-  meetingCreatingStatus: string | null;
-  createMeeting: boolean;
-  createMeetingLoading: boolean;
+  selectedStream: {
+    set: (stream: IStream) => void;
+    state: IStream | null;
+  };
+  updateStream: (newStream: IStream) => any;
 };
 
 export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
-  const { selectedStream, setSelectedStream, updateStream } = params;
+  const { selectedStream, updateStream } = params;
 
   const [settingsStreamStatusModal, setSettingsStreamStatusModal] =
     useState(false);
@@ -46,12 +40,11 @@ export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
   };
 
   useEffect(() => {
-    if (selectedStream) {
+    if (selectedStream.state) {
       supportBookingAPI.open().finally();
       supportBookingAPI.subscribe(
         'ZoomMeetingCreatingStatusChanged',
         ({ message }: { message: string }) => {
-          console.log(message, '-message');
           changeMeetingLogicState({
             meetingCreatingStatus: message,
             createMeetingLoading: true,
@@ -61,10 +54,13 @@ export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
       supportBookingAPI.subscribe(
         'ZoomMeetingStarted',
         ({ url }: { url: string }) => {
-          if (selectedStream) {
-            const changedStream = { ...selectedStream, link: url };
+          if (selectedStream.state) {
+            const changedStream = {
+              ...selectedStream.state,
+              link: url,
+            };
 
-            setSelectedStream(changedStream);
+            selectedStream.set(changedStream);
             updateStream(changedStream).finally();
           }
           changeMeetingLogicState({
@@ -77,13 +73,13 @@ export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
     }
 
     return () => {
-      if (selectedStream) {
+      if (selectedStream.state) {
         supportBookingAPI.close().finally();
         supportBookingAPI.unsubscribe('ZoomMeetingCreatingStatusChanged');
         supportBookingAPI.unsubscribe('ZoomMeetingStarted');
       }
     };
-  }, [selectedStream]);
+  }, [selectedStream.state]);
 
   return {
     changeMeetingLogicState,

@@ -12,7 +12,7 @@ type ButtonRequestPropsType = ButtonProps & {
 };
 export const ButtonRequest = (props: ButtonRequestPropsType) => {
   const [localDisabled, setLocalDisabled] = useState(false);
-  const { typeUiButton = 'Mui' } = props;
+  const { typeUiButton = 'Mui', requestStatus, ...restProps } = props;
 
   const getButtonDisabled = () => {
     if (localDisabled) return true;
@@ -27,14 +27,14 @@ export const ButtonRequest = (props: ButtonRequestPropsType) => {
   };
 
   useEffect(() => {
-    if (props.requestStatus !== RequestStatuses.InProgress && localDisabled) {
+    if (requestStatus !== RequestStatuses.InProgress && localDisabled) {
       setLocalDisabled(false);
     }
-  }, [props.requestStatus]);
+  }, [requestStatus]);
 
   return typeUiButton === 'classic' ? (
     <button
-      {...props}
+      {...restProps}
       disabled={getButtonDisabled()}
       onClick={(e) => onClickHandler(e)}
     >

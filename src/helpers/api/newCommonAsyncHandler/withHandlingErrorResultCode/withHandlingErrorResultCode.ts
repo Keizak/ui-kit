@@ -22,6 +22,7 @@ export const withHandlingErrorResultCode = function <T>(
 ) {
   return async () => {
     let typedResult: T = await operation();
+
     let result: any = typedResult;
 
     //---------------------------------------------------Conditions-----------------------------------------------------
@@ -57,7 +58,6 @@ export const withHandlingErrorResultCode = function <T>(
       result && result.messages && result.messages.length > 0;
 
     //------------------------------------------------------------------------------------------------------------------
-
     if (resultCodeIsNotSuccess && resultMessages) {
       settings.withNotification
         ? actions.showError(result.messages)
