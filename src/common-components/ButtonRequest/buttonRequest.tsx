@@ -42,7 +42,7 @@ export const ButtonRequest = (props: ButtonRequestPropsType) => {
     </button>
   ) : (
     <CustomButton
-      {...props}
+      {...restProps}
       disabled={getButtonDisabled()}
       onClick={(e) => onClickHandler(e)}
     >
