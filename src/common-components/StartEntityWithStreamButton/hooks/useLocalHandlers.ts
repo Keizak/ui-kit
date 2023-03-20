@@ -1,61 +1,69 @@
-import { axiosInstance, IStream } from '../api/api';
+import { useMutation } from 'react-query';
+
+import { IStream, streamsAPI } from '../api/api';
 
 type useLocalHandlersParamsType = {
   changeMeetingLogicState: (fields: Record<string, any>) => void;
-  selectedStream: IStream | null;
-  setSelectedStream: (stream: IStream) => void;
-  updateStream: (newStream: IStream) => Promise<void>;
-  getStreams: () => void;
-  asyncHandler: (operation: any) => Promise<any>;
+  selectedStream: {
+    set: (stream: IStream) => void;
+    state: IStream | null;
+  };
+  streamsApi: {
+    updateStream: (newStream: IStream) => any;
+    getStreams: () => void;
+  };
+  asyncHandler: (operation: () => Promise<any>) => Promise<any>;
 };
 export const useLocalHandlers = ({
   changeMeetingLogicState,
   selectedStream,
-  updateStream,
-  setSelectedStream,
-  getStreams,
+  streamsApi,
   asyncHandler,
 }: useLocalHandlersParamsType) => {
   const toggleSelectedStreamStatus = () => {
-    if (selectedStream)
-      return setSelectedStream({
-        ...selectedStream,
-        startedStreamSession: !selectedStream.startedStreamSession,
+    if (selectedStream.state)
+      return selectedStream.set({
+        ...selectedStream.state,
+        startedStreamSession: !selectedStream.state.startedStreamSession,
       });
     else return null;
   };
   const changeStatusStream = async (streamId: number, status: boolean) => {
     changeMeetingLogicState({ meetingCreatingStatus: '' });
     if (status) {
-      return await asyncHandler(
-        axiosInstance.put(`streams/${streamId}/stop`).then((res) => {
-          if (res.status === 200 && res.data?.resultCode === 0) {
+      return await asyncHandler(() =>
+        streamsAPI.stop(streamId).then((res) => {
+          if (res.resultCode === 0) {
             toggleSelectedStreamStatus();
             changeMeetingLogicState({ createMeeting: false });
-            if (selectedStream) {
-              updateStream({ ...selectedStream, link: '' });
-              setSelectedStream({
-                ...selectedStream,
+            if (selectedStream.state) {
+              streamsApi.updateStream({ ...selectedStream.state, link: '' });
+              selectedStream.set({
+                ...selectedStream.state,
                 startedStreamSession: false,
               });
             }
-            getStreams();
+            streamsApi.getStreams();
           }
+
+          return res;
         })
       );
     } else {
-      return await asyncHandler(
-        axiosInstance.put(`streams/${streamId}/start`).then((res) => {
-          if (res.status === 200 && res.data?.resultCode === 0) {
+      return await asyncHandler(() =>
+        streamsAPI.start(streamId).then((res) => {
+          if (res.resultCode === 0) {
             toggleSelectedStreamStatus();
             changeMeetingLogicState({
               createMeeting: true,
               createMeetingStatusModal: false,
             });
-            if (selectedStream) {
-              updateStream(selectedStream);
+            if (selectedStream.state) {
+              streamsApi.updateStream(selectedStream.state);
             }
           }
+
+          return res;
         })
       );
     }
@@ -69,17 +77,39 @@ export const useLocalHandlers = ({
   };
 
   const clickStartStopStreamHandler = () => {
-    selectedStream &&
+    selectedStream.state &&
       changeStatusStream(
-        selectedStream?.id,
-        !!selectedStream.startedStreamSession
+        selectedStream.state?.id,
+        !!selectedStream.state.startedStreamSession
       );
   };
 
+  const createMeeting = useMutation<any, any, {}, any>(
+    () => {
+      if (selectedStream.state)
+        return streamsAPI.createMeeting(selectedStream.state.id);
+      else return new Promise((resolve) => resolve(null));
+    },
+    {
+      onSuccess: () => {
+        changeStatusStream(
+          selectedStream.state?.id ? selectedStream.state?.id : NaN,
+          false
+        ).finally();
+      },
+      onError: (error) => {
+        console.error(error, 'error');
+      },
+    }
+  );
+
   return {
-    changeStatusStream,
-    createStreamHandler,
-    clickSettingsHandler,
-    clickStartStopStreamHandler,
+    handlers: {
+      changeStatusStream,
+      createStreamHandler,
+      clickSettingsHandler,
+      clickStartStopStreamHandler,
+      createMeeting,
+    },
   };
 };

@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 import { securityConstants } from '../../../constants/securityConstants';
 import { BaseAPI } from '../../../helpers';
 import { BaseAxiosInstance } from '../../../helpers/api/baseAxiosInstance/BaseAxiosInstance';
@@ -112,16 +114,26 @@ export const axiosInstance = new BaseAxiosInstance({
 }).AxiosInstanceClient;
 
 class StreamAPI extends BaseAPI<IUpdateStreamModel, IStream> {
-  stop(streamId: number) {
-    return this.anyPut<IActionResult<null>>(`${streamId}/stop`);
+  stop(streamId: number): Promise<{ resultCode: number }> {
+    return this.anyPut(`${streamId}/stop`);
   }
 
-  start(streamId: number): Promise<IActionResult<null>> {
-    return this.anyPut<IActionResult<null>>(`${streamId}/start`);
+  start(streamId: number): Promise<{ resultCode: number }> {
+    return this.anyPut(`${streamId}/start`);
   }
 
-  createMeeting(streamId: number): Promise<IActionResult<{}>> {
+  createMeeting(streamId: number): Promise<AxiosResponse<IActionResult<null>>> {
     return this.anyPost(`${streamId}/zoom-meeting`);
+  }
+
+  getStreams(): Promise<{ items: IStream[] }> {
+    return this.anyGet(`?PageSize=100`);
+  }
+
+  updateStream(
+    newStream: IStream
+  ): Promise<AxiosResponse<{ items: IStream[] }>> {
+    return this.anyPut(`${newStream.id}`, newStream);
   }
 }
 
