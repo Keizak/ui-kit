@@ -1,8 +1,11 @@
+import { useEffect } from 'react';
+
 import { useMutation } from 'react-query';
 
 import { IStream, streamsAPI } from '../api/api';
 
 type useLocalHandlersParamsType = {
+  createMeetingStatus: boolean;
   changeMeetingLogicState: (fields: Record<string, any>) => void;
   selectedStream: {
     set: (stream: IStream) => void;
@@ -19,6 +22,7 @@ export const useLocalHandlers = ({
   selectedStream,
   streamsApi,
   asyncHandler,
+  createMeetingStatus,
 }: useLocalHandlersParamsType) => {
   const toggleSelectedStreamStatus = () => {
     if (selectedStream.state)
@@ -55,7 +59,6 @@ export const useLocalHandlers = ({
           if (res.resultCode === 0) {
             toggleSelectedStreamStatus();
             changeMeetingLogicState({
-              createMeeting: true,
               createMeetingStatusModal: false,
             });
             if (selectedStream.state) {
@@ -91,17 +94,19 @@ export const useLocalHandlers = ({
       else return new Promise((resolve) => resolve(null));
     },
     {
-      onSuccess: () => {
-        changeStatusStream(
-          selectedStream.state?.id ? selectedStream.state?.id : NaN,
-          false
-        ).finally();
-      },
       onError: (error) => {
         console.error(error, 'error');
       },
     }
   );
+
+  useEffect(() => {
+    if (createMeetingStatus)
+      changeStatusStream(
+        selectedStream.state?.id ? selectedStream.state?.id : NaN,
+        false
+      ).finally();
+  }, [createMeetingStatus]);
 
   return {
     handlers: {
