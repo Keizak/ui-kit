@@ -55,12 +55,13 @@ export const StartEntityWithStreamButton = (
 
   return (
     <div style={getContainerStyle(statusPosition)}>
-      {getPositionStatusBlock(statusPosition) === 'top' && (
-        <StatusBlock position={statusPosition}>
-          <InfoIcon sx={{ marginRight: '10px' }} />
-          {meetingLogicState.meetingCreatingStatus}
-        </StatusBlock>
-      )}
+      {getPositionStatusBlock(statusPosition) === 'top' &&
+        meetingLogicState.meetingCreatingStatus && (
+          <StatusBlock position={statusPosition}>
+            <InfoIcon sx={{ marginRight: '10px' }} />
+            {meetingLogicState.meetingCreatingStatus}
+          </StatusBlock>
+        )}
       <div>
         {(meetingLogicState.createMeeting && selectedStream.state) ||
         selectedStream.state?.startedStreamSession ? (
@@ -88,12 +89,13 @@ export const StartEntityWithStreamButton = (
           </ButtonRequest>
         )}
       </div>
-      {getPositionStatusBlock(statusPosition) === 'bottom' && (
-        <StatusBlock position={statusPosition}>
-          <InfoIcon sx={{ marginRight: '10px' }} />
-          {meetingLogicState.meetingCreatingStatus}
-        </StatusBlock>
-      )}
+      {getPositionStatusBlock(statusPosition) === 'bottom' &&
+        meetingLogicState.meetingCreatingStatus && (
+          <StatusBlock position={statusPosition}>
+            <InfoIcon sx={{ marginRight: '10px' }} />
+            {meetingLogicState.meetingCreatingStatus}
+          </StatusBlock>
+        )}
       {selectedStream.state && (
         <SettingStreamModal
           open={meetingLogicState.settingsStreamStatusModal}
