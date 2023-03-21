@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Block } from '../../ui-styled-components/common';
+import { Block } from '../../ui-styled-components';
 import { BasicInput } from '../BasicInput/BasicInput';
 import { BasicObsoleteSelect } from '../BasicObsoleteSelect/BasicObsoleteSelect';
 
