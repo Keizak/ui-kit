@@ -18,6 +18,7 @@ export enum CronDateENUM {
 
 /**
  * Функция приобразующая формат Даты в крон формат
+ *
  */
 export const cronToDate = (cron: string): Date => {
   /**
