@@ -11,7 +11,7 @@ import {
   dateToCron,
   getArraySymbolsFromStringWithSpaces,
 } from '../..';
-import { Block, Text } from '../../ui-styled-components/common';
+import { Block, Text } from '../../ui-styled-components';
 import { BasicButton } from '../BasicButton/BasicButton';
 
 import { CronSelect } from './CronSelect/CronSelect';

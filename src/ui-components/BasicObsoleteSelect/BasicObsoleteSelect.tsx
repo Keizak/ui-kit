@@ -17,7 +17,7 @@ import {
   Block,
   StyledKeyboardArrowDownIcon,
   StyledSelect,
-} from '../../ui-styled-components/common';
+} from '../../ui-styled-components';
 
 export type BasicObsoleteSelectProps = {
   label: string;

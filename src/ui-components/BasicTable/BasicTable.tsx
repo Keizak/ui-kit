@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Block } from '../../ui-styled-components/common';
+import { Block } from '../../ui-styled-components';
 import {
   BasicPagination,
   BasicPaginationPropsType,
