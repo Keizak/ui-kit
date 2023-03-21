@@ -1,18 +1,15 @@
 import React, { CSSProperties } from 'react';
 
+import InfoIcon from '@mui/icons-material/Info';
 import { CircularProgress } from '@mui/material';
+import styled from 'styled-components';
 
 import { RequestStatuses } from '../../helpers';
 import { ButtonRequest } from '../ButtonRequest/buttonRequest';
 
 import { StreamTypes } from './api/api';
-import { useLocalHandlers } from './hooks/useLocalHandlers';
-import { useMeetingLogic } from './hooks/useMeetingLogic';
-import { useStreamsData } from './hooks/useStreamsData';
-import {
-  StatusesPositionType,
-  useStyleFunctions,
-} from './hooks/useStyleFunctions';
+import { useCreateStreamButtonLogic } from './hooks/useCreateStreamButtonLogic';
+import { StatusesPositionType } from './hooks/useStyleFunctions';
 import { SettingStreamModal } from './modals/SettingStreamModal';
 import { StartStopStreamButton } from './startStopStreamButton/startStopStreamButton';
 
@@ -41,45 +38,16 @@ export const StartEntityWithStreamButton = (
     asyncHandler,
   } = props;
 
-  //------------------------------------------------useStyleFunctions---------------------------------------------------
+  const { handlers, streamData, meetingsData, styleFunctions } =
+    useCreateStreamButtonLogic({ userId, type, asyncHandler });
 
+  const { meetingLogicState, changeMeetingLogicState } = meetingsData;
+  const { selectedStream, loading } = streamData;
   const {
     getContainerStyle,
     getPositionStatusBlock,
     getDisabledStartStreamButton,
-  } = useStyleFunctions();
-
-  //-------------------------------------------------useStreamsData-----------------------------------------------------
-
-  const streamsDataParams = {
-    type,
-    userId,
-  };
-
-  const { streamsApi, selectedStream, loading } =
-    useStreamsData(streamsDataParams);
-
-  //-------------------------------------------------useMeetingLogic----------------------------------------------------
-
-  const meetingLogicParams = {
-    selectedStream,
-    updateStream: streamsApi.updateStream,
-  };
-
-  const { changeMeetingLogicState, meetingLogicState } =
-    useMeetingLogic(meetingLogicParams);
-
-  //-------------------------------------------------useLocalHandlers---------------------------------------------------
-  const localHandlersParams = {
-    changeMeetingLogicState,
-    asyncHandler,
-    selectedStream,
-    streamsApi,
-  };
-
-  const { handlers } = useLocalHandlers(localHandlersParams);
-
-  //-------------------------------------------------------JSX----------------------------------------------------------
+  } = styleFunctions;
 
   if (loading.state) {
     return <CircularProgress />;
@@ -88,9 +56,10 @@ export const StartEntityWithStreamButton = (
   return (
     <div style={getContainerStyle(statusPosition)}>
       {getPositionStatusBlock(statusPosition) === 'top' && (
-        <div style={{ marginLeft: '10px' }}>
+        <StatusBlock position={statusPosition}>
+          <InfoIcon sx={{ marginRight: '10px' }} />
           {meetingLogicState.meetingCreatingStatus}
-        </div>
+        </StatusBlock>
       )}
       <div>
         {(meetingLogicState.createMeeting && selectedStream.state) ||
@@ -120,9 +89,10 @@ export const StartEntityWithStreamButton = (
         )}
       </div>
       {getPositionStatusBlock(statusPosition) === 'bottom' && (
-        <div style={{ marginLeft: '10px' }}>
+        <StatusBlock position={statusPosition}>
+          <InfoIcon sx={{ marginRight: '10px' }} />
           {meetingLogicState.meetingCreatingStatus}
-        </div>
+        </StatusBlock>
       )}
       {selectedStream.state && (
         <SettingStreamModal
@@ -136,3 +106,26 @@ export const StartEntityWithStreamButton = (
     </div>
   );
 };
+
+const StatusBlock = styled.div<{ position: StatusesPositionType }>`
+  margin: ${(props) => {
+    switch (props.position) {
+      case 'bottom':
+        return '10px 0 0 0';
+      case 'top':
+        return '0 0 10px 0';
+      case 'left':
+        return '0 0 0 10px';
+      case 'right':
+        return '0 10px 0 0';
+      default:
+        return '';
+    }
+  }};
+  font-family: 'Roboto', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #8c8889;
+`;

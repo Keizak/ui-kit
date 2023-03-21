@@ -61,7 +61,7 @@ export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
             };
 
             selectedStream.set(changedStream);
-            updateStream(changedStream).finally();
+            updateStream(changedStream).finally(() => {});
           }
           changeMeetingLogicState({
             createMeeting: true,
