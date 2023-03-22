@@ -16,6 +16,8 @@ type useLocalHandlersParamsType = {
     getStreams: () => void;
   };
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
+  onFinishCreateStream?: () => void;
+  onFinishStopStream?: () => void;
 };
 export const useLocalHandlers = ({
   changeMeetingLogicState,
@@ -23,6 +25,8 @@ export const useLocalHandlers = ({
   streamsApi,
   asyncHandler,
   createMeetingStatus,
+  onFinishCreateStream,
+  onFinishStopStream,
 }: useLocalHandlersParamsType) => {
   const toggleSelectedStreamStatus = () => {
     if (selectedStream.state)
@@ -48,6 +52,7 @@ export const useLocalHandlers = ({
               });
             }
             streamsApi.getStreams();
+            onFinishStopStream && onFinishStopStream();
           }
 
           return res;
@@ -102,10 +107,15 @@ export const useLocalHandlers = ({
 
   useEffect(() => {
     if (createMeetingStatus)
-      changeStatusStream(
-        selectedStream.state?.id ? selectedStream.state?.id : NaN,
-        false
-      ).finally();
+      try {
+        changeStatusStream(
+          selectedStream.state?.id ? selectedStream.state?.id : NaN,
+          false
+        ).finally();
+        onFinishCreateStream && onFinishCreateStream();
+      } catch (e) {
+        console.log();
+      }
   }, [createMeetingStatus]);
 
   return {
