@@ -23,6 +23,9 @@ export type createStreamButtonPropsType = {
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
 
   statusPosition?: StatusesPositionType;
+
+  onFinishCreateStream?: () => void;
+  onFinishStopStream?: () => void;
 };
 export const StartEntityWithStreamButton = (
   props: createStreamButtonPropsType
@@ -36,10 +39,18 @@ export const StartEntityWithStreamButton = (
     type,
     customButtonStyle,
     asyncHandler,
+    onFinishCreateStream,
+    onFinishStopStream,
   } = props;
 
   const { handlers, streamData, meetingsData, styleFunctions } =
-    useCreateStreamButtonLogic({ userId, type, asyncHandler });
+    useCreateStreamButtonLogic({
+      userId,
+      type,
+      asyncHandler,
+      onFinishCreateStream,
+      onFinishStopStream,
+    });
 
   const { meetingLogicState, changeMeetingLogicState } = meetingsData;
   const { selectedStream, loading } = streamData;
@@ -119,9 +130,9 @@ const StatusBlock = styled.div<{ position: StatusesPositionType }>`
       case 'top':
         return '0 0 20px 0';
       case 'left':
-        return '0 0 0 20px';
-      case 'right':
         return '0 20px 0 0';
+      case 'right':
+        return '0 0 0 20px';
       default:
         return '';
     }

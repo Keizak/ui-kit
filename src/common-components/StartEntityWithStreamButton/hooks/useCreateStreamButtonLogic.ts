@@ -9,11 +9,15 @@ type useCreateStreamButtonLogicParamsType = {
   type: StreamTypes;
   userId: number;
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
+  onFinishCreateStream?: () => void;
+  onFinishStopStream?: () => void;
 };
 export const useCreateStreamButtonLogic = ({
   type,
   userId,
   asyncHandler,
+  onFinishCreateStream,
+  onFinishStopStream,
 }: useCreateStreamButtonLogicParamsType) => {
   //------------------------------------------------useStyleFunctions---------------------------------------------------
 
@@ -50,6 +54,8 @@ export const useCreateStreamButtonLogic = ({
     asyncHandler,
     selectedStream,
     streamsApi,
+    onFinishCreateStream,
+    onFinishStopStream,
   };
 
   const { handlers } = useLocalHandlers(localHandlersParams);
