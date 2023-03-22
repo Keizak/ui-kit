@@ -27,6 +27,12 @@ export const useStyleFunctions = () => {
 
     if (statusPosition === 'right' || statusPosition === 'left')
       return defaultStyle;
+    if (statusPosition === 'bottom')
+      return {
+        ...defaultStyle,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+      };
     else return { ...defaultStyle, flexDirection: 'column' };
   };
 
