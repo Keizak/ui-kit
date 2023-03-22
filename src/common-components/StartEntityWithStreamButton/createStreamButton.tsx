@@ -2,7 +2,6 @@ import React, { CSSProperties } from 'react';
 
 import InfoIcon from '@mui/icons-material/Info';
 import { CircularProgress } from '@mui/material';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import styled from 'styled-components';
 
 import { RequestStatuses } from '../../helpers';
@@ -13,8 +12,6 @@ import { useCreateStreamButtonLogic } from './hooks/useCreateStreamButtonLogic';
 import { StatusesPositionType } from './hooks/useStyleFunctions';
 import { SettingStreamModal } from './modals/SettingStreamModal';
 import { StartStopStreamButton } from './startStopStreamButton/startStopStreamButton';
-
-export const queryClient = new QueryClient();
 
 export type createStreamButtonPropsType = {
   title?: string;
@@ -57,60 +54,58 @@ export const StartEntityWithStreamButton = (
   }
 
   return (
-    <QueryClientProvider client={queryClient} contextSharing={true}>
-      <div style={getContainerStyle(statusPosition)}>
-        {getPositionStatusBlock(statusPosition) === 'top' &&
-          meetingLogicState.meetingCreatingStatus && (
-            <StatusBlock position={statusPosition}>
-              <InfoIcon sx={{ marginRight: '10px' }} />
-              {meetingLogicState.meetingCreatingStatus}
-            </StatusBlock>
-          )}
-        <div>
-          {(meetingLogicState.createMeeting && selectedStream.state) ||
-          selectedStream.state?.startedStreamSession ? (
-            <StartStopStreamButton
-              requestStatus={requestStatus}
-              selectedStream={selectedStream.state}
-              entityTitle={entityTitle}
-              clickSettingsHandler={handlers.clickSettingsHandler}
-              clickStartStopStreamHandler={handlers.clickStartStopStreamHandler}
-            />
-          ) : (
-            <ButtonRequest
-              variant="contained"
-              onClick={() => {
-                handlers.createMeeting.mutateAsync({}).finally();
-              }}
-              disabled={getDisabledStartStreamButton(
-                meetingLogicState.createMeetingLoading,
-                selectedStream.state
-              )}
-              requestStatus={requestStatus}
-              style={customButtonStyle}
-            >
-              {title}
-            </ButtonRequest>
-          )}
-        </div>
-        {getPositionStatusBlock(statusPosition) === 'bottom' &&
-          meetingLogicState.meetingCreatingStatus && (
-            <StatusBlock position={statusPosition}>
-              <InfoIcon sx={{ marginRight: '10px' }} />
-              {meetingLogicState.meetingCreatingStatus}
-            </StatusBlock>
-          )}
-        {selectedStream.state && (
-          <SettingStreamModal
-            open={meetingLogicState.settingsStreamStatusModal}
-            setOpen={(value) =>
-              changeMeetingLogicState({ settingsStreamStatusModal: value })
-            }
+    <div style={getContainerStyle(statusPosition)}>
+      {getPositionStatusBlock(statusPosition) === 'top' &&
+        meetingLogicState.meetingCreatingStatus && (
+          <StatusBlock position={statusPosition}>
+            <InfoIcon sx={{ marginRight: '10px' }} />
+            {meetingLogicState.meetingCreatingStatus}
+          </StatusBlock>
+        )}
+      <div>
+        {(meetingLogicState.createMeeting && selectedStream.state) ||
+        selectedStream.state?.startedStreamSession ? (
+          <StartStopStreamButton
+            requestStatus={requestStatus}
             selectedStream={selectedStream.state}
+            entityTitle={entityTitle}
+            clickSettingsHandler={handlers.clickSettingsHandler}
+            clickStartStopStreamHandler={handlers.clickStartStopStreamHandler}
           />
+        ) : (
+          <ButtonRequest
+            variant="contained"
+            onClick={() => {
+              handlers.createMeeting.mutateAsync({}).finally();
+            }}
+            disabled={getDisabledStartStreamButton(
+              meetingLogicState.createMeetingLoading,
+              selectedStream.state
+            )}
+            requestStatus={requestStatus}
+            style={customButtonStyle}
+          >
+            {title}
+          </ButtonRequest>
         )}
       </div>
-    </QueryClientProvider>
+      {getPositionStatusBlock(statusPosition) === 'bottom' &&
+        meetingLogicState.meetingCreatingStatus && (
+          <StatusBlock position={statusPosition}>
+            <InfoIcon sx={{ marginRight: '10px' }} />
+            {meetingLogicState.meetingCreatingStatus}
+          </StatusBlock>
+        )}
+      {selectedStream.state && (
+        <SettingStreamModal
+          open={meetingLogicState.settingsStreamStatusModal}
+          setOpen={(value) =>
+            changeMeetingLogicState({ settingsStreamStatusModal: value })
+          }
+          selectedStream={selectedStream.state}
+        />
+      )}
+    </div>
   );
 };
 
@@ -120,13 +115,13 @@ const StatusBlock = styled.div<{ position: StatusesPositionType }>`
   margin: ${(props) => {
     switch (props.position) {
       case 'bottom':
-        return '10px 0 0 0';
+        return '20px 0 0 0';
       case 'top':
-        return '0 0 10px 0';
+        return '0 0 20px 0';
       case 'left':
-        return '0 0 0 10px';
+        return '0 0 0 20px';
       case 'right':
-        return '0 10px 0 0';
+        return '0 20px 0 0';
       default:
         return '';
     }
