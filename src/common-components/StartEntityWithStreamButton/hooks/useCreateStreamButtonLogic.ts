@@ -1,4 +1,4 @@
-import { StreamTypes } from '../api/api';
+import { IStream, StreamTypes } from '../api/api';
 
 import { useLocalHandlers } from './useLocalHandlers';
 import { useMeetingLogic } from './useMeetingLogic';
@@ -11,6 +11,7 @@ type useCreateStreamButtonLogicParamsType = {
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
   onFinishCreateStream?: () => void;
   onFinishStopStream?: () => void;
+  beforeStartStream?: (selectedStream: IStream) => Promise<any>;
 };
 export const useCreateStreamButtonLogic = ({
   type,
@@ -18,6 +19,7 @@ export const useCreateStreamButtonLogic = ({
   asyncHandler,
   onFinishCreateStream,
   onFinishStopStream,
+  beforeStartStream,
 }: useCreateStreamButtonLogicParamsType) => {
   //------------------------------------------------useStyleFunctions---------------------------------------------------
 
@@ -56,6 +58,7 @@ export const useCreateStreamButtonLogic = ({
     streamsApi,
     onFinishCreateStream,
     onFinishStopStream,
+    beforeStartStream,
   };
 
   const { handlers } = useLocalHandlers(localHandlersParams);

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { RequestStatuses } from '../../helpers';
 import { ButtonRequest } from '../ButtonRequest/buttonRequest';
 
-import { StreamTypes } from './api/api';
+import { IStream, StreamTypes } from './api/api';
 import { useCreateStreamButtonLogic } from './hooks/useCreateStreamButtonLogic';
 import { StatusesPositionType } from './hooks/useStyleFunctions';
 import { SettingStreamModal } from './modals/SettingStreamModal';
@@ -26,6 +26,8 @@ export type createStreamButtonPropsType = {
 
   onFinishCreateStream?: () => void;
   onFinishStopStream?: () => void;
+
+  beforeStartStream?: (selectedStream: IStream) => Promise<any>;
 };
 export const StartEntityWithStreamButton = (
   props: createStreamButtonPropsType
@@ -41,6 +43,7 @@ export const StartEntityWithStreamButton = (
     asyncHandler,
     onFinishCreateStream,
     onFinishStopStream,
+    beforeStartStream,
   } = props;
 
   const { handlers, streamData, meetingsData, styleFunctions } =
@@ -50,6 +53,7 @@ export const StartEntityWithStreamButton = (
       asyncHandler,
       onFinishCreateStream,
       onFinishStopStream,
+      beforeStartStream,
     });
 
   const { meetingLogicState, changeMeetingLogicState } = meetingsData;
