@@ -37,6 +37,8 @@ export type BasicSelectProps = {
   theme?: DefaultTheme;
   nullableTitle?: string;
   addNullableValue?: boolean;
+
+  disabled?: boolean;
 };
 
 type OptionType = {
@@ -63,6 +65,7 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
   //opacityText,
   //colorText,
   nullableTitle = 'Not selected',
+                                                          disabled = false,
   addNullableValue = true,
 }) => {
   const parsedValue =
@@ -108,6 +111,7 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
           <StyledSelect
             displayEmpty
             value={parsedValue}
+            disabled={disabled}
             defaultValue={defaultValue}
             onChange={handleChange}
             input={<OutlinedInput />}

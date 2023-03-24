@@ -51,7 +51,7 @@ export const BasicTable = (props: BasicTablePropsType) => {
     <Block
       name={'Table with Paginator Container'}
       width={'100%'}
-      margin={'24px 0 0 0'}
+      margin={'24px 0 50px 0'}
       display={'block'}
     >
       <Block name={'Table Container'} display={'block'} overflow={'auto'}>
@@ -71,7 +71,7 @@ export const BasicTable = (props: BasicTablePropsType) => {
           name={'Pagination'}
           width={'100%'}
           justifyContent={'flex-start'}
-          margin={'38px 0 50px 0 '}
+          margin={'38px 0 0 0 '}
         >
           <BasicPagination {...props.paginationOptions} />
         </Block>

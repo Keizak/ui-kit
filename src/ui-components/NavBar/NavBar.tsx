@@ -119,6 +119,7 @@ export const NavBar = (props: NavBarPropsType) => {
                         margin={'10px 40px 10px 0'}
                     >
                         <BasicSelect
+                            addNullableValue={false}
                             value={currentCourse}
                             defaultValue={currentCourse}
                             options={selectOptions}
