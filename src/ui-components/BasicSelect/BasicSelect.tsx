@@ -17,7 +17,7 @@ import { nanoid } from 'nanoid';
 import {
   StyledKeyboardArrowDownIcon,
   StyledSelect,
-} from '../../ui-styled-components/common';
+} from '../../ui-styled-components';
 
 export type BasicSelectProps = {
   options: OptionType[];
@@ -30,7 +30,7 @@ export type BasicSelectProps = {
   colorIcon?: string;
   colorText?: string;
   sx?: SxProps<Theme>;
-  value?: string | string[] | number[] | number | null ;
+  value?: string | string[] | number[] | number | null;
   defaultValue?: string | string[] | number | null;
   menuType?: 'vertical' | 'horizontal';
   menuItemWidth?: string;
