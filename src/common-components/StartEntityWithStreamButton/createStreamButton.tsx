@@ -76,7 +76,7 @@ export const StartEntityWithStreamButton = (
     if (action === 'create') handlers.createMeeting.mutateAsync({}).finally();
     if (action === 'stop') handlers.clickStartStopStreamHandler();
 
-    return setCurrentAction(null);
+    return setTimeout(() => setCurrentAction(null), 1000);
   };
 
   const getConfirmHandler = (action: 'create' | 'stop') => {
