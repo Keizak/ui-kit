@@ -9,6 +9,7 @@ import { RequestStatuses } from '../../helpers';
 type ButtonRequestPropsType = ButtonProps & {
   requestStatus: RequestStatuses;
   typeUiButton?: 'Mui' | 'classic';
+  clearDisabledAfterClick?: boolean;
 };
 export const ButtonRequest = (props: ButtonRequestPropsType) => {
   const [localDisabled, setLocalDisabled] = useState(false);
@@ -24,6 +25,7 @@ export const ButtonRequest = (props: ButtonRequestPropsType) => {
   ) => {
     setLocalDisabled(true);
     props.onClick && props.onClick(e);
+    props.clearDisabledAfterClick && setLocalDisabled(false);
   };
 
   useEffect(() => {
