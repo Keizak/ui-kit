@@ -6,7 +6,7 @@ import { useStreamsData } from './useStreamsData';
 import { useStyleFunctions } from './useStyleFunctions';
 
 type useCreateStreamButtonLogicParamsType = {
-  type: StreamTypes;
+  type: StreamTypes | StreamTypes[];
   userId: number;
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
   onFinishCreateStream?: () => void;
