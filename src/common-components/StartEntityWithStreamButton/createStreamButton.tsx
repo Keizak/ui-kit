@@ -76,12 +76,10 @@ export const StartEntityWithStreamButton = (
     if (action === 'create') handlers.createMeeting.mutateAsync({}).finally();
     if (action === 'stop') handlers.clickStartStopStreamHandler();
 
-    return setCurrentAction(null);
+    return setTimeout(() => setCurrentAction(null), 1000);
   };
 
   const getConfirmHandler = (action: 'create' | 'stop') => {
-    console.log(action, 'action');
-    console.log(actionConfirmationStatus, 'actionConfirmationStatus');
     setCurrentAction(action);
     setActionConfirmationStatus(true);
   };
@@ -89,6 +87,17 @@ export const StartEntityWithStreamButton = (
   if (loading.state) {
     return <CircularProgress />;
   }
+
+  const streamIsStarted = selectedStream.state?.startedStreamSession;
+
+  const meetingIsCreatedWithStreamIsStarted =
+    meetingLogicState.createMeeting && streamIsStarted;
+
+  const meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted =
+    meetingIsCreatedWithStreamIsStarted || streamIsStarted;
+
+  const streamIsNotStartedMeetingIsNotCreated =
+    !meetingLogicState.createMeeting && !streamIsStarted;
 
   return (
     <div style={getContainerStyle(statusPosition)}>
@@ -100,19 +109,18 @@ export const StartEntityWithStreamButton = (
           </StatusBlock>
         )}
       <div>
-        {meetingLogicState.createMeeting &&
-          selectedStream.state?.startedStreamSession && (
-            <StartStopStreamButton
-              requestStatus={requestStatus}
-              selectedStream={selectedStream.state}
-              entityTitle={entityTitle}
-              clickSettingsHandler={handlers.clickSettingsHandler}
-              clickStartStopStreamHandler={() => {
-                getConfirmHandler('stop');
-              }}
-            />
-          )}
-        {!meetingLogicState.createMeeting && (
+        {!!meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted && (
+          <StartStopStreamButton
+            requestStatus={requestStatus}
+            selectedStream={selectedStream.state as IStream}
+            entityTitle={entityTitle}
+            clickSettingsHandler={handlers.clickSettingsHandler}
+            clickStartStopStreamHandler={() => {
+              getConfirmHandler('stop');
+            }}
+          />
+        )}
+        {streamIsNotStartedMeetingIsNotCreated && (
           <ButtonRequest
             variant="contained"
             onClick={() => {
