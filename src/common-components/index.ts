@@ -9,6 +9,13 @@ import {
   createStreamButtonPropsType,
   StartEntityWithStreamButton,
 } from './StartEntityWithStreamButton/createStreamButton';
+import { useStreamsData } from './StartEntityWithStreamButton/hooks/useStreamsData';
 
 export type { createStreamButtonPropsType, StreamStatusType, IStream };
-export { StartEntityWithStreamButton, ButtonRequest, StreamTypes, streamsAPI };
+export {
+  StartEntityWithStreamButton,
+  ButtonRequest,
+  StreamTypes,
+  streamsAPI,
+  useStreamsData,
+};
