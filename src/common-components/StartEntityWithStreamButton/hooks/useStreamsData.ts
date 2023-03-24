@@ -1,36 +1,77 @@
 import { useEffect, useState } from 'react';
 
-import { axiosInstance, IStream } from '../api/api';
+import { IStream, streamsAPI, StreamTypes } from '../api/api';
 
 type useStreamsDataParams = {
   userId: number;
-  setSelectedStream: (value: IStream) => void;
+  type: StreamTypes | StreamTypes[];
 };
 export const useStreamsData = (params: useStreamsDataParams) => {
   const [streams, setStreams] = useState<IStream[]>([]);
+  const [selectedStream, setSelectedStream] = useState<IStream | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const updateStream = async (link: string, currentStream: IStream) => {
-    await axiosInstance.put(`streams/${currentStream.id}`, {
-      ...currentStream,
-      link,
-    });
+  const updateStream = async (newStream: IStream) => {
+    return await streamsAPI.updateStream(newStream);
   };
-  const getStreamsForThisUser = async (userId: number): Promise<any> => {
-    const { data } = await axiosInstance.get<{ items: IStream[] }>(`streams/`);
-    const startedStreams = data.items.filter(
+  const getStreamsWithNeededTypeForThisUser = async (
+    userId: number,
+    type: StreamTypes | StreamTypes[]
+  ): Promise<any> => {
+    const { items } = await streamsAPI.getStreams();
+
+    const filteredByIdStreams = items.filter(
+      (stream: IStream) => stream.userId === userId
+    );
+
+    const filteredTypeStreams = filteredByIdStreams.filter(
+      (stream: IStream) => {
+        if (Array.isArray(type)) return type.includes(stream.type);
+        else return stream.type === type;
+      }
+    );
+
+    const startedStreams = filteredTypeStreams.filter(
       (stream: IStream) => stream.startedStreamSession
     );
 
-    if (startedStreams) params.setSelectedStream(startedStreams[0]);
+    if (startedStreams.length > 0) setSelectedStream(startedStreams[0]);
+    else
+      filteredTypeStreams.length > 0 &&
+        setSelectedStream(filteredTypeStreams[0]);
 
-    return data.items.filter((stream) => stream.userId === userId);
+    return items.filter((stream) => stream.userId === userId);
+  };
+
+  const getStreamsContainerFunctions = async () => {
+    setLoading(true);
+
+    return await getStreamsWithNeededTypeForThisUser(params.userId, params.type)
+      .then((res) => setStreams(res))
+      .catch((err) => console.error(err, 'errr'))
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
-    getStreamsForThisUser(params.userId)
-      .then((res) => setStreams(res))
-      .catch((err) => console.log(err, 'errr'));
+    getStreamsContainerFunctions().finally();
   }, []);
 
-  return { streams, setStreams, getStreamsForThisUser, updateStream };
+  return {
+    streams: {
+      set: setStreams,
+      state: streams,
+    },
+    selectedStream: {
+      set: setSelectedStream,
+      state: selectedStream,
+    },
+    streamsApi: {
+      getStreams: getStreamsContainerFunctions,
+      updateStream,
+    },
+    loading: {
+      set: setLoading,
+      state: loading,
+    },
+  };
 };

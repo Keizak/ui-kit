@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState, memo } from 'react';
 
 import { Pagination } from '@mui/material';
 
-import { Block, Text } from '../../ui-styled-components/common';
+import { Block, Text } from '../../ui-styled-components';
 import { BasicObsoleteSelect } from '../BasicObsoleteSelect/BasicObsoleteSelect';
 
 export type BasicPaginationPropsType = {

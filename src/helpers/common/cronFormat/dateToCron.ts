@@ -28,6 +28,7 @@ export enum WeekEnum {
 /**
  * Функция приобразующая формат Даты в крон формат
  */
+
 export const dateToCron = (date: Date): string => {
   /**
    * Преобразуем значения из даты в отдельные числа

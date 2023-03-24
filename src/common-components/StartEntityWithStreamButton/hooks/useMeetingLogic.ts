@@ -4,82 +4,90 @@ import { IStream } from '../api/api';
 import { supportBookingAPI } from '../api/supportBookingApi';
 
 type useMeetingLogicParamsType = {
-  selectedStream: IStream | null;
-  setSelectedStream: (stream: IStream) => void;
-  updateStream: (link: string, currentStream: IStream) => Promise<void>;
+  selectedStream: {
+    set: (stream: IStream) => void;
+    state: IStream | null;
+  };
+  updateStream: (newStream: IStream) => any;
 };
 
-export type meetingLogicStateType = {
-  createMeetingStatusModal: boolean;
-  settingsStreamStatusModal: boolean;
-  meetingCreatingStatus: string | null;
-  createMeeting: boolean;
-  createMeetingLoading: boolean;
-};
-
-export type meetingLogicStateKeysType = keyof meetingLogicStateType;
 export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
-  const { selectedStream, setSelectedStream, updateStream } = params;
+  const { selectedStream, updateStream } = params;
 
-  const [meetingLogicState, setMeetingLogicState] =
-    useState<meetingLogicStateType>({
-      createMeetingStatusModal: false,
-      settingsStreamStatusModal: false,
-      meetingCreatingStatus: null,
-      createMeeting: false,
-      createMeetingLoading: false,
+  const [settingsStreamStatusModal, setSettingsStreamStatusModal] =
+    useState(false);
+  const [meetingCreatingStatus, setMeetingCreatingStatus] = useState<
+    string | null
+  >(null);
+  const [createMeeting, setCreateMeeting] = useState(false);
+  const [createMeetingLoading, setCreateMeetingLoading] = useState(false);
+
+  const changeMeetingLogicState = (fields: Record<string, any>) => {
+    Object.keys(fields).forEach((key) => {
+      switch (key) {
+        case 'settingsStreamStatusModal':
+          return setSettingsStreamStatusModal(fields[key]);
+        case 'meetingCreatingStatus':
+          return setMeetingCreatingStatus(fields[key]);
+        case 'createMeeting':
+          return setCreateMeeting(fields[key]);
+        case 'createMeetingLoading':
+          return setCreateMeetingLoading(fields[key]);
+        default:
+          break;
+      }
     });
-
-  const changeMeetingLogicState = async (
-    fields: meetingLogicStateKeysType | meetingLogicStateKeysType[],
-    value: any
-  ) => {
-    const newState: any = { ...meetingLogicState };
-
-    if (Array.isArray(fields)) {
-      await fields.forEach((field, index) => (newState[field] = value[index]));
-      setMeetingLogicState(newState);
-    } else {
-      setMeetingLogicState({ ...meetingLogicState, [fields]: value });
-    }
   };
 
   useEffect(() => {
-    supportBookingAPI.subscribe(
-      'ZoomMeetingCreatingStatusChanged',
-      ({ message }: { message: string }) => {
-        changeMeetingLogicState(
-          [
-            'createMeetingStatusModal',
-            'meetingCreatingStatus',
-            'createMeetingLoading',
-          ],
-          [false, message, 'true']
-        );
-      }
-    );
-    supportBookingAPI.subscribe(
-      'ZoomMeetingStarted',
-      ({ url }: { url: string }) => {
-        if (selectedStream) {
-          setSelectedStream({ ...selectedStream, link: url });
-          updateStream(url, selectedStream).finally();
+    if (selectedStream.state) {
+      supportBookingAPI.open().finally();
+      supportBookingAPI.subscribe(
+        'ZoomMeetingCreatingStatusChanged',
+        ({ message }: { message: string }) => {
+          changeMeetingLogicState({
+            meetingCreatingStatus: message,
+            createMeetingLoading: true,
+          });
         }
-        changeMeetingLogicState(
-          ['createMeeting', 'createMeetingLoading', 'createMeetingStatusModal'],
-          [true, false, false]
-        );
-      }
-    );
+      );
+      supportBookingAPI.subscribe(
+        'ZoomMeetingStarted',
+        ({ url }: { url: string }) => {
+          if (selectedStream.state) {
+            const changedStream = {
+              ...selectedStream.state,
+              link: url,
+            };
+
+            selectedStream.set(changedStream);
+            updateStream(changedStream).finally(() => {});
+          }
+          changeMeetingLogicState({
+            createMeeting: true,
+            createMeetingLoading: false,
+            meetingCreatingStatus: '',
+          });
+        }
+      );
+    }
 
     return () => {
-      supportBookingAPI.unsubscribe('ZoomMeetingCreatingStatusChanged');
-      supportBookingAPI.unsubscribe('ZoomMeetingStarted');
+      if (selectedStream.state) {
+        supportBookingAPI.close().finally();
+        supportBookingAPI.unsubscribe('ZoomMeetingCreatingStatusChanged');
+        supportBookingAPI.unsubscribe('ZoomMeetingStarted');
+      }
     };
-  }, [selectedStream]);
+  }, [selectedStream.state]);
 
   return {
     changeMeetingLogicState,
-    meetingLogicState,
+    meetingLogicState: {
+      settingsStreamStatusModal,
+      meetingCreatingStatus,
+      createMeetingLoading,
+      createMeeting,
+    },
   };
 };

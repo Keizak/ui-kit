@@ -1,130 +1,191 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
+
+import InfoIcon from '@mui/icons-material/Info';
+import { CircularProgress } from '@mui/material';
+import styled from 'styled-components';
 
 import { RequestStatuses } from '../../helpers';
 import { ButtonRequest } from '../ButtonRequest/buttonRequest';
 
 import { IStream, StreamTypes } from './api/api';
-import { useLocalHandlers } from './hooks/useLocalHandlers';
-import { useMeetingLogic } from './hooks/useMeetingLogic';
-import { useStreamsData } from './hooks/useStreamsData';
-import { CreateSettingStreamModal } from './modals/CreateSettingStreamModal';
+import { useCreateStreamButtonLogic } from './hooks/useCreateStreamButtonLogic';
+import { StatusesPositionType } from './hooks/useStyleFunctions';
+import { ActionConfirmation } from './modals/NotificationModal';
 import { SettingStreamModal } from './modals/SettingStreamModal';
 import { StartStopStreamButton } from './startStopStreamButton/startStopStreamButton';
 
 export type createStreamButtonPropsType = {
   title?: string;
   entityTitle?: string;
-  type: StreamTypes;
-  streamStatus: boolean;
-  setStreamStatus: (status: boolean) => void;
+  type: StreamTypes | StreamTypes[];
   userId: number;
   requestStatus: RequestStatuses;
+  customButtonStyle?: CSSProperties;
+  asyncHandler: (operation: () => Promise<any>) => Promise<any>;
+
+  statusPosition?: StatusesPositionType;
+
+  onFinishCreateStream?: () => void;
+  onFinishStopStream?: () => void;
+
+  beforeStartStream?: (selectedStream: IStream) => Promise<any>;
 };
 export const StartEntityWithStreamButton = (
   props: createStreamButtonPropsType
 ) => {
   const {
-    title = 'Create stream',
+    title = 'Create Zoom-meeting',
     entityTitle = 'stream',
-    streamStatus,
-    setStreamStatus,
+    statusPosition = 'right',
     userId,
     requestStatus,
+    type,
+    customButtonStyle,
+    asyncHandler,
+    onFinishCreateStream,
+    onFinishStopStream,
+    beforeStartStream,
   } = props;
 
-  const [selectedStream, setSelectedStream] = useState<IStream | null>(null);
-
-  const { streams, setStreams, getStreamsForThisUser, updateStream } =
-    useStreamsData({
-      setSelectedStream,
+  const { handlers, streamData, meetingsData, styleFunctions } =
+    useCreateStreamButtonLogic({
       userId,
+      type,
+      asyncHandler,
+      onFinishCreateStream,
+      onFinishStopStream,
+      beforeStartStream,
     });
 
-  const { changeMeetingLogicState, meetingLogicState } = useMeetingLogic({
-    setSelectedStream,
-    selectedStream,
-    updateStream,
-  });
-
+  const { meetingLogicState, changeMeetingLogicState } = meetingsData;
+  const { selectedStream, loading } = streamData;
   const {
-    changeStatusStream,
-    createStreamHandler,
-    clickSettingsHandler,
-    clickStartStopStreamHandler,
-  } = useLocalHandlers({
-    changeMeetingLogicState,
-    streamStatus,
-    selectedStream,
-    setSelectedStream,
-    updateStream,
-    toggleStreamStatus: () => setStreamStatus(!streamStatus),
-    getStreams: () => {
-      getStreamsForThisUser(userId).then((res) => setStreams(res));
-    },
-  });
+    getContainerStyle,
+    getPositionStatusBlock,
+    getDisabledStartStreamButton,
+  } = styleFunctions;
 
-  useEffect(() => {}, [selectedStream, streamStatus]);
+  const [actionConfirmationStatus, setActionConfirmationStatus] =
+    useState(false);
+
+  const [currentAction, setCurrentAction] = useState<'create' | 'stop' | null>(
+    null
+  );
+
+  const actionConfirmationHandler = (action: 'create' | 'stop' | null) => {
+    if (action === 'create') handlers.createMeeting.mutateAsync({}).finally();
+    if (action === 'stop') handlers.clickStartStopStreamHandler();
+
+    return setTimeout(() => setCurrentAction(null), 1000);
+  };
+
+  const getConfirmHandler = (action: 'create' | 'stop') => {
+    setCurrentAction(action);
+    setActionConfirmationStatus(true);
+  };
+
+  if (loading.state) {
+    return <CircularProgress />;
+  }
+
+  const streamIsStarted = selectedStream.state?.startedStreamSession;
+
+  const meetingIsCreatedWithStreamIsStarted =
+    meetingLogicState.createMeeting && streamIsStarted;
+
+  const meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted =
+    meetingIsCreatedWithStreamIsStarted || streamIsStarted;
+
+  const streamIsNotStartedMeetingIsNotCreated =
+    !meetingLogicState.createMeeting && !streamIsStarted;
 
   return (
-    <div
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-    >
-      <div style={{ marginBottom: '5px' }}>
-        {meetingLogicState.meetingCreatingStatus}
-      </div>
-      {selectedStream && streamStatus && (
-        <div style={{ marginBottom: '5px' }}>
-          Стрим : {selectedStream.title}
-        </div>
-      )}
-
+    <div style={getContainerStyle(statusPosition)}>
+      {getPositionStatusBlock(statusPosition) === 'top' &&
+        meetingLogicState.meetingCreatingStatus && (
+          <StatusBlock position={statusPosition}>
+            <InfoIcon sx={{ marginRight: '10px' }} />
+            {meetingLogicState.meetingCreatingStatus}
+          </StatusBlock>
+        )}
       <div>
-        {(meetingLogicState.createMeeting && selectedStream) ||
-        selectedStream?.startedStreamSession ? (
+        {!!meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted && (
           <StartStopStreamButton
-            selectedStream={selectedStream}
-            streamStatus={streamStatus}
+            requestStatus={requestStatus}
+            selectedStream={selectedStream.state as IStream}
             entityTitle={entityTitle}
-            clickSettingsHandler={clickSettingsHandler}
-            clickStartStopStreamHandler={clickStartStopStreamHandler}
+            clickSettingsHandler={handlers.clickSettingsHandler}
+            clickStartStopStreamHandler={() => {
+              getConfirmHandler('stop');
+            }}
           />
-        ) : (
+        )}
+        {streamIsNotStartedMeetingIsNotCreated && (
           <ButtonRequest
             variant="contained"
-            onClick={createStreamHandler}
-            disabled={meetingLogicState.createMeetingLoading}
+            onClick={() => {
+              getConfirmHandler('create');
+            }}
+            disabled={getDisabledStartStreamButton(
+              meetingLogicState.createMeetingLoading,
+              selectedStream.state
+            )}
             requestStatus={requestStatus}
+            style={customButtonStyle}
+            clearDisabledAfterClick={true}
           >
             {title}
           </ButtonRequest>
         )}
       </div>
-
-      <CreateSettingStreamModal
-        onSubmit={(id, status) => changeStatusStream(id, status)}
-        open={meetingLogicState.createMeetingStatusModal}
-        setOpen={(value) =>
-          changeMeetingLogicState('createMeetingStatusModal', value)
-        }
-        streams={streams}
-        setStreamStatus={setStreamStatus}
-        setMeetingCreatingStatus={(value) =>
-          changeMeetingLogicState('meetingCreatingStatus', value)
-        }
-        setSelectedStream={setSelectedStream}
-        selectedStream={selectedStream}
-      />
-      {selectedStream && (
+      {getPositionStatusBlock(statusPosition) === 'bottom' &&
+        meetingLogicState.meetingCreatingStatus && (
+          <StatusBlock position={statusPosition}>
+            <InfoIcon sx={{ marginRight: '10px' }} />
+            {meetingLogicState.meetingCreatingStatus}
+          </StatusBlock>
+        )}
+      {selectedStream.state && (
         <SettingStreamModal
-          onSubmit={() => updateStream(selectedStream.link, selectedStream)}
           open={meetingLogicState.settingsStreamStatusModal}
           setOpen={(value) =>
-            changeMeetingLogicState('settingsStreamStatusModal', value)
+            changeMeetingLogicState({ settingsStreamStatusModal: value })
           }
-          setSelectedStream={setSelectedStream}
-          selectedStream={selectedStream}
+          selectedStream={selectedStream.state}
         />
       )}
+      <ActionConfirmation
+        title={`${currentAction} stream`}
+        onConfirm={() => actionConfirmationHandler(currentAction)}
+        content={'Вы уверены что хотите это сделать ?'}
+        open={actionConfirmationStatus}
+        setOpen={setActionConfirmationStatus}
+      />
     </div>
   );
 };
+
+const StatusBlock = styled.div<{ position: StatusesPositionType }>`
+  display: flex;
+  align-items: center;
+  margin: ${(props) => {
+    switch (props.position) {
+      case 'bottom':
+        return '20px 0 0 0';
+      case 'top':
+        return '0 0 20px 0';
+      case 'left':
+        return '0 20px 0 0';
+      case 'right':
+        return '0 0 0 20px';
+      default:
+        return '';
+    }
+  }};
+  font-family: 'Roboto', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #8c8889;
+`;

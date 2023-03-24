@@ -1,5 +1,7 @@
 import * as signalR from '@microsoft/signalr';
 
+import { securityConstants } from '../../../constants/securityConstants';
+
 export type SupportEvents =
   | 'StartSupport'
   | 'StudentAccepted'
@@ -12,6 +14,7 @@ export type SupportEvents =
 
 class SupportBookingAPI {
   connection: signalR.HubConnection | null = null;
+  wsStatus: 'pending' | 'connected' | 'error' = 'pending';
   private eventsNames: string[] = [];
 
   subscribe(eventName: SupportEvents, callback: (...args: any) => void) {
@@ -28,6 +31,29 @@ class SupportBookingAPI {
     eventNames.forEach((e) => {
       this.connection?.off(e);
     });
+  }
+
+  async open() {
+    if (!this.connection) {
+      this.connection = new signalR.HubConnectionBuilder()
+        .withUrl(
+          securityConstants.apiBaseUrl.replace('api/', 'support-booking-hub')
+        ) //todo: add configuration
+        .withAutomaticReconnect()
+        .build();
+    }
+    await this.connection.start();
+    this.wsStatus = 'connected';
+
+    return true;
+  }
+
+  async close() {
+    if (this.connection) {
+      this.eventsNames.forEach((e) => this.connection?.off(e));
+      this.eventsNames = [];
+      await this.connection.stop();
+    }
   }
 }
 

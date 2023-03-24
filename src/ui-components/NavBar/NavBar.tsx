@@ -50,7 +50,6 @@ export const NavBar = (props: NavBarPropsType) => {
     const localCurrentCourse = localStorage.getItem(localstorageKey);
 
     if (localCurrentCourse) {
-      console.log(localCurrentCourse, 'localCurrentCourse');
       setCurrentCourse(+localCurrentCourse);
     }
   }, []);
