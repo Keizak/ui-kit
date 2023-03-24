@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useState } from 'react';
 
 import InfoIcon from '@mui/icons-material/Info';
 import { CircularProgress } from '@mui/material';
@@ -10,6 +10,7 @@ import { ButtonRequest } from '../ButtonRequest/buttonRequest';
 import { IStream, StreamTypes } from './api/api';
 import { useCreateStreamButtonLogic } from './hooks/useCreateStreamButtonLogic';
 import { StatusesPositionType } from './hooks/useStyleFunctions';
+import { ActionConfirmation } from './modals/NotificationModal';
 import { SettingStreamModal } from './modals/SettingStreamModal';
 import { StartStopStreamButton } from './startStopStreamButton/startStopStreamButton';
 
@@ -64,6 +65,27 @@ export const StartEntityWithStreamButton = (
     getDisabledStartStreamButton,
   } = styleFunctions;
 
+  const [actionConfirmationStatus, setActionConfirmationStatus] =
+    useState(false);
+
+  const [currentAction, setCurrentAction] = useState<'create' | 'stop' | null>(
+    null
+  );
+
+  const actionConfirmationHandler = (action: 'create' | 'stop' | null) => {
+    if (action === 'create') handlers.createMeeting.mutateAsync({}).finally();
+    if (action === 'stop') handlers.clickStartStopStreamHandler();
+
+    return setCurrentAction(null);
+  };
+
+  const getConfirmHandler = (action: 'create' | 'stop') => {
+    console.log(action, 'action');
+    console.log(actionConfirmationStatus, 'actionConfirmationStatus');
+    setCurrentAction(action);
+    setActionConfirmationStatus(true);
+  };
+
   if (loading.state) {
     return <CircularProgress />;
   }
@@ -78,20 +100,23 @@ export const StartEntityWithStreamButton = (
           </StatusBlock>
         )}
       <div>
-        {(meetingLogicState.createMeeting && selectedStream.state) ||
-        selectedStream.state?.startedStreamSession ? (
-          <StartStopStreamButton
-            requestStatus={requestStatus}
-            selectedStream={selectedStream.state}
-            entityTitle={entityTitle}
-            clickSettingsHandler={handlers.clickSettingsHandler}
-            clickStartStopStreamHandler={handlers.clickStartStopStreamHandler}
-          />
-        ) : (
+        {meetingLogicState.createMeeting &&
+          selectedStream.state?.startedStreamSession && (
+            <StartStopStreamButton
+              requestStatus={requestStatus}
+              selectedStream={selectedStream.state}
+              entityTitle={entityTitle}
+              clickSettingsHandler={handlers.clickSettingsHandler}
+              clickStartStopStreamHandler={() => {
+                getConfirmHandler('stop');
+              }}
+            />
+          )}
+        {!meetingLogicState.createMeeting && (
           <ButtonRequest
             variant="contained"
             onClick={() => {
-              handlers.createMeeting.mutateAsync({}).finally();
+              getConfirmHandler('create');
             }}
             disabled={getDisabledStartStreamButton(
               meetingLogicState.createMeetingLoading,
@@ -99,6 +124,7 @@ export const StartEntityWithStreamButton = (
             )}
             requestStatus={requestStatus}
             style={customButtonStyle}
+            clearDisabledAfterClick={true}
           >
             {title}
           </ButtonRequest>
@@ -120,6 +146,13 @@ export const StartEntityWithStreamButton = (
           selectedStream={selectedStream.state}
         />
       )}
+      <ActionConfirmation
+        title={`${currentAction} stream`}
+        onConfirm={() => actionConfirmationHandler(currentAction)}
+        content={'Вы уверены что хотите это сделать ?'}
+        open={actionConfirmationStatus}
+        setOpen={setActionConfirmationStatus}
+      />
     </div>
   );
 };

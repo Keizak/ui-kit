@@ -58,6 +58,7 @@ export enum StreamTypes {
   ExtraLesson = 11,
   OnlineCoworking = 20,
 
+  StudentSupport = 21,
   OtherStream = 30,
 }
 
