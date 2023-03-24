@@ -17,7 +17,7 @@ import { StartStopStreamButton } from './startStopStreamButton/startStopStreamBu
 export type createStreamButtonPropsType = {
   title?: string;
   entityTitle?: string;
-  type: StreamTypes;
+  type: StreamTypes | StreamTypes[];
   userId: number;
   requestStatus: RequestStatuses;
   customButtonStyle?: CSSProperties;

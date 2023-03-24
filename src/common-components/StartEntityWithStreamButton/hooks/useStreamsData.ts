@@ -4,7 +4,7 @@ import { IStream, streamsAPI, StreamTypes } from '../api/api';
 
 type useStreamsDataParams = {
   userId: number;
-  type: StreamTypes;
+  type: StreamTypes | StreamTypes[];
 };
 export const useStreamsData = (params: useStreamsDataParams) => {
   const [streams, setStreams] = useState<IStream[]>([]);
@@ -16,7 +16,7 @@ export const useStreamsData = (params: useStreamsDataParams) => {
   };
   const getStreamsWithNeededTypeForThisUser = async (
     userId: number,
-    type: StreamTypes
+    type: StreamTypes | StreamTypes[]
   ): Promise<any> => {
     const { items } = await streamsAPI.getStreams();
 
@@ -25,7 +25,10 @@ export const useStreamsData = (params: useStreamsDataParams) => {
     );
 
     const filteredTypeStreams = filteredByIdStreams.filter(
-      (stream: IStream) => stream.type === type
+      (stream: IStream) => {
+        if (Array.isArray(type)) return type.includes(stream.type);
+        else return stream.type === type;
+      }
     );
 
     const startedStreams = filteredTypeStreams.filter(
