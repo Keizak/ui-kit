@@ -11,6 +11,8 @@ export type BasicInputPropsType = {
   positionIcon?: 'start' | 'end';
   onChange: (value: string) => void;
   value: string;
+
+  disabled?: boolean;
 };
 /**
  * JSX Component( BasicInput )
@@ -23,6 +25,7 @@ export type BasicInputPropsType = {
  * @param {'start' | 'end'} props.positionIcon Позиция иконки в инпуте, начало/конец ( Необязательный )
  */
 export const BasicInput = (props: BasicInputPropsType) => {
+  const {disabled = false} = props
   /**
    * Дефолтные значения для компоненты
    */
@@ -41,6 +44,7 @@ export const BasicInput = (props: BasicInputPropsType) => {
     case 'search': {
       return (
         <OutlinedInput
+            disabled={disabled}
           placeholder={placeholder}
           sx={{ ...defaultStyle, ...sx }}
           value={props.value}
@@ -56,6 +60,7 @@ export const BasicInput = (props: BasicInputPropsType) => {
     case 'text': {
       return (
         <OutlinedInput
+            disabled={disabled}
           placeholder={placeholder}
           sx={{ ...defaultStyle, ...sx }}
           value={props.value}
