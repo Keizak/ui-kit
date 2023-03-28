@@ -19,7 +19,10 @@ type useLocalHandlersParamsType = {
   onFinishCreateStream?: () => void;
   onFinishStopStream?: () => void;
 
-  beforeStartStream?: (selectedStream: IStream) => Promise<any>;
+  beforeStartStream?: (
+    selectedStream: IStream,
+    set: (stream: IStream) => void
+  ) => Promise<any>;
 };
 export const useLocalHandlers = ({
   changeMeetingLogicState,
@@ -64,7 +67,7 @@ export const useLocalHandlers = ({
     } else {
       beforeStartStream &&
         selectedStream.state &&
-        (await beforeStartStream(selectedStream.state));
+        (await beforeStartStream(selectedStream.state, selectedStream.set));
 
       return await asyncHandler(() =>
         streamsAPI.start(streamId).then((res) => {
@@ -73,9 +76,9 @@ export const useLocalHandlers = ({
             changeMeetingLogicState({
               createMeetingStatusModal: false,
             });
-            if (selectedStream.state) {
-              streamsApi.updateStream(selectedStream.state);
-            }
+            // if (selectedStream.state) {
+            //   streamsApi.updateStream(selectedStream.state);
+            // }
           }
 
           return res;
