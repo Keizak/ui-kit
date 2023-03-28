@@ -11,7 +11,10 @@ type useCreateStreamButtonLogicParamsType = {
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
   onFinishCreateStream?: () => void;
   onFinishStopStream?: () => void;
-  beforeStartStream?: (selectedStream: IStream) => Promise<any>;
+  beforeStartStream?: (
+    selectedStream: IStream,
+    set: (stream: IStream) => void
+  ) => Promise<any>;
 };
 export const useCreateStreamButtonLogic = ({
   type,

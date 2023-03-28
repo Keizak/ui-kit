@@ -28,7 +28,10 @@ export type createStreamButtonPropsType = {
   onFinishCreateStream?: () => void;
   onFinishStopStream?: () => void;
 
-  beforeStartStream?: (selectedStream: IStream) => Promise<any>;
+  beforeStartStream?: (
+    selectedStream: IStream,
+    set: (stream: IStream) => void
+  ) => Promise<any>;
 };
 export const StartEntityWithStreamButton = (
   props: createStreamButtonPropsType

@@ -1,6 +1,7 @@
 import { ButtonRequest } from './ButtonRequest/buttonRequest';
 import {
   IStream,
+  IStreamSession,
   streamsAPI,
   StreamStatusType,
   StreamTypes,
@@ -11,7 +12,12 @@ import {
 } from './StartEntityWithStreamButton/createStreamButton';
 import { useStreamsData } from './StartEntityWithStreamButton/hooks/useStreamsData';
 
-export type { createStreamButtonPropsType, StreamStatusType, IStream };
+export type {
+  createStreamButtonPropsType,
+  StreamStatusType,
+  IStream,
+  IStreamSession,
+};
 export {
   StartEntityWithStreamButton,
   ButtonRequest,
