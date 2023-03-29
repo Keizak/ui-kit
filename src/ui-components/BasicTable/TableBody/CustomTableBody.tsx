@@ -36,7 +36,7 @@ export const CustomTableBody = (props: CustomTableBodyPropsType) => {
           key={nanoid()}
           justifyContent={'flex-start'}
           width={'100%'}
-          height={'46px'}
+          height={'100%'}
           borderBottom={'1px solid #CFCFCF'}
           flexWrap={'nowrap'}
 
@@ -57,6 +57,7 @@ export const CustomTableBody = (props: CustomTableBodyPropsType) => {
                     : 'flex-start'
                 }
                 width={props.columnStyle[index].width}
+                overflow={''}
               >
                 {currentRow && currentRow.value ? currentRow.value : currentRow}
               </Block>
