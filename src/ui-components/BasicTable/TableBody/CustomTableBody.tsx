@@ -2,7 +2,7 @@ import React from 'react';
 
 import { nanoid } from 'nanoid';
 
-import { Block } from '../../../ui-styled-components/common';
+import { Block } from '../../../ui-styled-components';
 import { TableRowType } from '../BasicTable';
 
 type columnStyle = {

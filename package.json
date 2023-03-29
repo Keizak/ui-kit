@@ -44,7 +44,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@it-incubator/ui-kit",
+  "name": "@it-incubator/kit",
   "author": "Ivan_Kazak",
   "module": "dist/index.js",
   "repository": {
