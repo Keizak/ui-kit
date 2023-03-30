@@ -30,6 +30,7 @@ export function ActionConfirmation(props: Props) {
     handleClose();
   };
 
+  //TODO Закрывать попап только на кнопки
   return (
     <div>
       <Dialog
@@ -38,18 +39,32 @@ export function ActionConfirmation(props: Props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {props.title.toUpperCase()}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {props.content}
+            <br />
+            <br />
+            Ты уверен, что хочешь это сделать?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button
+            onClick={handleClose}
+            color="primary"
+            sx={{ fontSize: '1rem' }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleConfirm} color="primary" autoFocus>
-            Confirm
+          <Button
+            onClick={handleConfirm}
+            color="primary"
+            sx={{ fontSize: '1rem' }}
+            autoFocus
+          >
+            OK
           </Button>
         </DialogActions>
       </Dialog>

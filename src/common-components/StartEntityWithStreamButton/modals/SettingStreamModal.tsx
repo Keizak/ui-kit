@@ -8,6 +8,7 @@ export type AddLinkToStreamModalPropsType = {
   setOpen: (open: boolean) => void;
   selectedStream: IStream;
 };
+//TODO Добавить курсы и технологии
 export const SettingStreamModal = (props: AddLinkToStreamModalPropsType) => {
   const { selectedStream } = props;
 

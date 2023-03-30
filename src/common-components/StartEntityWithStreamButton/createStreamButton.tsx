@@ -21,6 +21,7 @@ export type createStreamButtonPropsType = {
   userId: number;
   requestStatus: RequestStatuses;
   customButtonStyle?: CSSProperties;
+  customButtonClassname: string;
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
 
   statusPosition?: StatusesPositionType;
@@ -33,6 +34,9 @@ export type createStreamButtonPropsType = {
     set: (stream: IStream) => void
   ) => Promise<any>;
 };
+//TODO добавить тект что если нету подходящего типа стрима то мы не можем ничего сделать. Текст: У тебя нет доступа к такому типу стримов
+// убрать дизейбл при потверждении
+// Реализовать берем первый Support, если нет Support - берем первый StudentSupport . Если нет - значит нет доступа к созланию
 export const StartEntityWithStreamButton = (
   props: createStreamButtonPropsType
 ) => {
@@ -44,6 +48,7 @@ export const StartEntityWithStreamButton = (
     requestStatus,
     type,
     customButtonStyle,
+    customButtonClassname,
     asyncHandler,
     onFinishCreateStream,
     onFinishStopStream,
@@ -71,18 +76,18 @@ export const StartEntityWithStreamButton = (
   const [actionConfirmationStatus, setActionConfirmationStatus] =
     useState(false);
 
-  const [currentAction, setCurrentAction] = useState<'create' | 'stop' | null>(
+  const [currentAction, setCurrentAction] = useState<'start' | 'stop' | null>(
     null
   );
 
-  const actionConfirmationHandler = (action: 'create' | 'stop' | null) => {
-    if (action === 'create') handlers.createMeeting.mutateAsync({}).finally();
+  const actionConfirmationHandler = (action: 'start' | 'stop' | null) => {
+    if (action === 'start') handlers.createMeeting.mutateAsync({}).finally();
     if (action === 'stop') handlers.clickStartStopStreamHandler();
 
     return setTimeout(() => setCurrentAction(null), 1000);
   };
 
-  const getConfirmHandler = (action: 'create' | 'stop') => {
+  const getConfirmHandler = (action: 'start' | 'stop') => {
     setCurrentAction(action);
     setActionConfirmationStatus(true);
   };
@@ -127,7 +132,7 @@ export const StartEntityWithStreamButton = (
           <ButtonRequest
             variant="contained"
             onClick={() => {
-              getConfirmHandler('create');
+              getConfirmHandler('start');
             }}
             disabled={getDisabledStartStreamButton(
               meetingLogicState.createMeetingLoading,
@@ -135,9 +140,12 @@ export const StartEntityWithStreamButton = (
             )}
             requestStatus={requestStatus}
             style={customButtonStyle}
+            className={customButtonClassname}
             clearDisabledAfterClick={true}
           >
-            {title}
+            {selectedStream.state
+              ? title
+              : `You don't have access to this type of streams`}
           </ButtonRequest>
         )}
       </div>
@@ -158,14 +166,29 @@ export const StartEntityWithStreamButton = (
         />
       )}
       <ActionConfirmation
-        title={`${currentAction} stream`}
+        title={`${currentAction} ${entityTitle}`}
         onConfirm={() => actionConfirmationHandler(currentAction)}
-        content={'Вы уверены что хотите это сделать ?'}
+        content={chooseText(currentAction, entityTitle)}
         open={actionConfirmationStatus}
         setOpen={setActionConfirmationStatus}
       />
     </div>
   );
+};
+
+const chooseText = (
+  currentAction: 'start' | 'stop' | null,
+  entityTitle: string
+) => {
+  switch (currentAction) {
+    case 'start':
+      return `Потверждая данное действие, автоматически запустится зум конференция и ${entityTitle} сессия.`;
+    case 'stop':
+      return `Потверждая данное действие, автоматически выключается ${entityTitle} сессия, но не завершается зум конференция.
+          Пожалуйста не забудь её закрыть!`;
+    default:
+      return '';
+  }
 };
 
 const StatusBlock = styled.div<{ position: StatusesPositionType }>`

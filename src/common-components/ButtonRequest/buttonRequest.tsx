@@ -24,6 +24,9 @@ export const ButtonRequest = (props: ButtonRequestPropsType) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     setLocalDisabled(true);
+    setTimeout(() => {
+      if (requestStatus !== RequestStatuses.InProgress) setLocalDisabled(false);
+    }, 1000);
     props.onClick && props.onClick(e);
     props.clearDisabledAfterClick && setLocalDisabled(false);
   };
