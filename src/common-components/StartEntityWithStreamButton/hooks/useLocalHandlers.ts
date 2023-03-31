@@ -103,9 +103,9 @@ export const useLocalHandlers = ({
     (currentAction: 'start' | 'stop' | null, entityTitle: string) => {
       switch (currentAction) {
         case 'start':
-          return `Потверждая данное действие, автоматически запустится зум конференция и ${entityTitle} сессия.`;
+          return `Потверждая данное действие, автоматически запустится зум-конференция и ${entityTitle}-сессия.`;
         case 'stop':
-          return `Потверждая данное действие, автоматически выключается ${entityTitle} сессия, но не завершается зум конференция.
+          return `Потверждая данное действие, автоматически выключается ${entityTitle}-сессия, но не завершается зум-конференция.
           Пожалуйста не забудь её закрыть!`;
         default:
           return '';
