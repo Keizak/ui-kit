@@ -1,16 +1,7 @@
 import * as signalR from '@microsoft/signalr';
 
 import { securityConstants } from '../../../constants/securityConstants';
-
-export type SupportEvents =
-  | 'StartSupport'
-  | 'StudentAccepted'
-  | 'QueueItemAdded'
-  | 'QueueItemCancelled'
-  | 'NoteUpdated'
-  | 'ZoomMeetingCreatingStatusChanged'
-  | 'ZoomMeetingStarted'
-  | 'StopSupport';
+import { SupportEvents } from '../types';
 
 class SupportBookingAPI {
   connection: signalR.HubConnection | null = null;

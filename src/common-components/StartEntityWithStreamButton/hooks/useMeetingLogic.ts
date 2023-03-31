@@ -1,17 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { IStream } from '../api/api';
-import { supportBookingAPI } from '../api/supportBookingApi';
+import { supportBookingAPI } from '../api';
+import { useMeetingLogicParamsType, UseMeetingLogicReturnType } from '../types';
 
-type useMeetingLogicParamsType = {
-  selectedStream: {
-    set: (stream: IStream) => void;
-    state: IStream | null;
-  };
-  updateStream: (newStream: IStream) => any;
-};
-
-export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
+export const useMeetingLogic = (
+  params: useMeetingLogicParamsType
+): UseMeetingLogicReturnType => {
   const { selectedStream, updateStream } = params;
 
   const [settingsStreamStatusModal, setSettingsStreamStatusModal] =
@@ -22,7 +16,7 @@ export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
   const [createMeeting, setCreateMeeting] = useState(false);
   const [createMeetingLoading, setCreateMeetingLoading] = useState(false);
 
-  const changeMeetingLogicState = (fields: Record<string, any>) => {
+  const changeMeetingLogicState = useCallback((fields: Record<string, any>) => {
     Object.keys(fields).forEach((key) => {
       switch (key) {
         case 'settingsStreamStatusModal':
@@ -37,7 +31,7 @@ export const useMeetingLogic = (params: useMeetingLogicParamsType) => {
           break;
       }
     });
-  };
+  }, []);
 
   useEffect(() => {
     if (selectedStream.state) {

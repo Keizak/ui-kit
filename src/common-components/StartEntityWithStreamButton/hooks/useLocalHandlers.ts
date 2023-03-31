@@ -1,29 +1,13 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useMutation } from 'react-query';
 
-import { IStream, streamsAPI } from '../api/api';
+import { streamsAPI } from '../api';
+import {
+  useLocalHandlersParamsType,
+  useLocalHandlersReturnType,
+} from '../types';
 
-type useLocalHandlersParamsType = {
-  createMeetingStatus: boolean;
-  changeMeetingLogicState: (fields: Record<string, any>) => void;
-  selectedStream: {
-    set: (stream: IStream) => void;
-    state: IStream | null;
-  };
-  streamsApi: {
-    updateStream: (newStream: IStream) => any;
-    getStreams: () => void;
-  };
-  asyncHandler: (operation: () => Promise<any>) => Promise<any>;
-  onFinishCreateStream?: () => void;
-  onFinishStopStream?: () => void;
-
-  beforeStartStream?: (
-    selectedStream: IStream,
-    set: (stream: IStream) => void
-  ) => Promise<any>;
-};
 export const useLocalHandlers = ({
   changeMeetingLogicState,
   selectedStream,
@@ -33,7 +17,7 @@ export const useLocalHandlers = ({
   onFinishCreateStream,
   onFinishStopStream,
   beforeStartStream,
-}: useLocalHandlersParamsType) => {
+}: useLocalHandlersParamsType): useLocalHandlersReturnType => {
   const toggleSelectedStreamStatus = () => {
     if (selectedStream.state)
       return selectedStream.set({
@@ -86,13 +70,13 @@ export const useLocalHandlers = ({
       );
     }
   };
-  const createStreamHandler = () => {
+  const createStreamHandler = useCallback(() => {
     changeMeetingLogicState({ createMeetingStatusModal: true });
-  };
+  }, []);
 
-  const clickSettingsHandler = () => {
+  const clickSettingsHandler = useCallback(() => {
     changeMeetingLogicState({ settingsStreamStatusModal: true });
-  };
+  }, []);
 
   const clickStartStopStreamHandler = () => {
     selectedStream.state &&
@@ -115,6 +99,40 @@ export const useLocalHandlers = ({
     }
   );
 
+  const chooseText = useCallback(
+    (currentAction: 'start' | 'stop' | null, entityTitle: string) => {
+      switch (currentAction) {
+        case 'start':
+          return `Потверждая данное действие, автоматически запустится зум конференция и ${entityTitle} сессия.`;
+        case 'stop':
+          return `Потверждая данное действие, автоматически выключается ${entityTitle} сессия, но не завершается зум конференция.
+          Пожалуйста не забудь её закрыть!`;
+        default:
+          return '';
+      }
+    },
+    []
+  );
+
+  const [actionConfirmationStatus, setActionConfirmationStatus] =
+    useState(false);
+
+  const [currentAction, setCurrentAction] = useState<'start' | 'stop' | null>(
+    null
+  );
+
+  const actionConfirmationHandler = (action: 'start' | 'stop' | null) => {
+    if (action === 'start') createMeeting.mutateAsync({}).finally();
+    if (action === 'stop') clickStartStopStreamHandler();
+
+    return setTimeout(() => setCurrentAction(null), 1000);
+  };
+
+  const getConfirmHandler = useCallback((action: 'start' | 'stop') => {
+    setCurrentAction(action);
+    setActionConfirmationStatus(true);
+  }, []);
+
   useEffect(() => {
     if (createMeetingStatus)
       try {
@@ -135,6 +153,16 @@ export const useLocalHandlers = ({
       clickSettingsHandler,
       clickStartStopStreamHandler,
       createMeeting,
+      chooseText,
+      getConfirmHandler,
+      actionConfirmationHandler,
+    },
+    actionConfirmationData: {
+      actionConfirmationStatus: {
+        state: actionConfirmationStatus,
+        set: setActionConfirmationStatus,
+      },
+      currentAction,
     },
   };
 };
