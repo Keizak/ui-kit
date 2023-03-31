@@ -20,7 +20,7 @@ export const SettingStreamModal = memo(
         selectedStream.coursesLessonsRestrictions.map((el) => {
           return (
             <span key={el.courseId + 'course'}>
-              {getTitleCourseFromId(el.courseId, courses)},
+              {getTitleCourseFromId(el.courseId, courses)},{' '}
             </span>
           );
         }),
@@ -32,7 +32,7 @@ export const SettingStreamModal = memo(
         selectedStream.technologiesIds.map((id) => {
           return (
             <span key={id + 'technology'}>
-              {getTitleCourseFromId(id, technologies)},
+              {getTitleCourseFromId(id, technologies)},{' '}
             </span>
           );
         }),
