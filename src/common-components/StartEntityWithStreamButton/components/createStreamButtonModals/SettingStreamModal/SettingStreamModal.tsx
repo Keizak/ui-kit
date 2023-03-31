@@ -17,10 +17,12 @@ export const SettingStreamModal = memo(
 
     const coursesStrings = useMemo(
       () =>
-        selectedStream.coursesLessonsRestrictions.map((el) => {
+        selectedStream.coursesLessonsRestrictions.map((el, index) => {
           return (
             <span key={el.courseId + 'course'}>
-              {getTitleCourseFromId(el.courseId, courses)},{' '}
+              {getTitleCourseFromId(el.courseId, courses)}
+              {index + 1 !== selectedStream.coursesLessonsRestrictions.length &&
+                ','}{' '}
             </span>
           );
         }),
@@ -29,10 +31,11 @@ export const SettingStreamModal = memo(
 
     const technologiesString = useMemo(
       () =>
-        selectedStream.technologiesIds.map((id) => {
+        selectedStream.technologiesIds.map((id, index) => {
           return (
             <span key={id + 'technology'}>
-              {getTitleCourseFromId(id, technologies)},{' '}
+              {getTitleCourseFromId(id, technologies)}
+              {index + 1 !== selectedStream.technologiesIds.length && ','}{' '}
             </span>
           );
         }),
