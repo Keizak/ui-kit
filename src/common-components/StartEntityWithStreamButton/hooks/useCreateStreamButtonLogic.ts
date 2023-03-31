@@ -1,21 +1,13 @@
-import { IStream, StreamTypes } from '../api/api';
+import {
+  useCreateStreamButtonLogicParamsType,
+  UseCreateStreamButtonLogicReturnType,
+} from '../types';
 
 import { useLocalHandlers } from './useLocalHandlers';
 import { useMeetingLogic } from './useMeetingLogic';
 import { useStreamsData } from './useStreamsData';
 import { useStyleFunctions } from './useStyleFunctions';
 
-type useCreateStreamButtonLogicParamsType = {
-  type: StreamTypes | StreamTypes[];
-  userId: number;
-  asyncHandler: (operation: () => Promise<any>) => Promise<any>;
-  onFinishCreateStream?: () => void;
-  onFinishStopStream?: () => void;
-  beforeStartStream?: (
-    selectedStream: IStream,
-    set: (stream: IStream) => void
-  ) => Promise<any>;
-};
 export const useCreateStreamButtonLogic = ({
   type,
   userId,
@@ -23,12 +15,12 @@ export const useCreateStreamButtonLogic = ({
   onFinishCreateStream,
   onFinishStopStream,
   beforeStartStream,
-}: useCreateStreamButtonLogicParamsType) => {
+}: useCreateStreamButtonLogicParamsType): UseCreateStreamButtonLogicReturnType => {
   //------------------------------------------------useStyleFunctions---------------------------------------------------
 
   const {
     getContainerStyle,
-    getPositionStatusBlock,
+    getShowStatusForStatusesBlock,
     getDisabledStartStreamButton,
   } = useStyleFunctions();
 
@@ -64,12 +56,13 @@ export const useCreateStreamButtonLogic = ({
     beforeStartStream,
   };
 
-  const { handlers } = useLocalHandlers(localHandlersParams);
+  const { handlers, actionConfirmationData } =
+    useLocalHandlers(localHandlersParams);
 
   return {
     styleFunctions: {
       getContainerStyle,
-      getPositionStatusBlock,
+      getShowStatusForStatusesBlock,
       getDisabledStartStreamButton,
     },
     streamData: {
@@ -82,5 +75,6 @@ export const useCreateStreamButtonLogic = ({
       changeMeetingLogicState,
     },
     handlers,
+    actionConfirmationData,
   };
 };

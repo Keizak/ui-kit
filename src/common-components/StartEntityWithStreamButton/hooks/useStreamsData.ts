@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 
-import { IStream, streamsAPI, StreamTypes } from '../api/api';
+import { streamsAPI } from '../api';
+import {
+  IStream,
+  StreamTypes,
+  useStreamsDataParams,
+  UseStreamsDataReturnType,
+} from '../types';
 
-type useStreamsDataParams = {
-  userId: number;
-  type: StreamTypes | StreamTypes[];
-};
-export const useStreamsData = (params: useStreamsDataParams) => {
+export const useStreamsData = (
+  params: useStreamsDataParams
+): UseStreamsDataReturnType => {
   const [streams, setStreams] = useState<IStream[]>([]);
   const [selectedStream, setSelectedStream] = useState<IStream | null>(null);
   const [loading, setLoading] = useState(false);

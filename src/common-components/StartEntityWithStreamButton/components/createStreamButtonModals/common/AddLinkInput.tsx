@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import { BasicTextField } from '../../../../ui-components/BasicTextField/BasicTextField';
-import { IStream } from '../../api/api';
+import { BasicTextField } from '../../../../../ui-components/BasicTextField/BasicTextField';
+import { IStream } from '../../../types';
 
 type AddLinkInputPropsType = {
   autoGenerateLink: boolean;

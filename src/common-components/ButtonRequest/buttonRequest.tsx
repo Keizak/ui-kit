@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 
 import { Button } from '@mui/material';
 import { ButtonProps } from '@mui/material/Button/Button';
@@ -11,7 +11,7 @@ type ButtonRequestPropsType = ButtonProps & {
   typeUiButton?: 'Mui' | 'classic';
   clearDisabledAfterClick?: boolean;
 };
-export const ButtonRequest = (props: ButtonRequestPropsType) => {
+export const ButtonRequest = memo((props: ButtonRequestPropsType) => {
   const [localDisabled, setLocalDisabled] = useState(false);
   const { typeUiButton = 'Mui', requestStatus, ...restProps } = props;
 
@@ -54,7 +54,7 @@ export const ButtonRequest = (props: ButtonRequestPropsType) => {
       {props.children}
     </CustomButton>
   );
-};
+});
 
 const CustomButton = styled(Button)`
   :disabled {

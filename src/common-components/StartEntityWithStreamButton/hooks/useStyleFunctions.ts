@@ -1,49 +1,69 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, useCallback } from 'react';
 
-import { IStream } from '../api/api';
+import {
+  IStream,
+  StatusesPositionType,
+  UseStyleFunctionsReturnType,
+} from '../types';
 
-export type StatusesPositionType = 'top' | 'right' | 'left' | 'bottom';
-export const useStyleFunctions = () => {
-  const getDisabledStartStreamButton = (
-    meetingLoading: boolean,
-    selectedStream: IStream | null
-  ) => {
-    let disabled = false;
+export const useStyleFunctions = (): UseStyleFunctionsReturnType => {
+  const getDisabledStartStreamButton = useCallback(
+    (meetingLoading: boolean, selectedStream: IStream | null) => {
+      let disabled = false;
 
-    if (!selectedStream) disabled = true;
-    if (meetingLoading) disabled = true;
+      if (!selectedStream) disabled = true;
+      if (meetingLoading) disabled = true;
 
-    return disabled;
-  };
+      return disabled;
+    },
+    []
+  );
 
-  const getContainerStyle = (
-    statusPosition: StatusesPositionType
-  ): CSSProperties => {
-    const defaultStyle = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    };
-
-    if (statusPosition === 'right' || statusPosition === 'left')
-      return defaultStyle;
-    if (statusPosition === 'bottom')
-      return {
-        ...defaultStyle,
-        flexDirection: 'column',
-        alignItems: 'flex-start',
+  const getContainerStyle = useCallback(
+    (statusPosition: StatusesPositionType): CSSProperties => {
+      const defaultStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       };
-    else return { ...defaultStyle, flexDirection: 'column' };
-  };
 
-  const getPositionStatusBlock = (statusPosition: StatusesPositionType) => {
+      if (statusPosition === 'right' || statusPosition === 'left')
+        return defaultStyle;
+      if (statusPosition === 'bottom')
+        return {
+          ...defaultStyle,
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+        };
+      else return { ...defaultStyle, flexDirection: 'column' };
+    },
+    []
+  );
+
+  const getPositionStatusBlock = (
+    statusPosition: StatusesPositionType
+  ): 'top' | 'bottom' => {
     if (statusPosition === 'left' || statusPosition === 'top') return 'top';
     else return 'bottom';
   };
 
+  const getShowStatusForStatusesBlock = useCallback(
+    (
+      position: 'bottom' | 'top',
+      statusPosition: StatusesPositionType,
+      meetingCreatingStatus: boolean
+    ): boolean => {
+      return (
+        getPositionStatusBlock(statusPosition) === position &&
+        meetingCreatingStatus
+      );
+    },
+    []
+  );
+
   return {
     getDisabledStartStreamButton,
     getContainerStyle,
-    getPositionStatusBlock,
+    getShowStatusForStatusesBlock,
   };
 };
