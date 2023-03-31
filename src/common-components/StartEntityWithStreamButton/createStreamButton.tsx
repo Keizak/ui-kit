@@ -24,6 +24,9 @@ export type createStreamButtonPropsType = {
   customButtonClassname: string;
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
 
+  courses?: courseType[];
+  technologies?: technologyType[];
+
   statusPosition?: StatusesPositionType;
 
   onFinishCreateStream?: () => void;
@@ -34,9 +37,6 @@ export type createStreamButtonPropsType = {
     set: (stream: IStream) => void
   ) => Promise<any>;
 };
-//TODO добавить тект что если нету подходящего типа стрима то мы не можем ничего сделать. Текст: У тебя нет доступа к такому типу стримов
-// убрать дизейбл при потверждении
-// Реализовать берем первый Support, если нет Support - берем первый StudentSupport . Если нет - значит нет доступа к созланию
 export const StartEntityWithStreamButton = (
   props: createStreamButtonPropsType
 ) => {
@@ -53,6 +53,8 @@ export const StartEntityWithStreamButton = (
     onFinishCreateStream,
     onFinishStopStream,
     beforeStartStream,
+    courses,
+    technologies,
   } = props;
 
   const { handlers, streamData, meetingsData, styleFunctions } =
@@ -163,6 +165,8 @@ export const StartEntityWithStreamButton = (
             changeMeetingLogicState({ settingsStreamStatusModal: value })
           }
           selectedStream={selectedStream.state}
+          courses={courses}
+          technologies={technologies}
         />
       )}
       <ActionConfirmation
@@ -215,3 +219,22 @@ const StatusBlock = styled.div<{ position: StatusesPositionType }>`
   line-height: 19px;
   color: #8c8889;
 `;
+
+export type courseType = {
+  title: string;
+  type: number;
+  id: number;
+  addedAt: string;
+  updatedAt: string;
+  addedBy: number;
+  updatedBy: number;
+};
+
+export type technologyType = {
+  title: string;
+  id: number;
+  addedAt: string;
+  updatedAt: string;
+  addedBy: number;
+  updatedBy: number;
+};

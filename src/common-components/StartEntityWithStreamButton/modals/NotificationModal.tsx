@@ -20,14 +20,16 @@ interface Props {
 export function ActionConfirmation(props: Props) {
   const { open, setOpen } = props;
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClose = (_event: Object, reason: string) => {
+    if (reason !== 'backdropClick') {
+      setOpen(false);
+    }
   };
 
   const handleConfirm = () => {
     // Handle the confirmed action here
     props.onConfirm();
-    handleClose();
+    setOpen(false);
   };
 
   //TODO Закрывать попап только на кнопки
@@ -38,6 +40,7 @@ export function ActionConfirmation(props: Props) {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        disableEscapeKeyDown={true}
       >
         <DialogTitle id="alert-dialog-title">
           {props.title.toUpperCase()}
@@ -52,7 +55,7 @@ export function ActionConfirmation(props: Props) {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={handleClose}
+            onClick={() => setOpen(false)}
             color="primary"
             sx={{ fontSize: '1rem' }}
           >
