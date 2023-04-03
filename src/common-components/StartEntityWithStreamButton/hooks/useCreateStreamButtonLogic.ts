@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import {
   useCreateStreamButtonLogicParamsType,
   UseCreateStreamButtonLogicReturnType,
@@ -16,6 +18,10 @@ export const useCreateStreamButtonLogic = ({
   onFinishStopStream,
   beforeStartStream,
 }: useCreateStreamButtonLogicParamsType): UseCreateStreamButtonLogicReturnType => {
+  //-----------------------------------------------------useState-------------------------------------------------------
+
+  const [localLoading, setLocalLoading] = useState(true);
+
   //------------------------------------------------useStyleFunctions---------------------------------------------------
 
   const {
@@ -38,7 +44,7 @@ export const useCreateStreamButtonLogic = ({
 
   const meetingLogicParams = {
     selectedStream,
-    updateStream: streamsApi.updateStream,
+    streamsApi,
   };
 
   const { changeMeetingLogicState, meetingLogicState } =
@@ -59,6 +65,20 @@ export const useCreateStreamButtonLogic = ({
   const { handlers, actionConfirmationData } =
     useLocalHandlers(localHandlersParams);
 
+  //------------------------------------------------------useEffect-----------------------------------------------------
+
+  let timeout: any = 0;
+
+  useEffect(() => {
+    timeout = setTimeout(() => {
+      setLocalLoading(false);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return {
     styleFunctions: {
       getContainerStyle,
@@ -73,6 +93,10 @@ export const useCreateStreamButtonLogic = ({
     meetingsData: {
       meetingLogicState,
       changeMeetingLogicState,
+    },
+    localLoading: {
+      state: localLoading,
+      set: setLocalLoading,
     },
     handlers,
     actionConfirmationData,

@@ -30,6 +30,7 @@ export const CreateStreamButtonModals = memo(
           />
         )}
         <ActionConfirmationModal
+          currentAction={actionConfirmationData.currentAction}
           title={`${actionConfirmationData.currentAction} ${entityTitle}`}
           onConfirm={() =>
             handlers.actionConfirmationHandler(

@@ -9,6 +9,7 @@ type StatusBlockPropsType = {
   position: StatusesPositionType;
   allowPosition: 'top' | 'bottom';
   meetingCreatingStatus: string | null;
+  createMeetingError: boolean;
   getShowStatusForStatusesBlock: (
     position: 'bottom' | 'top',
     statusPosition: StatusesPositionType,
@@ -21,6 +22,7 @@ export const StatusesBlock = memo(
     meetingCreatingStatus,
     getShowStatusForStatusesBlock,
     allowPosition,
+    createMeetingError,
   }: StatusBlockPropsType) => {
     return (
       <>
@@ -29,7 +31,12 @@ export const StatusesBlock = memo(
           position,
           !!meetingCreatingStatus
         ) && (
-          <StatusBlock position={position}>
+          <StatusBlock
+            position={position}
+            style={{
+              color: createMeetingError ? 'red' : 'green',
+            }}
+          >
             <InfoIcon sx={{ marginRight: '10px' }} />
             {meetingCreatingStatus}
           </StatusBlock>

@@ -41,10 +41,14 @@ export const ActionConfirmationModal = memo(
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Прежде чем нажать &quot;OK&quot; активируй IT-INCUBATOR STUDENTS
-              BOT
-              <br />
-              <br />
+              {props.currentAction === 'start' && (
+                <>
+                  Прежде чем нажать &quot;OK&quot; активируй IT-INCUBATOR
+                  STUDENTS BOT
+                  <br />
+                  <br />
+                </>
+              )}
               {props.content}
               <br />
               <br />
