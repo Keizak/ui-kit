@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { ActionConfirmationDataType } from '../useLocalHandlers/ActionConfirmationDataType';
 import { LocalHandlersType } from '../useLocalHandlers/LocalHandlersType';
 import { UseMeetingLogicReturnType } from '../useMeetingLogic/UseMeetingLogicReturnType';
@@ -14,6 +16,11 @@ export type UseCreateStreamButtonLogicReturnType = {
     loading: LoadingDataType;
   };
   meetingsData: UseMeetingLogicReturnType;
+
+  localLoading: {
+    state: boolean;
+    set: React.Dispatch<React.SetStateAction<boolean>>;
+  };
   handlers: LocalHandlersType;
   actionConfirmationData: ActionConfirmationDataType;
 };

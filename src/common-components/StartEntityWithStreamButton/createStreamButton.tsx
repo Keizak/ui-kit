@@ -35,6 +35,7 @@ export const StartEntityWithStreamButton = memo(
       streamData,
       meetingsData,
       styleFunctions,
+      localLoading,
     } = useCreateStreamButtonLogic({
       userId,
       type,
@@ -45,7 +46,7 @@ export const StartEntityWithStreamButton = memo(
     });
 
     const { meetingLogicState, changeMeetingLogicState } = meetingsData;
-    const { selectedStream, loading } = streamData;
+    const { selectedStream } = streamData;
     const {
       getContainerStyle,
       getShowStatusForStatusesBlock,
@@ -67,7 +68,7 @@ export const StartEntityWithStreamButton = memo(
 
     //-----------------------------------------------------JSX------------------------------------------------------------
 
-    if (loading.state) {
+    if (streamData.loading.state || localLoading.state) {
       return <CircularProgress />;
     }
 
@@ -78,6 +79,7 @@ export const StartEntityWithStreamButton = memo(
           allowPosition={'top'}
           getShowStatusForStatusesBlock={getShowStatusForStatusesBlock}
           meetingCreatingStatus={meetingLogicState.meetingCreatingStatus}
+          createMeetingError={meetingLogicState.createMeetingError}
         />
         <ActionButtons
           entityTitle={entityTitle}
@@ -104,6 +106,7 @@ export const StartEntityWithStreamButton = memo(
           allowPosition={'bottom'}
           getShowStatusForStatusesBlock={getShowStatusForStatusesBlock}
           meetingCreatingStatus={meetingLogicState.meetingCreatingStatus}
+          createMeetingError={meetingLogicState.createMeetingError}
         />
         <CreateStreamButtonModals
           selectedStream={selectedStream}

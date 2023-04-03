@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useMutation } from 'react-query';
+import { useDispatch } from 'react-redux';
 
 import { streamsAPI } from '../api';
 import {
@@ -18,6 +19,7 @@ export const useLocalHandlers = ({
   onFinishStopStream,
   beforeStartStream,
 }: useLocalHandlersParamsType): useLocalHandlersReturnType => {
+  const dispatch = useDispatch();
   const toggleSelectedStreamStatus = () => {
     if (selectedStream.state)
       return selectedStream.set({
@@ -103,7 +105,10 @@ export const useLocalHandlers = ({
     (currentAction: 'start' | 'stop' | null, entityTitle: string) => {
       switch (currentAction) {
         case 'start':
-          return `Потверждая данное действие, автоматически запустится зум-конференция и ${entityTitle}-сессия.`;
+          return `
+              Потверждая данное действие, автоматически запустится
+              зум-конференция и ${entityTitle}-сессия.
+                `;
         case 'stop':
           return `Потверждая данное действие, автоматически выключается ${entityTitle}-сессия, но не завершается зум-конференция.
           Пожалуйста не забудь её закрыть!`;
@@ -142,7 +147,9 @@ export const useLocalHandlers = ({
         ).finally();
         onFinishCreateStream && onFinishCreateStream();
       } catch (e) {
-        console.log();
+        const error = e as Error; // приводим объект к типу Error
+
+        dispatch({ type: 'SHOW_ERROR', payload: error.message });
       }
   }, [createMeetingStatus]);
 

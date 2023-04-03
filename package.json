@@ -1,5 +1,5 @@
 {
-  "version": "0.2.154",
+  "version": "0.2.156",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -80,8 +80,9 @@
     "prettier": "2.7.1",
     "prettier-config-it-incubator": "1.0.1",
     "prettier-stylelint": "0.4.2",
-    "react-hook-form": "7.43.1",
+    "react-hook-form": "7.36.0",
     "react-query": "3.39.2",
+    "react-redux": "^8.0.5",
     "react-router-dom": "6.3.0",
     "rollup-plugin-alias": "2.2.0",
     "rollup-plugin-visualizer": "^5.8.2",

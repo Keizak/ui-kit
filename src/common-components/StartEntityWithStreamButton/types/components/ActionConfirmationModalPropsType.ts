@@ -4,4 +4,5 @@ export type ActionConfirmationModalPropsType = {
   onConfirm: () => void;
   open: boolean;
   setOpen: (value: boolean) => void;
+  currentAction: 'start' | 'stop' | null;
 };

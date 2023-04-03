@@ -1,21 +1,28 @@
 import * as signalR from '@microsoft/signalr';
 
 import { securityConstants } from '../../../constants/securityConstants';
-import { SupportEvents } from '../types';
+import { ZoomServiceEventsType } from '../types';
 
 class SupportBookingAPI {
   connection: signalR.HubConnection | null = null;
   wsStatus: 'pending' | 'connected' | 'error' = 'pending';
   private eventsNames: string[] = [];
 
-  subscribe(eventName: SupportEvents, callback: (...args: any) => void) {
+  subscribe(
+    eventName: ZoomServiceEventsType,
+    callback: (...args: any) => void
+  ) {
     this.eventsNames.push(eventName);
     this.connection?.on(eventName, function (...args: any) {
       callback(...args);
     });
   }
 
-  unsubscribe(...eventNames: SupportEvents[]) {
+  checkConnection() {
+    return this.connection;
+  }
+
+  unsubscribe(...eventNames: ZoomServiceEventsType[]) {
     this.eventsNames = this.eventsNames.filter((e) =>
       eventNames.every((en) => en !== e)
     );

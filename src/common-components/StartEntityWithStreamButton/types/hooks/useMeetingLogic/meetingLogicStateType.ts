@@ -3,4 +3,5 @@ export type meetingLogicStateType = {
   meetingCreatingStatus: string | null;
   createMeetingLoading: boolean;
   createMeeting: boolean;
+  createMeetingError: boolean;
 };
