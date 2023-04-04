@@ -25,6 +25,7 @@ export const StartEntityWithStreamButton = memo(
       beforeStartStream,
       courses,
       technologies,
+      statusMaxWidth,
     } = props;
 
     //-----------------------------------------------useCreateStreamButtonLogic-------------------------------------------
@@ -80,6 +81,7 @@ export const StartEntityWithStreamButton = memo(
           getShowStatusForStatusesBlock={getShowStatusForStatusesBlock}
           meetingCreatingStatus={meetingLogicState.meetingCreatingStatus}
           createMeetingError={meetingLogicState.createMeetingError}
+          maxWidth={statusMaxWidth}
         />
         <ActionButtons
           entityTitle={entityTitle}
@@ -107,6 +109,7 @@ export const StartEntityWithStreamButton = memo(
           getShowStatusForStatusesBlock={getShowStatusForStatusesBlock}
           meetingCreatingStatus={meetingLogicState.meetingCreatingStatus}
           createMeetingError={meetingLogicState.createMeetingError}
+          maxWidth={statusMaxWidth}
         />
         <CreateStreamButtonModals
           selectedStream={selectedStream}

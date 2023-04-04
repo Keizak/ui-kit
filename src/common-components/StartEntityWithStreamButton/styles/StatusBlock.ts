@@ -25,6 +25,5 @@ export const StatusBlock = styled.div<{ position: StatusesPositionType }>`
   font-size: 16px;
   line-height: 19px;
   color: #8c8889;
-  max-width: 500px;
   text-align: center;
 `;
