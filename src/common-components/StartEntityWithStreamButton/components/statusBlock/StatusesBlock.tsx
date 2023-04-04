@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 
 import InfoIcon from '@mui/icons-material/Info';
+import DOMPurify from 'dompurify';
 
 import { StatusBlock } from '../../styles';
 import { StatusesPositionType } from '../../types';
@@ -15,6 +16,7 @@ type StatusBlockPropsType = {
     statusPosition: StatusesPositionType,
     meetingCreatingStatus: boolean
   ) => boolean;
+  maxWidth?: string;
 };
 export const StatusesBlock = memo(
   ({
@@ -23,7 +25,14 @@ export const StatusesBlock = memo(
     getShowStatusForStatusesBlock,
     allowPosition,
     createMeetingError,
+    maxWidth = '500px',
   }: StatusBlockPropsType) => {
+    const sanitizedData = () => ({
+      __html: DOMPurify.sanitize(
+        meetingCreatingStatus ? meetingCreatingStatus : ''
+      ),
+    });
+
     return (
       <>
         {getShowStatusForStatusesBlock(
@@ -35,10 +44,11 @@ export const StatusesBlock = memo(
             position={position}
             style={{
               color: createMeetingError ? 'red' : 'green',
+              maxWidth: maxWidth,
             }}
           >
             <InfoIcon sx={{ marginRight: '10px' }} />
-            {meetingCreatingStatus}
+            <div dangerouslySetInnerHTML={sanitizedData()}></div>
           </StatusBlock>
         )}
       </>

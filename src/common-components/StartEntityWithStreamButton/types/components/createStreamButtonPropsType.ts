@@ -28,4 +28,6 @@ export type createStreamButtonPropsType = {
     selectedStream: IStream,
     set: (stream: IStream) => void
   ) => Promise<any>;
+
+  statusMaxWidth?: string;
 };
