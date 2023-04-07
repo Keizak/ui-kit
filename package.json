@@ -1,5 +1,5 @@
 {
-  "version": "0.2.157",
+  "version": "0.2.158",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -55,11 +55,12 @@
     "registry": "https://npm.pkg.github.com/it-incubator"
   },
   "devDependencies": {
-    "@emotion/react": "11.10.4",
-    "@emotion/styled": "11.10.4",
-    "@mui/icons-material": "5.10.3",
-    "@mui/material": "5.10.5",
-    "@mui/x-date-pickers": "5.0.1",
+    "@emotion/react": "11.9.3",
+    "@emotion/styled": "11.9.3",
+    "@mui/icons-material": "5.10.6",
+    "@mui/material": "5.9.0",
+    "@mui/styles": "5.10.6",
+    "@mui/x-date-pickers": "5.0.2",
     "@size-limit/preset-small-lib": "8.1.0",
     "@types/dompurify": "^3.0.1",
     "@types/react": "18.0.20",
