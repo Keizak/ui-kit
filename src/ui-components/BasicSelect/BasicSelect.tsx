@@ -44,6 +44,7 @@ export type BasicSelectProps = {
 type OptionType = {
   title: string;
   value: string | number;
+  disabled?: boolean;
 };
 
 export const NullString = '___65DYD3DGQWDG__';
@@ -65,7 +66,7 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
   //opacityText,
   //colorText,
   nullableTitle = 'Not selected',
-                                                          disabled = false,
+  disabled = false,
   addNullableValue = true,
 }) => {
   const parsedValue =
@@ -131,7 +132,11 @@ export const BasicSelect: React.FC<BasicSelectProps> = ({
               </MenuItem>
             )}
             {options.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
+              <MenuItem
+                key={option.value}
+                value={option.value}
+                disabled={option.disabled}
+              >
                 {menuType === 'vertical' ? (
                   option.title
                 ) : (
