@@ -28,6 +28,7 @@ export type BasicTablePropsType = {
   titles: TableTitleType[];
   rows: TableRowType[];
   minWidthTable: number | string;
+  minHeightRow?: number | string;
   paginationOptions?: BasicPaginationPropsType;
   pagination?: boolean;
 };
@@ -40,6 +41,7 @@ export type BasicTablePropsType = {
  * @param {TableTitleType[]} props.titles - Заголовки таблицы ( обязательный )
  * @param {TableRowType[]} props.rows - Строки таблицы ( данные ) ( обязательный )
  * @param { number | string} props.minWidthTable - Минимальная ширина таблицы
+ * @param { number | string} props.minHeightRow - Минимальная высота строки таблоицы ( необязательный )
  * @param {BasicPaginationPropsType} props.paginationOptions - Настройки пагинатора ( необязательный )
  * @param {boolean} props.pagination - включает и выключает блок с пагинатором
  */
@@ -63,6 +65,7 @@ export const BasicTable = (props: BasicTablePropsType) => {
             width: title.width,
             padding: title.padding,
           }))}
+          minHeightRow={props.minHeightRow}
         />
       </Block>
 
