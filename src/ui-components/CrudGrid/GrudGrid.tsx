@@ -244,7 +244,7 @@ export const withCRUDGrid = <
 
     //-----------------------JSX-------------------------
     return (
-      <Container fixed>
+      <Container fixed={false} maxWidth={'xl'}>
         <div className={classes.root}>
           <div style={{ display: 'flex', width: '100%' }}>
             <div style={{ width: '15%' }}>
@@ -392,6 +392,10 @@ export const withCRUDGrid = <
                                   key={r}
                                   align="center"
                                   component="th"
+                                  sx={{
+                                    maxWidth: '300px',
+                                    wordWrap: 'break-word',
+                                  }}
                                 >
                                   <CellValueWithControl<any, any>
                                     itemId={row.item.id}
@@ -407,7 +411,11 @@ export const withCRUDGrid = <
                             })}
 
                           {cellsRender.map((c, i) => (
-                            <TableCell align="center" key={i}>
+                            <TableCell
+                              align="center"
+                              key={i}
+                              sx={{ maxWidth: '300px', wordWrap: 'break-word' }}
+                            >
                               {c(row.item, {
                                 ...mdtp,
                                 dispatch,
@@ -416,16 +424,26 @@ export const withCRUDGrid = <
                             </TableCell>
                           ))}
                           {settings?.showEdit ? (
-                            <TableCell align="center">{row.edit}</TableCell>
+                            <TableCell
+                              align="center"
+                              sx={{ maxWidth: '300px' }}
+                            >
+                              {row.edit}
+                            </TableCell>
                           ) : null}
                           {settings?.showDetails ? (
-                            <TableCell align="center">{row.details}</TableCell>
+                            <TableCell
+                              align="center"
+                              sx={{ maxWidth: '300px' }}
+                            >
+                              {row.details}
+                            </TableCell>
                           ) : null}
                         </TableRow>
                       );
                     })}
                     {
-                      <TableCell colSpan={20}>
+                      <TableCell colSpan={20} sx={{ maxWidth: '300px' }}>
                         <PaginationWithSelectRows
                           currentPage={page}
                           pagesCount={pagesCount}
