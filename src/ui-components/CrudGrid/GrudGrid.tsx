@@ -244,7 +244,7 @@ export const withCRUDGrid = <
 
     //-----------------------JSX-------------------------
     return (
-      <Container fixed>
+      <Container maxWidth={'xl'}>
         <div className={classes.root}>
           <div style={{ display: 'flex', width: '100%' }}>
             <div style={{ width: '15%' }}>
