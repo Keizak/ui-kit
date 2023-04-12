@@ -18,8 +18,8 @@ class StreamAPI extends BaseAPI<IUpdateStreamModel, IStream> {
     return this.anyPost(`${streamId}/zoom-meeting`);
   }
 
-  getStreams(userId: number): Promise<{ items: IStream[] }> {
-    return this.anyGet(`/${userId}`);
+  getStreams(): Promise<{ items: IStream[] }> {
+    return this.anyGet(`?Page=1&PageSize=200`);
   }
 
   updateStream(
