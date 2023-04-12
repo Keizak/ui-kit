@@ -37,7 +37,7 @@ export const useStreamsData = (
     type: StreamTypes | StreamTypes[]
   ): Promise<IStream[]> => {
     // Получаем список всех стримов с сервера
-    const { items } = await streamsAPI.getStreams(userId);
+    const { items } = await streamsAPI.getStreams();
 
     // Фильтруем стримы по id пользователя
     const filteredByIdStreams = items.filter(
