@@ -48,4 +48,6 @@ export type CronComponentPropsType = {
   onChangeValue?: (value: string) => void;
   withButton?: boolean;
   defaultValue?: string;
+
+  changeMode?: boolean;
 };
