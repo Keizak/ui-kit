@@ -50,4 +50,5 @@ export type CronComponentPropsType = {
   defaultValue?: string;
 
   changeMode?: boolean;
+  switchCrone?: boolean;
 };
