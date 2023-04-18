@@ -38,6 +38,7 @@ export function CronComponent(props: CronComponentPropsType) {
     onChangeValue = false,
     defaultValue = '',
     changeMode = true,
+    switchCrone = true,
   } = props;
   /**
    * Тема для отоюражение вариантов селекта в горизонтаьном виде
@@ -299,16 +300,18 @@ export function CronComponent(props: CronComponentPropsType) {
         </Block>
       ) : (
         <>
-          <Block name={'switch-container'} height={'50px'} margin={'0 10px'}>
-            <strong>Разовое интервью</strong>
-            <Switch
-              checked={switchValue === 'multiple'}
-              onChange={() =>
-                setSwitchValue(switchValue === 'once' ? 'multiple' : 'once')
-              }
-            />
-            <strong>Постоянные интервью</strong>
-          </Block>
+          {switchCrone && (
+            <Block name={'switch-container'} height={'50px'} margin={'0 10px'}>
+              <strong>Разовое интервью</strong>
+              <Switch
+                checked={switchValue === 'multiple'}
+                onChange={() =>
+                  setSwitchValue(switchValue === 'once' ? 'multiple' : 'once')
+                }
+              />
+              <strong>Постоянные интервью</strong>
+            </Block>
+          )}
 
           {switchValue === 'once' ? (
             <Block name={'datetime-container'} height={'50px'}>
