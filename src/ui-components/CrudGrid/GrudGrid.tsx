@@ -381,7 +381,12 @@ export const withCRUDGrid = <
                                   rawValue = row.item[d.name];
                                 }
                                 if (d.parser) {
-                                  displayedValue = d.parser(rawValue, state);
+                                  displayedValue = d.parser(
+                                    rawValue,
+                                    state,
+                                    row.item,
+                                    () => dispatch(thunks.getItems())
+                                  );
                                 } else {
                                   displayedValue = rawValue;
                                 }
