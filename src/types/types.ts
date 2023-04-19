@@ -19,7 +19,12 @@ export type GridItemElementType<T, A> = {
   title: string;
   name: Extract<keyof T, string> | null; // use Extract for get from ALL keys only keys that is string (may be also SYmbol, number...)
   onlyTitle?: boolean;
-  parser?: (value: any, state?: A) => any;
+  parser?: (
+    value: any,
+    state?: A,
+    rowState?: any,
+    getItems?: () => void
+  ) => any;
   pathToProp?: string;
   props?: {
     //type?: "number" | "string"

@@ -1,18 +1,15 @@
-import { IStream, StreamTypes } from '../api/api';
+import { useEffect, useState } from 'react';
+
+import {
+  useCreateStreamButtonLogicParamsType,
+  UseCreateStreamButtonLogicReturnType,
+} from '../types';
 
 import { useLocalHandlers } from './useLocalHandlers';
 import { useMeetingLogic } from './useMeetingLogic';
 import { useStreamsData } from './useStreamsData';
 import { useStyleFunctions } from './useStyleFunctions';
 
-type useCreateStreamButtonLogicParamsType = {
-  type: StreamTypes | StreamTypes[];
-  userId: number;
-  asyncHandler: (operation: () => Promise<any>) => Promise<any>;
-  onFinishCreateStream?: () => void;
-  onFinishStopStream?: () => void;
-  beforeStartStream?: (selectedStream: IStream) => Promise<any>;
-};
 export const useCreateStreamButtonLogic = ({
   type,
   userId,
@@ -20,12 +17,16 @@ export const useCreateStreamButtonLogic = ({
   onFinishCreateStream,
   onFinishStopStream,
   beforeStartStream,
-}: useCreateStreamButtonLogicParamsType) => {
+}: useCreateStreamButtonLogicParamsType): UseCreateStreamButtonLogicReturnType => {
+  //-----------------------------------------------------useState-------------------------------------------------------
+
+  const [localLoading, setLocalLoading] = useState(true);
+
   //------------------------------------------------useStyleFunctions---------------------------------------------------
 
   const {
     getContainerStyle,
-    getPositionStatusBlock,
+    getShowStatusForStatusesBlock,
     getDisabledStartStreamButton,
   } = useStyleFunctions();
 
@@ -43,7 +44,7 @@ export const useCreateStreamButtonLogic = ({
 
   const meetingLogicParams = {
     selectedStream,
-    updateStream: streamsApi.updateStream,
+    streamsApi,
   };
 
   const { changeMeetingLogicState, meetingLogicState } =
@@ -61,12 +62,27 @@ export const useCreateStreamButtonLogic = ({
     beforeStartStream,
   };
 
-  const { handlers } = useLocalHandlers(localHandlersParams);
+  const { handlers, actionConfirmationData } =
+    useLocalHandlers(localHandlersParams);
+
+  //------------------------------------------------------useEffect-----------------------------------------------------
+
+  let timeout: any = 0;
+
+  useEffect(() => {
+    timeout = setTimeout(() => {
+      setLocalLoading(false);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
 
   return {
     styleFunctions: {
       getContainerStyle,
-      getPositionStatusBlock,
+      getShowStatusForStatusesBlock,
       getDisabledStartStreamButton,
     },
     streamData: {
@@ -78,6 +94,11 @@ export const useCreateStreamButtonLogic = ({
       meetingLogicState,
       changeMeetingLogicState,
     },
+    localLoading: {
+      state: localLoading,
+      set: setLocalLoading,
+    },
     handlers,
+    actionConfirmationData,
   };
 };

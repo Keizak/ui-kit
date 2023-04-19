@@ -2,7 +2,7 @@ import React from 'react';
 
 import { nanoid } from 'nanoid';
 
-import { Block } from '../../../ui-styled-components/common';
+import { Block } from '../../../ui-styled-components';
 import { TableRowType } from '../BasicTable';
 
 type columnStyle = {
@@ -14,6 +14,7 @@ type CustomTableBodyPropsType = {
   rows: TableRowType[];
   columnStyle: columnStyle[];
   minWidth: number | string;
+  minHeightRow?: number | string;
 };
 /**
  * JSX Component( CustomTableBody )
@@ -21,8 +22,11 @@ type CustomTableBodyPropsType = {
  * @param {TableRowType[]} props.rows - Строки таблицы ( данные ) ( обязательный )
  * @param { string[]} props.columnStyle - Стиль для столбца, стили наклываются по порядку начиная с 0
  * @param { number | string} props.minWidthTable - Минимальная ширина таблицы ( обязательный )
+ * @param { number | string} props.minHeightRow - Минимальная высота строки таблоицы ( необязательный )
  */
 export const CustomTableBody = (props: CustomTableBodyPropsType) => {
+  const { minHeightRow = '40px' } = props;
+
   return (
     <Block
       name={'Table body'}
@@ -30,15 +34,16 @@ export const CustomTableBody = (props: CustomTableBodyPropsType) => {
       display={'block'}
       minWidth={props.minWidth}
     >
-      {props.rows.map((row) => (
+      {props.rows.map((row, index) => (
         <Block
           name={'Table row'}
-          key={nanoid()}
+          key={index}
           justifyContent={'flex-start'}
           width={'100%'}
-          height={'46px'}
+          height={'100%'}
           borderBottom={'1px solid #CFCFCF'}
           flexWrap={'nowrap'}
+          minHeight={minHeightRow}
 
           // sx={{ '&:last-child td, &:last-child th': { border: 0 }}}
         >
@@ -57,6 +62,7 @@ export const CustomTableBody = (props: CustomTableBodyPropsType) => {
                     : 'flex-start'
                 }
                 width={props.columnStyle[index].width}
+                overflow={''}
               >
                 {currentRow && currentRow.value ? currentRow.value : currentRow}
               </Block>

@@ -101,6 +101,7 @@ export const Block = styled.div`
     props.overflowX ? props.overflowX : ''};
   overflow: ${(props: BlockProps) => (props.overflow ? props.overflow : '')};
   transition: border-bottom 0.1s ease-in-out;
+  word-break: break-all;
 `;
 // -------------------------------------------------StyledSvg-----------------------------------------------------
 export type StyledSvgProps = {

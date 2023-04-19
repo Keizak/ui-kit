@@ -33,7 +33,13 @@ import {
 export function CronComponent(props: CronComponentPropsType) {
   //---------------------------------------------Инициализируем переменные--------------------------------------------
 
-  const { withButton = true, onChangeValue = false, defaultValue = '' } = props;
+  const {
+    withButton = true,
+    onChangeValue = false,
+    defaultValue = '',
+    changeMode = true,
+    switchCrone = true,
+  } = props;
   /**
    * Тема для отоюражение вариантов селекта в горизонтаьном виде
    */
@@ -272,8 +278,8 @@ export function CronComponent(props: CronComponentPropsType) {
       name={'cron-container'}
       flexDirection={'column'}
       alignItems={'flex-start'}
-      minHeight={'300px'}
       height={'auto'}
+      margin={'0 0 20px 0'}
     >
       {props.defaultValue && !editMode ? (
         <Block
@@ -284,24 +290,28 @@ export function CronComponent(props: CronComponentPropsType) {
           <Block name={'Тайтл'}>
             Текущее расписание :{CronFormatInTime(props.defaultValue)}
           </Block>
-          <BasicButton
-            mode={'normal'}
-            onClick={() => setEditMode(true)}
-            text={'Изменить'}
-          />
+          {changeMode && (
+            <BasicButton
+              mode={'normal'}
+              onClick={() => setEditMode(true)}
+              text={'Изменить'}
+            />
+          )}
         </Block>
       ) : (
         <>
-          <Block name={'switch-container'} height={'50px'} margin={'0 10px'}>
-            <strong>Разовое интервью</strong>
-            <Switch
-              checked={switchValue === 'multiple'}
-              onChange={() =>
-                setSwitchValue(switchValue === 'once' ? 'multiple' : 'once')
-              }
-            />
-            <strong>Постоянные интервью</strong>
-          </Block>
+          {switchCrone && (
+            <Block name={'switch-container'} height={'50px'} margin={'0 10px'}>
+              <strong>Разовое интервью</strong>
+              <Switch
+                checked={switchValue === 'multiple'}
+                onChange={() =>
+                  setSwitchValue(switchValue === 'once' ? 'multiple' : 'once')
+                }
+              />
+              <strong>Постоянные интервью</strong>
+            </Block>
+          )}
 
           {switchValue === 'once' ? (
             <Block name={'datetime-container'} height={'50px'}>

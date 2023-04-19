@@ -37,9 +37,10 @@ export const dateToCron = (date: Date): string => {
   const hours = dayjs(date).get('h');
   const days = dayjs(date).get('D');
   const months: number = +dayjs(date).get('M') + 1;
+  const year: number = +dayjs(date).get('year');
 
   /**
    * Формируем из отдельных значения крон выражения формата "m h d m dw"
    */
-  return `0 ${minutes} ${hours} ${days} ${MonthEnum[months]} ? *`;
+  return `0 ${minutes} ${hours} ${days} ${MonthEnum[months]} ? ${year}`;
 };
