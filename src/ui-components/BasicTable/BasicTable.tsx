@@ -31,6 +31,7 @@ export type BasicTablePropsType = {
   minHeightRow?: number | string;
   paginationOptions?: BasicPaginationPropsType;
   pagination?: boolean;
+  maxHeightTable?: string;
 };
 
 //---------------------------------------------------------------------------------------------------------
@@ -43,10 +44,11 @@ export type BasicTablePropsType = {
  * @param { number | string} props.minWidthTable - Минимальная ширина таблицы
  * @param { number | string} props.minHeightRow - Минимальная высота строки таблоицы ( необязательный )
  * @param {BasicPaginationPropsType} props.paginationOptions - Настройки пагинатора ( необязательный )
- * @param {boolean} props.pagination - включает и выключает блок с пагинатором
+ * @param {boolean} props.pagination - включает и выключает блок с пагинатором ( необязательный )
+ * @param {string} props.maxHeightTable - Высота самой таблицы без учета пагинации ( необязательный )
  */
 export const BasicTable = (props: BasicTablePropsType) => {
-  const { pagination = true } = props;
+  const { pagination = true, maxHeightTable } = props;
   //-------------------------------------------------JSX-----------------------------------------------------
 
   return (
@@ -56,7 +58,12 @@ export const BasicTable = (props: BasicTablePropsType) => {
       margin={'24px 0 50px 0'}
       display={'block'}
     >
-      <Block name={'Table Container'} display={'block'} overflow={'auto'}>
+      <Block
+        name={'Table Container'}
+        display={'block'}
+        overflow={'auto'}
+        maxHeight={maxHeightTable}
+      >
         <CustomTableHead titles={props.titles} minWidth={props.minWidthTable} />
         <CustomTableBody
           rows={props.rows}
