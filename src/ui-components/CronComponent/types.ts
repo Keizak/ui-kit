@@ -51,4 +51,12 @@ export type CronComponentPropsType = {
 
   changeMode?: boolean;
   switchCrone?: boolean;
+
+  modeCroneSelectors?: {
+    period: 'once' | 'multiple';
+    day: 'once' | 'multiple';
+    month: 'once' | 'multiple';
+    hours: 'once' | 'multiple';
+    minutes: 'once' | 'multiple';
+  };
 };
