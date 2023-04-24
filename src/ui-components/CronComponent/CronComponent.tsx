@@ -83,7 +83,7 @@ export function CronComponent(props: CronComponentPropsType) {
   /**
    * Режим редактирования
    */
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(!!props.editMode);
   /**
    * Выбор даты , единожды или с повторением
    */
