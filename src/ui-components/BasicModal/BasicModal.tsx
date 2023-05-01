@@ -36,7 +36,7 @@ export type BasicModalPropsType = {
  * Принимает пропсы :
  * @param {string} example
  * @param {boolean} props.open параметр отвечающий за открытие модалки ( Обязательный )
- * @param {() => void} props.onClose функция выполняющая логику по закрытию модалки ( Обязательный )
+ * @param {() => void}  props.onClose функция выполняющая логику по закрытию модалки ( Обязательный )
  * @param {() => void} props.onCancel функция выполняющая логику по нажатию кнопки Cancel( Left bottom ) ( Необязательный )
  * @param {() => void} props.onSubmit функция выполняющая логику по нажатию кнопки Submit( Right bottom ) ( Необязательный )
  * @param {string} props.title Имя модалки ( Обязательный )
