@@ -14,6 +14,7 @@ export const StartEntityWithStreamButton = memo(
       title = 'Create Zoom-meeting',
       entityTitle = 'stream',
       statusPosition = 'right',
+      withNameOfStream = false,
       userId,
       requestStatus,
       type,
@@ -28,7 +29,7 @@ export const StartEntityWithStreamButton = memo(
       statusMaxWidth,
     } = props;
 
-    //-----------------------------------------------useCreateStreamButtonLogic-------------------------------------------
+    //-----------------------------------------------useCreateStreamButtonLogic-----------------------------------------
 
     const {
       handlers,
@@ -54,7 +55,7 @@ export const StartEntityWithStreamButton = memo(
       getDisabledStartStreamButton,
     } = styleFunctions;
 
-    //-----------------------------------------------Conditions-----------------------------------------------------------
+    //-----------------------------------------------Conditions---------------------------------------------------------
 
     const streamIsStarted = selectedStream.state?.startedStreamSession;
 
@@ -67,7 +68,7 @@ export const StartEntityWithStreamButton = memo(
     const streamIsNotStartedMeetingIsNotCreated =
       !meetingLogicState.createMeeting && !streamIsStarted;
 
-    //-----------------------------------------------------JSX------------------------------------------------------------
+    //-----------------------------------------------------JSX----------------------------------------------------------
 
     if (streamData.loading.state || localLoading.state) {
       return <CircularProgress />;
@@ -101,6 +102,7 @@ export const StartEntityWithStreamButton = memo(
           streamIsNotStartedMeetingIsNotCreated={
             streamIsNotStartedMeetingIsNotCreated
           }
+          withNameOfStream={withNameOfStream}
         />
 
         <StatusesBlock
