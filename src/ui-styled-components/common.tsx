@@ -9,6 +9,7 @@ export interface BlockProps {
   display?: string;
   width?: string | number;
   minWidth?: string | number;
+  maxHeight?: string | number;
   height?: string | number;
   margin?: string | number;
   padding?: string | number;
@@ -75,6 +76,8 @@ export const Block = styled.div`
   height: ${(props: BlockProps) => (props.height ? props.height : '100%')};
   min-height: ${(props: BlockProps) =>
     props.minHeight ? props.minHeight : 'auto'};
+  max-height: ${(props: BlockProps) =>
+    props.maxHeight ? props.maxHeight : 'auto'};
   padding: ${(props: BlockProps) => (props.padding ? props.padding : 0)};
   margin: ${(props: BlockProps) => (props.margin ? props.margin : 0)};
   background: ${(props: BlockProps) =>

@@ -39,6 +39,13 @@ export function CronComponent(props: CronComponentPropsType) {
     defaultValue = '',
     changeMode = true,
     switchCrone = true,
+    modeCroneSelectors = {
+      period: 'once',
+      day: 'once',
+      month: 'once',
+      hours: 'once',
+      minutes: 'once',
+    },
   } = props;
   /**
    * Тема для отоюражение вариантов селекта в горизонтаьном виде
@@ -76,7 +83,7 @@ export function CronComponent(props: CronComponentPropsType) {
   /**
    * Режим редактирования
    */
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(!!props.editMode);
   /**
    * Выбор даты , единожды или с повторением
    */
@@ -130,8 +137,9 @@ export function CronComponent(props: CronComponentPropsType) {
   /**
    * Фукнция для изменения значения даты при множественном выборре
    */
-  const changeDate = (type: DateItemsType, value: []) => {
-    setDate({ ...date, [type]: value });
+  const changeDate = (type: DateItemsType, value: string) => {
+    if (type === 'period') setDate({ ...date, period: value });
+    else setDate({ ...date, [type]: [value] });
   };
 
   /**
@@ -331,7 +339,7 @@ export function CronComponent(props: CronComponentPropsType) {
               <CronSelect
                 options={periodOptions}
                 onSelect={(e) => changeDate('period', e)}
-                mode={'once'}
+                mode={modeCroneSelectors.period}
                 value={date.period as string}
                 key={nanoid()}
               />
@@ -340,6 +348,7 @@ export function CronComponent(props: CronComponentPropsType) {
                   <>
                     В
                     <CronSelect
+                      mode={modeCroneSelectors.day}
                       options={daysOptions}
                       value={date.day}
                       onSelect={(e) => changeDate('day', e)}
@@ -351,6 +360,7 @@ export function CronComponent(props: CronComponentPropsType) {
                 {date.period === 'Месяц' && (
                   <>
                     <CronSelect
+                      mode={modeCroneSelectors.month}
                       options={daysOfMonthOptions}
                       value={date.dayOfMonth}
                       onSelect={(e) => changeDate('dayOfMonth', e)}
@@ -368,6 +378,7 @@ export function CronComponent(props: CronComponentPropsType) {
                   value={date.hours}
                   onSelect={(e) => changeDate('hours', e)}
                   menuType={'horizontal'}
+                  mode={modeCroneSelectors.hours}
                   theme={horizontalTheme}
                 />
                 <>
@@ -384,6 +395,7 @@ export function CronComponent(props: CronComponentPropsType) {
                   <CronSelect
                     options={minutesOptions}
                     value={date.minutes}
+                    mode={modeCroneSelectors.minutes}
                     onSelect={(e) => changeDate('minutes', e)}
                     menuType={'horizontal'}
                     theme={horizontalTheme}
