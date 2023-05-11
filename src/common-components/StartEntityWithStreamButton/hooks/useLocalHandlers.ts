@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { streamsAPI } from '../api';
 import {
+  IStream,
   useLocalHandlersParamsType,
   useLocalHandlersReturnType,
 } from '../types';
@@ -28,6 +29,10 @@ export const useLocalHandlers = ({
       });
     else return null;
   };
+
+  const updateStream = (newStream: IStream | null | undefined) => {
+    newStream && streamsApi.updateStream(newStream);
+  };
   const changeStatusStream = async (streamId: number, status: boolean) => {
     changeMeetingLogicState({ meetingCreatingStatus: '' });
     if (status) {
@@ -37,7 +42,7 @@ export const useLocalHandlers = ({
             toggleSelectedStreamStatus();
             changeMeetingLogicState({ createMeeting: false });
             if (selectedStream.state) {
-              streamsApi.updateStream({ ...selectedStream.state, link: '' });
+              updateStream({ ...selectedStream.state, link: '' });
               selectedStream.set({
                 ...selectedStream.state,
                 startedStreamSession: false,
@@ -72,6 +77,7 @@ export const useLocalHandlers = ({
       );
     }
   };
+
   const createStreamHandler = useCallback(() => {
     changeMeetingLogicState({ createMeetingStatusModal: true });
   }, []);
@@ -155,6 +161,7 @@ export const useLocalHandlers = ({
 
   return {
     handlers: {
+      updateStream,
       changeStatusStream,
       createStreamHandler,
       clickSettingsHandler,
