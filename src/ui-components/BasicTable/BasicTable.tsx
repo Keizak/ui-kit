@@ -19,7 +19,7 @@ export type CustomRowType = {
 
 export type TableTitleType = {
   width: string;
-  value: string;
+  value: ReactNode;
   padding?: string;
 };
 export type TableRowType = Record<string, ReactNode | CustomRowType>;
