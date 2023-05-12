@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { TableTitleType } from '../../ui-components';
 
 //----------------------------------------createTitle---------------------------------------------
@@ -7,7 +9,7 @@ import { TableTitleType } from '../../ui-components';
  */
 export const createTitle = (
   width: string,
-  value: string,
+  value: ReactNode,
   padding?: string
 ): TableTitleType => ({ width, value, padding });
 
