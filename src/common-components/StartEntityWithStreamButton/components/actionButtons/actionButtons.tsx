@@ -43,7 +43,7 @@ export const ActionButtons = memo(
           />
         )}
 
-        {streamIsNotStartedMeetingIsNotCreated && (
+        {streamIsNotStartedMeetingIsNotCreated && values.initialization && (
           <Block name={'NameAndButtonStartStreamContainer'}>
             {withNameOfStream && (
               <EditableSpan

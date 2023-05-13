@@ -15,6 +15,7 @@ export const useGetActionButtonsLogic = ({
   handlers,
 }: useGetActionButtonsLogicParamsType) => {
   const [nameStream, setNameStream] = useState('');
+  const [initialization, setInitialization] = useState(false);
   const localStorageStreamNameKey = `${entityId + 'Stream-name'}`;
 
   const startStreamButtonCheckForDisable = () => {
@@ -46,6 +47,7 @@ export const useGetActionButtonsLogic = ({
     );
 
     if (localStorageStreamName) setNameStream(localStorageStreamName);
+    setInitialization(true);
   }, []);
 
   return {
@@ -56,6 +58,7 @@ export const useGetActionButtonsLogic = ({
     },
     values: {
       nameStream,
+      initialization,
     },
   };
 };
