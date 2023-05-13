@@ -15,4 +15,5 @@ export type ActionButtonsPropsType = {
   customButtonClassname: string;
   title: string;
   withNameOfStream: boolean;
+  entityId?: string | number | null;
 };
