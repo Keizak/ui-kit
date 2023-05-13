@@ -7,8 +7,8 @@ import { BasicObsoleteSelect } from '../../BasicObsoleteSelect/BasicObsoleteSele
 export type CronSelectType = {
   options: (string | number)[];
   mode?: 'once' | 'multiple';
-  value: string | number[] | string[];
-  onSelect: (value: []) => void;
+  value: string | number[] | string[] | null;
+  onSelect: (value: string) => void;
   theme?: DefaultTheme;
   menuType?: 'vertical' | 'horizontal';
 };
@@ -25,8 +25,8 @@ export type CronSelectType = {
  */
 export const CronSelect = ({
   options,
-  value,
   onSelect,
+  value,
   theme,
   menuType,
   mode = 'multiple',
@@ -35,7 +35,7 @@ export const CronSelect = ({
     <BasicObsoleteSelect
       label={value as string}
       options={options}
-      value={value}
+      value={value ? value : undefined}
       onSelect={(e) => onSelect(e)}
       minWidth={'150px'}
       margin={'0 5px'}
