@@ -75,6 +75,7 @@ const EditableSpan: React.FC<EditableSpanProps> = ({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    marginRight: '10px',
   };
   const customContainerStyle = { ...defaultContainerStyle, ...customStyle };
 
@@ -91,7 +92,7 @@ const EditableSpan: React.FC<EditableSpanProps> = ({
             autoFocus
             size={'small'}
             error={isEmptyValue}
-            helperText={isEmptyValue ? 'Значение не может быть пустым' : ''}
+            helperText={isEmptyValue ? 'Введите название стрима' : ''}
           />
           <Button variant="contained" color="success" onClick={handleSave}>
             ✓
