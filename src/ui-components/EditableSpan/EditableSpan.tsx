@@ -120,7 +120,7 @@ const EditableSpan: React.FC<EditableSpanProps> = ({
             onDoubleClick={handleDoubleClick}
           >
             {isEmptyValue ? (
-              <span style={{ color: 'red' }}>Значения нет</span>
+              <span style={{ color: 'red' }}>Введите название стрима</span>
             ) : (
               value
             )}

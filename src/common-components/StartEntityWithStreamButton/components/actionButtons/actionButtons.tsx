@@ -22,6 +22,14 @@ export const ActionButtons = memo(
   }: ActionButtonsPropsType) => {
     const [nameStream, setNameStream] = useState('');
 
+    console.log(nameStream, '-nameStream');
+
+    const startStreamButtonCheckForDisable = () => {
+      if (disabledCreateMeetingButton) return true;
+
+      return nameStream.length < 1;
+    };
+
     return (
       <div>
         {meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted && (
@@ -66,7 +74,7 @@ export const ActionButtons = memo(
               onClick={() => {
                 handlers.getConfirmHandler('start');
               }}
-              disabled={disabledCreateMeetingButton && nameStream.length > 0}
+              disabled={startStreamButtonCheckForDisable()}
               requestStatus={requestStatus}
               style={customButtonStyle}
               className={customButtonClassname}
