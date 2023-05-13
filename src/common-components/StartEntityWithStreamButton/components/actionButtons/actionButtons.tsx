@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 
 import EditableSpan from '../../../../ui-components/EditableSpan/EditableSpan';
 import { Block } from '../../../../ui-styled-components';
@@ -20,6 +20,8 @@ export const ActionButtons = memo(
     title,
     withNameOfStream,
   }: ActionButtonsPropsType) => {
+    const [nameStream, setNameStream] = useState('');
+
     return (
       <div>
         {meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted && (
@@ -38,14 +40,15 @@ export const ActionButtons = memo(
           <Block name={'NameAndButtonStartStreamContainer'}>
             {withNameOfStream && (
               <EditableSpan
-                value={selectedStream.state?.title || ''}
-                onChange={(newTitle) =>
+                value={nameStream}
+                onChange={(newTitle) => {
+                  setNameStream(newTitle);
                   selectedStream.state &&
-                  selectedStream.set({
-                    ...selectedStream.state,
-                    title: newTitle,
-                  })
-                }
+                    selectedStream.set({
+                      ...selectedStream.state,
+                      title: newTitle,
+                    });
+                }}
                 onSave={(newTitle) => {
                   selectedStream.state &&
                     handlers.updateStream({
@@ -63,7 +66,7 @@ export const ActionButtons = memo(
               onClick={() => {
                 handlers.getConfirmHandler('start');
               }}
-              disabled={disabledCreateMeetingButton}
+              disabled={disabledCreateMeetingButton && nameStream.length > 0}
               requestStatus={requestStatus}
               style={customButtonStyle}
               className={customButtonClassname}
