@@ -1,8 +1,9 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 
 import EditableSpan from '../../../../ui-components/EditableSpan/EditableSpan';
 import { Block } from '../../../../ui-styled-components';
 import { ButtonRequest } from '../../../ButtonRequest/buttonRequest';
+import { useGetActionButtonsLogic } from '../../hooks/useGetActionButtonsLogic';
 import { ActionButtonsPropsType, IStream } from '../../types';
 import { StartStopStreamButton } from '../startStopStreamButton/startStopStreamButton';
 
@@ -19,16 +20,14 @@ export const ActionButtons = memo(
     customButtonClassname,
     title,
     withNameOfStream,
+    entityId,
   }: ActionButtonsPropsType) => {
-    const [nameStream, setNameStream] = useState('');
-
-    console.log(nameStream, '-nameStream');
-
-    const startStreamButtonCheckForDisable = () => {
-      if (disabledCreateMeetingButton) return true;
-
-      return nameStream.length < 1;
-    };
+    const { values, localHandlers } = useGetActionButtonsLogic({
+      entityId,
+      disabledCreateMeetingButton,
+      selectedStream,
+      handlers,
+    });
 
     return (
       <div>
@@ -48,22 +47,9 @@ export const ActionButtons = memo(
           <Block name={'NameAndButtonStartStreamContainer'}>
             {withNameOfStream && (
               <EditableSpan
-                value={nameStream}
-                onChange={(newTitle) => {
-                  setNameStream(newTitle);
-                  selectedStream.state &&
-                    selectedStream.set({
-                      ...selectedStream.state,
-                      title: newTitle,
-                    });
-                }}
-                onSave={(newTitle) => {
-                  selectedStream.state &&
-                    handlers.updateStream({
-                      ...selectedStream.state,
-                      title: newTitle,
-                    });
-                }}
+                value={values.nameStream}
+                onChange={localHandlers.onChangeNameStreamHandler}
+                onSave={localHandlers.onSaveNameStreamHandler}
                 label={'Name of stream'}
                 customStyle={{ marginRight: '10px' }}
               />
@@ -74,7 +60,7 @@ export const ActionButtons = memo(
               onClick={() => {
                 handlers.getConfirmHandler('start');
               }}
-              disabled={startStreamButtonCheckForDisable()}
+              disabled={localHandlers.startStreamButtonCheckForDisable()}
               requestStatus={requestStatus}
               style={customButtonStyle}
               className={customButtonClassname}

@@ -15,6 +15,7 @@ export const StartEntityWithStreamButton = memo(
       entityTitle = 'stream',
       statusPosition = 'right',
       withNameOfStream = false,
+      entityId = null,
       userId,
       requestStatus,
       type,
@@ -103,6 +104,7 @@ export const StartEntityWithStreamButton = memo(
             streamIsNotStartedMeetingIsNotCreated
           }
           withNameOfStream={withNameOfStream}
+          entityId={entityId}
         />
 
         <StatusesBlock
