@@ -75,14 +75,9 @@ export const useCreateStreamButtonLogic = ({
     }, 1000);
 
     return () => {
-      console.log('clearTimeout');
       clearTimeout(timeout);
     };
   }, []);
-
-  useEffect(() => {
-    console.log(localLoading, 'localLoading');
-  }, [localLoading]);
 
   return {
     styleFunctions: {
