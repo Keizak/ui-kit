@@ -14,4 +14,6 @@ export type ActionButtonsPropsType = {
   customButtonStyle?: CSSProperties;
   customButtonClassname: string;
   title: string;
+  withNameOfStream: boolean;
+  entityId?: string | number | null;
 };

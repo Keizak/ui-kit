@@ -1,7 +1,10 @@
 import React, { memo } from 'react';
 
+import EditableSpan from '../../../../ui-components/EditableSpan/EditableSpan';
+import { Block } from '../../../../ui-styled-components';
 import { ButtonRequest } from '../../../ButtonRequest/buttonRequest';
-import { IStream, ActionButtonsPropsType } from '../../types';
+import { useGetActionButtonsLogic } from '../../hooks/useGetActionButtonsLogic';
+import { ActionButtonsPropsType, IStream } from '../../types';
 import { StartStopStreamButton } from '../startStopStreamButton/startStopStreamButton';
 
 export const ActionButtons = memo(
@@ -16,7 +19,16 @@ export const ActionButtons = memo(
     customButtonStyle,
     customButtonClassname,
     title,
+    withNameOfStream,
+    entityId,
   }: ActionButtonsPropsType) => {
+    const { values, localHandlers } = useGetActionButtonsLogic({
+      entityId,
+      disabledCreateMeetingButton,
+      selectedStream,
+      handlers,
+    });
+
     return (
       <div>
         {meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted && (
@@ -31,22 +43,34 @@ export const ActionButtons = memo(
           />
         )}
 
-        {streamIsNotStartedMeetingIsNotCreated && (
-          <ButtonRequest
-            variant="contained"
-            onClick={() => {
-              handlers.getConfirmHandler('start');
-            }}
-            disabled={disabledCreateMeetingButton}
-            requestStatus={requestStatus}
-            style={customButtonStyle}
-            className={customButtonClassname}
-            clearDisabledAfterClick={true}
-          >
-            {selectedStream.state
-              ? title
-              : `You don't have access to this type of streams`}
-          </ButtonRequest>
+        {streamIsNotStartedMeetingIsNotCreated && values.initialization && (
+          <Block name={'NameAndButtonStartStreamContainer'}>
+            {withNameOfStream && (
+              <EditableSpan
+                value={values.nameStream}
+                onChange={localHandlers.onChangeNameStreamHandler}
+                onSave={localHandlers.onSaveNameStreamHandler}
+                label={'Name of stream'}
+                customStyle={{ marginRight: '10px' }}
+              />
+            )}
+
+            <ButtonRequest
+              variant="contained"
+              onClick={() => {
+                handlers.getConfirmHandler('start');
+              }}
+              disabled={localHandlers.startStreamButtonCheckForDisable()}
+              requestStatus={requestStatus}
+              style={customButtonStyle}
+              className={customButtonClassname}
+              clearDisabledAfterClick={true}
+            >
+              {selectedStream.state
+                ? title
+                : `You don't have access to this type of streams`}
+            </ButtonRequest>
+          </Block>
         )}
       </div>
     );

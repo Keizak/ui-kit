@@ -30,4 +30,7 @@ export type createStreamButtonPropsType = {
   ) => Promise<any>;
 
   statusMaxWidth?: string;
+
+  withNameOfStream?: boolean;
+  entityId?: string | number | null;
 };

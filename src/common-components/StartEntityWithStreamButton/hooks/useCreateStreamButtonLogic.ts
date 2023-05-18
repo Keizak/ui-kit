@@ -22,6 +22,10 @@ export const useCreateStreamButtonLogic = ({
 
   const [localLoading, setLocalLoading] = useState(true);
 
+  useEffect(() => {
+    console.log(localLoading, 'localLoading');
+  }, [localLoading]);
+
   //------------------------------------------------useStyleFunctions---------------------------------------------------
 
   const {
@@ -75,6 +79,7 @@ export const useCreateStreamButtonLogic = ({
     }, 1000);
 
     return () => {
+      console.log('clearTimeout');
       clearTimeout(timeout);
     };
   }, []);
