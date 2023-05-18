@@ -72,6 +72,9 @@ export const StartEntityWithStreamButton = memo(
     //-----------------------------------------------------JSX----------------------------------------------------------
 
     if (streamData.loading.state || localLoading.state) {
+      console.log(streamData.loading.state, 'streamData.loading.state');
+      console.log(localLoading.state, 'localLoading.state');
+
       return <CircularProgress />;
     }
 

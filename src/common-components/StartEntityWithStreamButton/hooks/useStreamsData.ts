@@ -98,6 +98,10 @@ export const useStreamsData = (
     getStreamsContainerFunctions().finally();
   }, []);
 
+  useEffect(() => {
+    console.log(loading, 'loading');
+  }, [loading]);
+
   // Возвращаем объект с состояниями и функциями для работы со списком стримов
   return {
     streams: {
