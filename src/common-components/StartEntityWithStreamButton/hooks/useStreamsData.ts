@@ -93,14 +93,11 @@ export const useStreamsData = (
     }
   };
 
+  debugger;
   // Используем useEffect для получения списка стримов нужного типа при первом рендере компонента, использующего этот хук
   useEffect(() => {
     getStreamsContainerFunctions().finally();
   }, []);
-
-  useEffect(() => {
-    console.log(loading, 'loading');
-  }, [loading]);
 
   // Возвращаем объект с состояниями и функциями для работы со списком стримов
   return {
