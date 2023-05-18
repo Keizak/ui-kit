@@ -45,7 +45,7 @@ export const ActionButtons = memo(
 
         {streamIsNotStartedMeetingIsNotCreated && values.initialization && (
           <Block name={'NameAndButtonStartStreamContainer'}>
-            {withNameOfStream && (
+            {withNameOfStream && !disabledCreateMeetingButton && (
               <EditableSpan
                 value={values.nameStream}
                 onChange={localHandlers.onChangeNameStreamHandler}
