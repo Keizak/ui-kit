@@ -21,6 +21,14 @@ export const useLocalHandlers = ({
   beforeStartStream,
 }: useLocalHandlersParamsType): useLocalHandlersReturnType => {
   const dispatch = useDispatch();
+
+  const [actionConfirmationStatus, setActionConfirmationStatus] =
+    useState(false);
+
+  const [currentAction, setCurrentAction] = useState<'start' | 'stop' | null>(
+    null
+  );
+
   const toggleSelectedStreamStatus = () => {
     if (selectedStream.state)
       return selectedStream.set({
@@ -95,10 +103,12 @@ export const useLocalHandlers = ({
   };
 
   const createMeeting = useMutation<any, any, {}, any>(
-    () => {
-      if (selectedStream.state)
-        return streamsAPI.createMeeting(selectedStream.state.id);
-      else return new Promise((resolve) => resolve(null));
+    async () => {
+      return await asyncHandler(() =>
+        selectedStream.state
+          ? streamsAPI.createMeeting(selectedStream.state.id)
+          : new Promise((resolve) => resolve(null))
+      );
     },
     {
       onError: (error) => {
@@ -123,13 +133,6 @@ export const useLocalHandlers = ({
       }
     },
     []
-  );
-
-  const [actionConfirmationStatus, setActionConfirmationStatus] =
-    useState(false);
-
-  const [currentAction, setCurrentAction] = useState<'start' | 'stop' | null>(
-    null
   );
 
   const actionConfirmationHandler = (action: 'start' | 'stop' | null) => {

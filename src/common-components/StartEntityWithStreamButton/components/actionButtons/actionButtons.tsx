@@ -43,7 +43,7 @@ export const ActionButtons = memo(
           />
         )}
 
-        {streamIsNotStartedMeetingIsNotCreated && values.initialization && (
+        {streamIsNotStartedMeetingIsNotCreated && (
           <Block name={'NameAndButtonStartStreamContainer'}>
             {withNameOfStream && !disabledCreateMeetingButton && (
               <EditableSpan
@@ -60,7 +60,11 @@ export const ActionButtons = memo(
               onClick={() => {
                 handlers.getConfirmHandler('start');
               }}
-              disabled={localHandlers.startStreamButtonCheckForDisable()}
+              disabled={
+                withNameOfStream
+                  ? localHandlers.startStreamButtonCheckForDisable()
+                  : disabledCreateMeetingButton
+              }
               requestStatus={requestStatus}
               style={customButtonStyle}
               className={customButtonClassname}

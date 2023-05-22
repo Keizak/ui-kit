@@ -36,7 +36,7 @@ class SupportBookingAPI {
       this.connection = new signalR.HubConnectionBuilder()
         .withUrl(
           securityConstants.apiBaseUrl.replace('api/', 'support-booking-hub')
-        ) //todo: add configuration
+        )
         .withAutomaticReconnect()
         .build();
     }
