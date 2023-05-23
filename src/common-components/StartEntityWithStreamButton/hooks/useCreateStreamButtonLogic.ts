@@ -18,6 +18,7 @@ export const useCreateStreamButtonLogic = ({
   onFinishCreateStream,
   onFinishStopStream,
   beforeStartStream,
+  showError,
 }: useCreateStreamButtonLogicParamsType): UseCreateStreamButtonLogicReturnType => {
   //-----------------------------------------------------useState-------------------------------------------------------
 
@@ -61,6 +62,7 @@ export const useCreateStreamButtonLogic = ({
     onFinishCreateStream,
     onFinishStopStream,
     beforeStartStream,
+    showError,
   };
 
   const { handlers, actionConfirmationData } =

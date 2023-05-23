@@ -19,4 +19,5 @@ export type useLocalHandlersParamsType = {
     selectedStream: IStream,
     set: (stream: IStream) => void
   ) => Promise<any>;
+  showError: (error: string | string[]) => void;
 };

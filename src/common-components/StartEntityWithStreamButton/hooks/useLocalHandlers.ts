@@ -18,6 +18,7 @@ export const useLocalHandlers = ({
   onFinishCreateStream,
   onFinishStopStream,
   beforeStartStream,
+  showError,
 }: useLocalHandlersParamsType): useLocalHandlersReturnType => {
   const dispatch = useDispatch();
 
@@ -108,7 +109,12 @@ export const useLocalHandlers = ({
         : new Promise((resolve) => resolve(null))
     );
 
-    console.log(res, 'res');
+    if (res.errors.length > 0)
+      showError(
+        res.errors.map(
+          (error: { field: string; message: string }) => error.message
+        )
+      );
 
     return res;
   };
