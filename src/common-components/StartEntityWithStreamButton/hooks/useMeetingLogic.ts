@@ -99,13 +99,6 @@ export const useMeetingLogic = (
         handleSessionFailed
       );
     }
-
-    // Возвращаем функцию очистки, которая закрывает соединение с бэкэндом
-    return () => {
-      if (selectedStream.state) {
-        supportBookingAPI.close().finally();
-      }
-    };
   }, [selectedStream.state]);
 
   return {

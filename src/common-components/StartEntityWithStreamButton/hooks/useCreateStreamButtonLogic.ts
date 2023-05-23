@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { supportBookingAPI } from '../api';
 import {
   useCreateStreamButtonLogicParamsType,
   UseCreateStreamButtonLogicReturnType,
@@ -76,6 +77,7 @@ export const useCreateStreamButtonLogic = ({
 
     return () => {
       clearTimeout(timeout);
+      supportBookingAPI.close().finally();
     };
   }, []);
 
