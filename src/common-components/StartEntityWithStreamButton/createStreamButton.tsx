@@ -56,6 +56,8 @@ export const StartEntityWithStreamButton = memo(
       getDisabledStartStreamButton,
     } = styleFunctions;
 
+    console.log('Conditions');
+
     //-----------------------------------------------Conditions---------------------------------------------------------
 
     const streamIsStarted = selectedStream.state?.startedStreamSession;
