@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useMutation } from 'react-query';
 import { useDispatch } from 'react-redux';
 
 import { streamsAPI } from '../api';
@@ -19,6 +18,7 @@ export const useLocalHandlers = ({
   onFinishCreateStream,
   onFinishStopStream,
   beforeStartStream,
+  showError,
 }: useLocalHandlersParamsType): useLocalHandlersReturnType => {
   const dispatch = useDispatch();
 
@@ -102,20 +102,47 @@ export const useLocalHandlers = ({
       );
   };
 
-  const createMeeting = useMutation<any, any, {}, any>(
-    async () => {
-      return await asyncHandler(() =>
-        selectedStream.state
-          ? streamsAPI.createMeeting(selectedStream.state.id)
-          : new Promise((resolve) => resolve(null))
+  const createMeeting = async () => {
+    const res = await asyncHandler(() =>
+      selectedStream.state
+        ? streamsAPI.createMeeting(selectedStream.state.id)
+        : new Promise((resolve) => resolve(null))
+    );
+
+    if (res.errors.length > 0)
+      showError(
+        res.errors.map(
+          (error: { field: string; message: string }) => error.message
+        )
       );
-    },
-    {
-      onError: (error) => {
-        console.error(error, 'error');
-      },
-    }
-  );
+
+    return res;
+  };
+
+  // useMutation<any, any, {}, any>(
+  //   async () => {
+  //     const res = await asyncHandler(() =>
+  //       selectedStream.state
+  //         ? streamsAPI.createMeeting(selectedStream.state.id)
+  //         : new Promise((resolve) => resolve(null))
+  //     );
+  //
+  //     console.log(res, 'res');
+  //
+  //     return res;
+  //   },
+  //   {
+  //     onError: (error) => {
+  //       console.error(error, 'error');
+  //     },
+  //     onSuccess: (res) => {
+  //       console.log(res, 'res');
+  //     },
+  //     onMutate: (res) => {
+  //       console.log(res, 'res');
+  //     },
+  //   }
+  // );
 
   const chooseText = useCallback(
     (currentAction: 'start' | 'stop' | null, entityTitle: string) => {
@@ -136,7 +163,7 @@ export const useLocalHandlers = ({
   );
 
   const actionConfirmationHandler = (action: 'start' | 'stop' | null) => {
-    if (action === 'start') createMeeting.mutateAsync({}).finally();
+    if (action === 'start') createMeeting().finally();
     if (action === 'stop') clickStartStopStreamHandler();
 
     return setTimeout(() => setCurrentAction(null), 1000);

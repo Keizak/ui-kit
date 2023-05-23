@@ -28,6 +28,7 @@ export const StartEntityWithStreamButton = memo(
       courses,
       technologies,
       statusMaxWidth,
+      showError,
     } = props;
 
     //-----------------------------------------------useCreateStreamButtonLogic-----------------------------------------
@@ -46,6 +47,7 @@ export const StartEntityWithStreamButton = memo(
       onFinishCreateStream,
       onFinishStopStream,
       beforeStartStream,
+      showError,
     });
 
     const { meetingLogicState, changeMeetingLogicState } = meetingsData;
