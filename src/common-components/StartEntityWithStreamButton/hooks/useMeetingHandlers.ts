@@ -54,6 +54,15 @@ export const useMeetingHandlers = ({
     [selectedStream.state]
   );
 
+  const handleMeetingFinished = useCallback(() => {
+    changeMeetingLogicState({
+      createMeeting: false,
+      meetingCreatingStatus: '',
+      createMeetingLoading: false,
+      createMeetingError: false,
+    });
+  }, []);
+
   // Функция handleSessionFinished задается через useCallback и обрабатывает событие окончания сессии
   const handleSessionFinished = useCallback(() => {
     // Обновляем состояние приложения, указывая, что создание встречи (createMeeting) не происходит, загрузка (createMeetingLoading) закончилась и ошибка (createMeetingError) отсутствует
@@ -92,5 +101,6 @@ export const useMeetingHandlers = ({
     handleSessionStarted,
     handleSessionFinished,
     handleSessionFailed,
+    handleMeetingFinished,
   };
 };

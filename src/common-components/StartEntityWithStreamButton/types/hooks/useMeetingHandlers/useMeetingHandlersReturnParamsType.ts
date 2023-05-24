@@ -10,5 +10,6 @@ export type useMeetingHandlersReturnParamsType = {
   ) => void;
   handleSessionStarted: (event: SESSION_STARTED_EventType) => void;
   handleSessionFinished: () => void;
+  handleMeetingFinished: () => void;
   handleSessionFailed: (event: SESSION_FAILED_EventType) => void;
 };

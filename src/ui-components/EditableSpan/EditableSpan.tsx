@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 
 import { Button, TextField, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
@@ -34,7 +34,7 @@ const EditableSpan: React.FC<EditableSpanProps> = ({
   onChange,
   label,
   onSave,
-  showIcon = false,
+  showIcon = true,
   customStyle = {},
 }) => {
   const classes = useStyles();
@@ -79,6 +79,10 @@ const EditableSpan: React.FC<EditableSpanProps> = ({
   };
   const customContainerStyle = { ...defaultContainerStyle, ...customStyle };
 
+  useEffect(() => {
+    if (isEmptyValue) setIsEditing(true);
+  }, [isEmptyValue]);
+
   return (
     <div style={customContainerStyle}>
       {isEditing ? (
@@ -119,13 +123,9 @@ const EditableSpan: React.FC<EditableSpanProps> = ({
             }}
             onDoubleClick={handleDoubleClick}
           >
-            {isEmptyValue ? (
-              <span style={{ color: 'red' }}>Введите название стрима</span>
-            ) : (
-              value
-            )}
+            {value}
             {showIcon && (
-              <span style={{ marginLeft: '5px', fontSize: '20px' }}>🖉</span>
+              <span style={{ marginLeft: '5px', fontSize: '16px' }}>🖉</span>
             )}
           </Typography>
         </Tooltip>

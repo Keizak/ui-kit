@@ -59,6 +59,7 @@ export const useMeetingLogic = (
     handleCreateSessionInformation,
     handleSessionStarted,
     handleSessionFinished,
+    handleMeetingFinished,
     handleSessionFailed,
   } = useMeetingHandlers({
     ...params,
@@ -93,6 +94,10 @@ export const useMeetingLogic = (
       supportBookingAPI.subscribe(
         'ZOOM-SERVICE-API/SESSION_FINISHED',
         handleSessionFinished
+      );
+      supportBookingAPI.subscribe(
+        'ZOOM-SERVICE-API/MEETING-FINISHED',
+        handleMeetingFinished
       );
       supportBookingAPI.subscribe(
         'ZOOM-SERVICE-API/SESSION_FAILED',
