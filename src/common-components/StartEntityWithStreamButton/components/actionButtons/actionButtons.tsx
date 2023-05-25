@@ -1,5 +1,7 @@
 import React, { memo } from 'react';
 
+import { CircularProgress } from '@mui/material';
+
 import EditableSpan from '../../../../ui-components/EditableSpan/EditableSpan';
 import { Block } from '../../../../ui-styled-components';
 import { ButtonRequest } from '../../../ButtonRequest/buttonRequest';
@@ -21,6 +23,7 @@ export const ActionButtons = memo(
     title,
     withNameOfStream,
     entityId,
+    streamRequestIsRunning,
   }: ActionButtonsPropsType) => {
     const { values, localHandlers } = useGetActionButtonsLogic({
       entityId,
@@ -31,6 +34,8 @@ export const ActionButtons = memo(
 
     return (
       <div>
+        {!meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted &&
+          !streamIsNotStartedMeetingIsNotCreated && <CircularProgress />}
         {meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted && (
           <StartStopStreamButton
             requestStatus={requestStatus}
@@ -40,39 +45,45 @@ export const ActionButtons = memo(
             clickStartStopStreamHandler={() => {
               handlers.getConfirmHandler('stop');
             }}
+            disabled={streamRequestIsRunning}
           />
         )}
 
         {streamIsNotStartedMeetingIsNotCreated && (
           <Block name={'NameAndButtonStartStreamContainer'}>
-            {withNameOfStream && !disabledCreateMeetingButton && (
-              <EditableSpan
-                value={values.nameStream}
-                onChange={localHandlers.onChangeNameStreamHandler}
-                onSave={localHandlers.onSaveNameStreamHandler}
-                label={'Name of stream'}
-                customStyle={{ marginRight: '10px' }}
-              />
-            )}
-
+            {selectedStream.state &&
+              withNameOfStream &&
+              !disabledCreateMeetingButton && (
+                <EditableSpan
+                  defaultValue={selectedStream.state?.title || ''}
+                  value={values.nameStream}
+                  onChange={localHandlers.onChangeNameStreamHandler}
+                  label={'Name of stream'}
+                  customStyle={{ marginRight: '10px' }}
+                  editable={
+                    !meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted
+                  }
+                />
+              )}
             <ButtonRequest
               variant="contained"
               onClick={() => {
                 handlers.getConfirmHandler('start');
               }}
-              disabled={
+              disabled={localHandlers.checkForDisableStartButton(
+                streamRequestIsRunning,
                 withNameOfStream
-                  ? localHandlers.startStreamButtonCheckForDisable()
-                  : disabledCreateMeetingButton
-              }
+              )}
               requestStatus={requestStatus}
               style={customButtonStyle}
               className={customButtonClassname}
               clearDisabledAfterClick={true}
             >
-              {selectedStream.state
-                ? title
-                : `You don't have access to this type of streams`}
+              {localHandlers.getStartButtonTitle(
+                streamRequestIsRunning,
+                !!selectedStream.state,
+                title
+              )}
             </ButtonRequest>
           </Block>
         )}

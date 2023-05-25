@@ -24,6 +24,14 @@ export const useCreateStreamButtonLogic = ({
 
   const [localLoading, setLocalLoading] = useState(true);
 
+  const [clickStartStopStreamHandler, setClickStartStopStreamHandler] =
+    useState<{ status: 'mock' | 'real'; func: () => void }>({
+      status: 'mock',
+      func: () => {
+        console.log('mock');
+      },
+    });
+
   //------------------------------------------------useStyleFunctions---------------------------------------------------
 
   const {
@@ -37,9 +45,10 @@ export const useCreateStreamButtonLogic = ({
   const streamsDataParams = {
     type,
     userId,
+    setLocalLoading,
   };
 
-  const { streamsApi, selectedStream, loading } =
+  const { streamsApi, selectedStream, loading, streamRequestIsRunning } =
     useStreamsData(streamsDataParams);
 
   //-------------------------------------------------useMeetingLogic----------------------------------------------------
@@ -47,6 +56,7 @@ export const useCreateStreamButtonLogic = ({
   const meetingLogicParams = {
     selectedStream,
     streamsApi,
+    clickStartStopStreamHandler,
   };
 
   const { changeMeetingLogicState, meetingLogicState } =
@@ -63,6 +73,7 @@ export const useCreateStreamButtonLogic = ({
     onFinishStopStream,
     beforeStartStream,
     showError,
+    setClickStartStopStreamHandler,
   };
 
   const { handlers, actionConfirmationData } =
@@ -93,6 +104,7 @@ export const useCreateStreamButtonLogic = ({
       streamsApi,
       selectedStream,
       loading,
+      streamRequestIsRunning,
     },
     meetingsData: {
       meetingLogicState,

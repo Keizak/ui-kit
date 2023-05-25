@@ -1,31 +1,18 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties } from 'react';
 
-import { Button, TextField, Typography } from '@mui/material';
-import Tooltip from '@mui/material/Tooltip';
-import { makeStyles } from '@mui/styles';
+import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import { IconButton, TextField } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    '& .MuiTextField-root': {
-      margin: '10px',
-      width: '100%',
-    },
-    '& .MuiButton-root': {
-      height: '30px',
-      margin: '0 2px 0 2px',
-    },
-  },
-}));
+import { TitleValue } from './TitleValue/TitleValue';
+import { useEditableSpanLogic } from './useEditableSpanLogic/useEditableSpanLogic';
 
 interface EditableSpanProps {
   value: string;
+  defaultValue: string;
   onChange: (newValue: string) => void;
   label: string;
-  onSave?: (value: string) => void;
-  showIcon?: boolean;
+  editable?: boolean;
   customStyle?: CSSProperties;
 }
 
@@ -33,55 +20,32 @@ const EditableSpan: React.FC<EditableSpanProps> = ({
   value,
   onChange,
   label,
-  onSave,
-  showIcon = true,
+  editable = true,
   customStyle = {},
+  defaultValue,
 }) => {
-  const classes = useStyles();
-  const [isEditing, setIsEditing] = useState(false);
-  const [tempValue, setTempValue] = useState(value);
+  const { handlers, values } = useEditableSpanLogic({
+    onChange,
+    customStyle,
+    defaultValue,
+    value,
+  });
 
-  const handleDoubleClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleSave = () => {
-    setIsEditing(false);
-    if (tempValue !== value) {
-      onChange(tempValue);
-      onSave && onSave(tempValue);
-    }
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    setTempValue(value);
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTempValue(event.target.value);
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      handleSave();
-    }
-  };
-
-  const isEmptyValue = tempValue.trim() === '';
-  const defaultContainerStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    marginRight: '10px',
-  };
-  const customContainerStyle = { ...defaultContainerStyle, ...customStyle };
-
-  useEffect(() => {
-    if (isEmptyValue) setIsEditing(true);
-  }, [isEmptyValue]);
+  const {
+    customContainerStyle,
+    classes,
+    isEditing,
+    tempValue,
+    isEmptyTempleValue,
+    isEmptyValue,
+  } = values;
+  const {
+    handleChange,
+    handleKeyDown,
+    handleSave,
+    handleCancel,
+    handleDoubleClick,
+  } = handlers;
 
   return (
     <div style={customContainerStyle}>
@@ -95,40 +59,25 @@ const EditableSpan: React.FC<EditableSpanProps> = ({
             onKeyDown={handleKeyDown}
             autoFocus
             size={'small'}
-            error={isEmptyValue}
-            helperText={isEmptyValue ? 'Введите название стрима' : ''}
+            error={isEmptyTempleValue}
+            helperText={isEmptyTempleValue ? 'Введите название стрима' : ''}
           />
-          <Button variant="contained" color="success" onClick={handleSave}>
-            ✓
-          </Button>
-          <Button variant="contained" color="error" onClick={handleCancel}>
-            🗙
-          </Button>
+          <IconButton onClick={handleSave} color={'success'}>
+            <DoneOutlineIcon />
+          </IconButton>
+          {!isEmptyValue && (
+            <IconButton onClick={handleCancel} color={'error'}>
+              <CancelPresentationIcon />
+            </IconButton>
+          )}
         </form>
       ) : (
-        <Tooltip
-          title={
-            isEmptyValue
-              ? 'Значение пустое. Нажмите дважды, чтобы отредактировать'
-              : label + '. Нажмите дважды, чтобы отредактировать'
-          }
-        >
-          <Typography
-            sx={{
-              fontWeight: 500,
-              fontSize: '16px',
-              lineHeight: '24px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            onDoubleClick={handleDoubleClick}
-          >
-            {value}
-            {showIcon && (
-              <span style={{ marginLeft: '5px', fontSize: '16px' }}>🖉</span>
-            )}
-          </Typography>
-        </Tooltip>
+        <TitleValue
+          value={value}
+          editable={editable}
+          label={label}
+          handleDoubleClick={handleDoubleClick}
+        />
       )}
     </div>
   );

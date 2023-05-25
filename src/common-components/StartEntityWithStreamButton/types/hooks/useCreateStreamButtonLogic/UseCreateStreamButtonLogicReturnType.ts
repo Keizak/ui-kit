@@ -14,6 +14,7 @@ export type UseCreateStreamButtonLogicReturnType = {
     streamsApi: StreamsApiDataType;
     selectedStream: SelectedStreamDataType;
     loading: LoadingDataType;
+    streamRequestIsRunning: boolean;
   };
   meetingsData: UseMeetingLogicReturnType;
 

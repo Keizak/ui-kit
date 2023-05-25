@@ -18,6 +18,7 @@ export const useLocalHandlers = ({
   onFinishCreateStream,
   onFinishStopStream,
   beforeStartStream,
+  setClickStartStopStreamHandler,
   showError,
 }: useLocalHandlersParamsType): useLocalHandlersReturnType => {
   const dispatch = useDispatch();
@@ -45,23 +46,25 @@ export const useLocalHandlers = ({
     changeMeetingLogicState({ meetingCreatingStatus: '' });
     if (status) {
       return await asyncHandler(() =>
-        streamsAPI.stop(streamId).then((res) => {
-          if (res.resultCode === 0) {
-            toggleSelectedStreamStatus();
-            changeMeetingLogicState({ createMeeting: false });
-            if (selectedStream.state) {
-              updateStream({ ...selectedStream.state, link: '' });
-              selectedStream.set({
-                ...selectedStream.state,
-                startedStreamSession: false,
-              });
+        streamsApi.withStreamRequestIsRunningStatus(() =>
+          streamsAPI.stop(streamId).then((res) => {
+            if (res.resultCode === 0) {
+              toggleSelectedStreamStatus();
+              changeMeetingLogicState({ createMeeting: false });
+              if (selectedStream.state) {
+                updateStream({ ...selectedStream.state, link: '' });
+                selectedStream.set({
+                  ...selectedStream.state,
+                  startedStreamSession: false,
+                });
+              }
+              streamsApi.getStreams();
+              onFinishStopStream && onFinishStopStream();
             }
-            streamsApi.getStreams();
-            onFinishStopStream && onFinishStopStream();
-          }
 
-          return res;
-        })
+            return res;
+          })
+        )
       );
     } else {
       beforeStartStream &&
@@ -69,19 +72,21 @@ export const useLocalHandlers = ({
         (await beforeStartStream(selectedStream.state, selectedStream.set));
 
       return await asyncHandler(() =>
-        streamsAPI.start(streamId).then((res) => {
-          if (res.resultCode === 0) {
-            toggleSelectedStreamStatus();
-            changeMeetingLogicState({
-              createMeetingStatusModal: false,
-            });
-            // if (selectedStream.state) {
-            //   streamsApi.updateStream(selectedStream.state);
-            // }
-          }
+        streamsApi.withStreamRequestIsRunningStatus(() =>
+          streamsAPI.start(streamId).then((res) => {
+            if (res.resultCode === 0) {
+              toggleSelectedStreamStatus();
+              changeMeetingLogicState({
+                createMeetingStatusModal: false,
+              });
+              // if (selectedStream.state) {
+              //   streamsApi.updateStream(selectedStream.state);
+              // }
+            }
 
-          return res;
-        })
+            return res;
+          })
+        )
       );
     }
   };
@@ -118,31 +123,6 @@ export const useLocalHandlers = ({
 
     return res;
   };
-
-  // useMutation<any, any, {}, any>(
-  //   async () => {
-  //     const res = await asyncHandler(() =>
-  //       selectedStream.state
-  //         ? streamsAPI.createMeeting(selectedStream.state.id)
-  //         : new Promise((resolve) => resolve(null))
-  //     );
-  //
-  //     console.log(res, 'res');
-  //
-  //     return res;
-  //   },
-  //   {
-  //     onError: (error) => {
-  //       console.error(error, 'error');
-  //     },
-  //     onSuccess: (res) => {
-  //       console.log(res, 'res');
-  //     },
-  //     onMutate: (res) => {
-  //       console.log(res, 'res');
-  //     },
-  //   }
-  // );
 
   const chooseText = useCallback(
     (currentAction: 'start' | 'stop' | null, entityTitle: string) => {
@@ -188,6 +168,14 @@ export const useLocalHandlers = ({
         dispatch({ type: 'SHOW_ERROR', payload: error.message });
       }
   }, [createMeetingStatus]);
+
+  useEffect(() => {
+    if (selectedStream.state)
+      setClickStartStopStreamHandler({
+        func: clickStartStopStreamHandler,
+        status: 'real',
+      });
+  }, [selectedStream.state]);
 
   return {
     handlers: {

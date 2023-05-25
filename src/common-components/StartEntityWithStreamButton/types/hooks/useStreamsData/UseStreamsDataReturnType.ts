@@ -8,4 +8,6 @@ export type UseStreamsDataReturnType = {
   selectedStream: SelectedStreamDataType;
   streamsApi: StreamsApiDataType;
   loading: LoadingDataType;
+
+  streamRequestIsRunning: boolean;
 };

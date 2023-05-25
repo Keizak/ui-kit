@@ -7,4 +7,5 @@ export interface useMeetingLogicParamsType {
     state: IStream | null;
   };
   streamsApi: StreamsApiDataType;
+  clickStartStopStreamHandler: { status: 'mock' | 'real'; func: () => void };
 }
