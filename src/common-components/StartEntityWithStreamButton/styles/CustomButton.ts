@@ -17,4 +17,8 @@ export const CustomButton = styled(ButtonRequest)`
   :hover {
     color: black;
   }
+
+  :disabled {
+    background: gray;
+  }
 `;

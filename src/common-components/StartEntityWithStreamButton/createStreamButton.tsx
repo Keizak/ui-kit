@@ -51,7 +51,7 @@ export const StartEntityWithStreamButton = memo(
     });
 
     const { meetingLogicState, changeMeetingLogicState } = meetingsData;
-    const { selectedStream } = streamData;
+    const { selectedStream, streamRequestIsRunning } = streamData;
     const {
       getContainerStyle,
       getShowStatusForStatusesBlock,
@@ -94,6 +94,7 @@ export const StartEntityWithStreamButton = memo(
           selectedStream={selectedStream}
           title={title}
           requestStatus={requestStatus}
+          streamRequestIsRunning={streamRequestIsRunning}
           customButtonClassname={customButtonClassname}
           meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted={
             !!meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted

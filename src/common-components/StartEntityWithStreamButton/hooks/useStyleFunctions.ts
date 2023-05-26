@@ -12,9 +12,6 @@ export const useStyleFunctions = (): UseStyleFunctionsReturnType => {
     (meetingLoading: boolean, selectedStream: IStream | null) => {
       let disabled = false;
 
-      console.log(meetingLoading, 'meetingLoading');
-      console.log(selectedStream, 'selectedStream');
-
       // Если не выбран поток, то кнопка должна быть заблокирована
       if (!selectedStream) disabled = true;
       // Если идет создание встречи, то кнопка должна быть заблокирована
