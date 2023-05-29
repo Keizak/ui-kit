@@ -2,13 +2,13 @@ import React, { ReactNode } from 'react';
 
 import { Path } from 'history';
 
-import { Block } from '../../ui-styled-components/common';
+import { Block } from '../../ui-styled-components';
 
 import { NavigateText } from './NavigateText/NavigateText';
 import { TitleAndButton } from './TitleAndButton/TitleAndButton';
 
 export type InfoBarPropsType = {
-  title: string;
+  title: ReactNode;
   buttonText?: string;
   navigateText?: string;
   buttonOnClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -24,8 +24,8 @@ export type InfoBarPropsType = {
  * @param {string} props.title - Заголовок ( обязательный )
  * @param {string} props.buttonText - Текст на кнопке . Если текста нету , не будет и кнопки  ( необязательный )
  * @param {string} props.buttonOnClick - Функцця которая будет выполняться при нажатии на кнопку  ( необязательный )
- * @param {string} props.backStepText - Текст для навигации назад ( необязательный )
- * @param {ReactNode} props.infoBlock - Компонента для отображения дополнительной информации под тайтлом ( необязательный )
+ * @param {string} props.navigateText - Текст для навигации назад ( необязательный )
+ * @param {ReactNode} props.subInfoBlock - Компонента для отображения дополнительной информации под тайтлом ( необязательный )
  * @param {string | Partial<Path>} props.navigatePath - Путь указывающий куда выполниться переход
  */
 export const InfoBar = (props: InfoBarPropsType) => {
