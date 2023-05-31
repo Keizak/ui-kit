@@ -107,6 +107,12 @@ export const useLocalHandlers = ({
       );
   };
 
+  const stopStreamHandler = () => {
+    if (selectedStream.state && selectedStream.state.startedStreamSession)
+      changeStatusStream(selectedStream.state?.id, true);
+    else return;
+  };
+
   const createMeeting = async () => {
     const res = await asyncHandler(() =>
       selectedStream.state
@@ -172,7 +178,7 @@ export const useLocalHandlers = ({
   useEffect(() => {
     if (selectedStream.state)
       setClickStartStopStreamHandler({
-        func: clickStartStopStreamHandler,
+        func: stopStreamHandler,
         status: 'real',
       });
   }, [selectedStream.state]);
