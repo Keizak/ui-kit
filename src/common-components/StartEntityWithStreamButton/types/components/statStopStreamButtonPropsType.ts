@@ -7,4 +7,5 @@ export type statStopStreamButtonPropsType = {
   clickStartStopStreamHandler: () => void;
   clickSettingsHandler: () => void;
   requestStatus: RequestStatuses;
+  disabled: boolean;
 };

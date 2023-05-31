@@ -16,4 +16,5 @@ export type ActionButtonsPropsType = {
   title: string;
   withNameOfStream: boolean;
   entityId?: string | number | null;
+  streamRequestIsRunning: boolean;
 };

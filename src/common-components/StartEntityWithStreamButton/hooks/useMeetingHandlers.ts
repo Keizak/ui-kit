@@ -26,7 +26,7 @@ export const useMeetingHandlers = ({
 
   // Функция handleSessionStarted задается через useCallback и обрабатывает событие типа SESSION_STARTED_EventType
   const handleSessionStarted = useCallback(
-    ({ data }: SESSION_STARTED_EventType) => {
+    async ({ data }: SESSION_STARTED_EventType) => {
       // Если у выбранного потока (selectedStream) есть состояние (state),
       // то создается новый поток (changedStream) с обновленной ссылкой (link),
       // которая берется из свойства registration_url объекта data.meeting. Если свойство registration_url равно null или undefined,
@@ -39,7 +39,7 @@ export const useMeetingHandlers = ({
 
         // Обновляем состояние выбранного потока и отправляем обновленный поток на сервер
         selectedStream.set(changedStream);
-        streamsApi.updateStream(changedStream);
+        await streamsApi.updateStream(changedStream);
       }
 
       // Обновляем состояние приложения, указывая,
@@ -50,9 +50,25 @@ export const useMeetingHandlers = ({
         createMeetingLoading: false,
         meetingCreatingStatus: '',
       });
+      setTimeout(() => {
+        changeMeetingLogicState({
+          createMeeting: true,
+          meetingCreatingStatus: '',
+          createMeetingLoading: false,
+        });
+      }, 10000);
     },
     [selectedStream.state]
   );
+
+  const handleMeetingFinished = useCallback(() => {
+    changeMeetingLogicState({
+      createMeeting: false,
+      meetingCreatingStatus: '',
+      createMeetingLoading: false,
+      createMeetingError: false,
+    });
+  }, []);
 
   // Функция handleSessionFinished задается через useCallback и обрабатывает событие окончания сессии
   const handleSessionFinished = useCallback(() => {
@@ -92,5 +108,6 @@ export const useMeetingHandlers = ({
     handleSessionStarted,
     handleSessionFinished,
     handleSessionFailed,
+    handleMeetingFinished,
   };
 };

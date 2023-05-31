@@ -12,10 +12,16 @@ class SupportBookingAPI {
     eventName: ZoomServiceEventsType,
     callback: (...args: any) => void
   ) {
-    this.eventsNames.push(eventName);
-    this.connection?.on(eventName, function (...args: any) {
-      callback(...args);
-    });
+    let match = this.eventsNames.includes(eventName);
+
+    //You are already subscribed to this event
+    if (match) return;
+    else {
+      this.eventsNames.push(eventName);
+      this.connection?.on(eventName, function (...args: any) {
+        callback(...args);
+      });
+    }
   }
 
   checkConnection() {
@@ -36,7 +42,7 @@ class SupportBookingAPI {
       this.connection = new signalR.HubConnectionBuilder()
         .withUrl(
           securityConstants.apiBaseUrl.replace('api/', 'support-booking-hub')
-        ) //todo: add configuration
+        )
         .withAutomaticReconnect()
         .build();
     }

@@ -28,6 +28,7 @@ export const StartEntityWithStreamButton = memo(
       courses,
       technologies,
       statusMaxWidth,
+      showError,
     } = props;
 
     //-----------------------------------------------useCreateStreamButtonLogic-----------------------------------------
@@ -46,10 +47,11 @@ export const StartEntityWithStreamButton = memo(
       onFinishCreateStream,
       onFinishStopStream,
       beforeStartStream,
+      showError,
     });
 
     const { meetingLogicState, changeMeetingLogicState } = meetingsData;
-    const { selectedStream } = streamData;
+    const { selectedStream, streamRequestIsRunning } = streamData;
     const {
       getContainerStyle,
       getShowStatusForStatusesBlock,
@@ -72,9 +74,6 @@ export const StartEntityWithStreamButton = memo(
     //-----------------------------------------------------JSX----------------------------------------------------------
 
     if (streamData.loading.state || localLoading.state) {
-      console.log(streamData.loading.state, 'streamData.loading.state');
-      console.log(localLoading.state, 'localLoading.state');
-
       return <CircularProgress />;
     }
 
@@ -95,6 +94,7 @@ export const StartEntityWithStreamButton = memo(
           selectedStream={selectedStream}
           title={title}
           requestStatus={requestStatus}
+          streamRequestIsRunning={streamRequestIsRunning}
           customButtonClassname={customButtonClassname}
           meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted={
             !!meetingIsCreatedWithStreamIsStartedOrOnlyStreamIsStarted

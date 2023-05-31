@@ -13,6 +13,7 @@ export const StartStopStreamButton = memo(
     clickStartStopStreamHandler,
     clickSettingsHandler,
     requestStatus,
+    disabled,
   }: statStopStreamButtonPropsType) => {
     return (
       <div
@@ -26,6 +27,7 @@ export const StartStopStreamButton = memo(
           requestStatus={requestStatus}
           variant={'outlined'}
           onClick={clickStartStopStreamHandler}
+          disabled={disabled}
         >
           <Tooltip
             title={

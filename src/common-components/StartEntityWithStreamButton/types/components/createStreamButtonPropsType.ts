@@ -15,6 +15,7 @@ export type createStreamButtonPropsType = {
   customButtonStyle?: CSSProperties;
   customButtonClassname: string;
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
+  showError: (error: string | string[]) => void;
 
   courses?: courseType[];
   technologies?: technologyType[];

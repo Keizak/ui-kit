@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { LocalHandlersType, SelectedStreamDataType } from '../types';
+import { IStream, LocalHandlersType, SelectedStreamDataType } from '../types';
 
 type useGetActionButtonsLogicParamsType = {
   entityId?: string | number | null;
@@ -9,56 +9,58 @@ type useGetActionButtonsLogicParamsType = {
   handlers: LocalHandlersType;
 };
 export const useGetActionButtonsLogic = ({
-  entityId,
   disabledCreateMeetingButton,
   selectedStream,
   handlers,
 }: useGetActionButtonsLogicParamsType) => {
   const [nameStream, setNameStream] = useState('');
-  const [initialization, setInitialization] = useState(false);
-  const localStorageStreamNameKey = `${entityId + 'Stream-name'}`;
 
   const startStreamButtonCheckForDisable = () => {
     if (disabledCreateMeetingButton) return true;
 
-    return nameStream.length < 1;
+    return nameStream.length <= 1;
   };
 
   const onChangeNameStreamHandler = (newTitle: string) => {
-    setNameStream(newTitle);
-    selectedStream.state &&
-      selectedStream.set({
+    if (selectedStream.state) {
+      const newStream: IStream = {
         ...selectedStream.state,
         title: newTitle,
-      });
-  };
-  const onSaveNameStreamHandler = (newTitle: string) => {
-    localStorage.setItem(localStorageStreamNameKey, newTitle);
-    selectedStream.state &&
-      handlers.updateStream({
-        ...selectedStream.state,
-        title: newTitle,
-      });
+      };
+
+      setNameStream(newTitle);
+      selectedStream.state && selectedStream.set(newStream);
+      handlers.updateStream(newStream);
+    }
   };
 
-  useEffect(() => {
-    const localStorageStreamName = localStorage.getItem(
-      localStorageStreamNameKey
-    );
+  const checkForDisableStartButton = (
+    streamRequestIsRunning: boolean,
+    withNameOfStream: boolean
+  ) => {
+    if (streamRequestIsRunning) return true;
+    if (withNameOfStream) return startStreamButtonCheckForDisable();
+    else return disabledCreateMeetingButton;
+  };
 
-    if (localStorageStreamName) setNameStream(localStorageStreamName);
-    setInitialization(true);
-  }, []);
+  const getStartButtonTitle = (
+    streamRequestIsRunning: boolean,
+    selectedStream: boolean,
+    title: string
+  ) => {
+    if (streamRequestIsRunning) return 'Stream is updating';
+    if (selectedStream) return title;
+    else return `You don't have access to this type of streams`;
+  };
 
   return {
     localHandlers: {
-      onSaveNameStreamHandler,
       onChangeNameStreamHandler,
-      startStreamButtonCheckForDisable,
+      checkForDisableStartButton,
+      getStartButtonTitle,
     },
     values: {
       nameStream,
-      initialization,
     },
   };
 };

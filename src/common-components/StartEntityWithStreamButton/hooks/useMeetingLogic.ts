@@ -3,18 +3,35 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { supportBookingAPI } from '../api';
-import { useMeetingLogicParamsType, UseMeetingLogicReturnType } from '../types';
+import {
+  useMeetingLogicParamsType,
+  UseMeetingLogicReturnType,
+  ZoomServiceEventsType,
+} from '../types';
 
 import { useMeetingHandlers } from './useMeetingHandlers';
+
+const ZoomServiceEvents: ZoomServiceEventsType[] = [
+  'ZOOM-SERVICE-API/CREATE-SESSION-INFORMATION',
+  'ZOOM-SERVICE-API/SESSION_FAILED',
+  'ZOOM-SERVICE-API/MEETING-STARTED',
+  'ZOOM-SERVICE-API/STREAM-OWNER-ACCEPTED-TO-MEETING',
+  'ZOOM-SERVICE-API/STREAM-OWNER-CONNECTED-TO-MEETING',
+  'ZOOM-SERVICE-API/SESSION_STARTED',
+  'ZOOM-SERVICE-API/SESSION_FINISHED',
+  'ZOOM-SERVICE-API/MEETING-FINISHED',
+];
 
 export const useMeetingLogic = (
   params: useMeetingLogicParamsType
 ): UseMeetingLogicReturnType => {
   // Деструктуризируем параметры встречи
-  const { selectedStream } = params;
+  const { selectedStream, clickStartStopStreamHandler } = params;
 
   // Инициализируем хранилище Redux для отправки действий
   const dispatch = useDispatch();
+
+  const currentStream = !!selectedStream.state;
 
   // Инициализируем состояния для модального окна статуса потока, статуса создания встречи, флага создания встречи, флага загрузки создания встречи и флага ошибки создания встречи
   const [settingsStreamStatusModal, setSettingsStreamStatusModal] =
@@ -58,7 +75,7 @@ export const useMeetingLogic = (
   const {
     handleCreateSessionInformation,
     handleSessionStarted,
-    handleSessionFinished,
+    handleMeetingFinished,
     handleSessionFailed,
   } = useMeetingHandlers({
     ...params,
@@ -66,21 +83,23 @@ export const useMeetingLogic = (
   });
 
   // Запускаем эффект, который подписывается на события с бэкэнда
+
   useEffect(() => {
-    if (selectedStream.state) {
-      // Открываем соединение с бэкэндом
-      supportBookingAPI.open().finally(() => {
-        const connection = supportBookingAPI.checkConnection();
+    supportBookingAPI.open().finally(() => {
+      const connection = supportBookingAPI.checkConnection();
 
-        if (!connection) {
-          // Если связь с бэкэндом не установлена, отправляем действие с ошибкой
-          dispatch({
-            type: 'SHOW_ERROR',
-            payload: 'Связь с сокетом не установлена',
-          });
-        }
-      });
+      if (!connection) {
+        // Если связь с бэкэндом не установлена, отправляем действие с ошибкой
+        dispatch({
+          type: 'SHOW_ERROR',
+          payload: 'Связь с сокетом не установлена',
+        });
+      }
+    });
+  }, []);
 
+  useEffect(() => {
+    if (currentStream && clickStartStopStreamHandler.status === 'real') {
       // Подписываемся на события с бэкэнда
       supportBookingAPI.subscribe(
         'ZOOM-SERVICE-API/CREATE-SESSION-INFORMATION',
@@ -92,7 +111,11 @@ export const useMeetingLogic = (
       );
       supportBookingAPI.subscribe(
         'ZOOM-SERVICE-API/SESSION_FINISHED',
-        handleSessionFinished
+        clickStartStopStreamHandler.func
+      );
+      supportBookingAPI.subscribe(
+        'ZOOM-SERVICE-API/MEETING-FINISHED',
+        handleMeetingFinished
       );
       supportBookingAPI.subscribe(
         'ZOOM-SERVICE-API/SESSION_FAILED',
@@ -100,13 +123,10 @@ export const useMeetingLogic = (
       );
     }
 
-    // Возвращаем функцию очистки, которая закрывает соединение с бэкэндом
     return () => {
-      if (selectedStream.state) {
-        supportBookingAPI.close().finally();
-      }
+      supportBookingAPI.unsubscribe(...ZoomServiceEvents);
     };
-  }, [selectedStream.state]);
+  }, [currentStream, clickStartStopStreamHandler]);
 
   return {
     changeMeetingLogicState,

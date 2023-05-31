@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { supportBookingAPI } from '../api';
 import {
   useCreateStreamButtonLogicParamsType,
   UseCreateStreamButtonLogicReturnType,
@@ -17,14 +18,19 @@ export const useCreateStreamButtonLogic = ({
   onFinishCreateStream,
   onFinishStopStream,
   beforeStartStream,
+  showError,
 }: useCreateStreamButtonLogicParamsType): UseCreateStreamButtonLogicReturnType => {
   //-----------------------------------------------------useState-------------------------------------------------------
 
   const [localLoading, setLocalLoading] = useState(true);
 
-  useEffect(() => {
-    console.log(localLoading, 'localLoading');
-  }, [localLoading]);
+  const [clickStartStopStreamHandler, setClickStartStopStreamHandler] =
+    useState<{ status: 'mock' | 'real'; func: () => void }>({
+      status: 'mock',
+      func: () => {
+        console.log('mock');
+      },
+    });
 
   //------------------------------------------------useStyleFunctions---------------------------------------------------
 
@@ -39,9 +45,10 @@ export const useCreateStreamButtonLogic = ({
   const streamsDataParams = {
     type,
     userId,
+    setLocalLoading,
   };
 
-  const { streamsApi, selectedStream, loading } =
+  const { streamsApi, selectedStream, loading, streamRequestIsRunning } =
     useStreamsData(streamsDataParams);
 
   //-------------------------------------------------useMeetingLogic----------------------------------------------------
@@ -49,6 +56,7 @@ export const useCreateStreamButtonLogic = ({
   const meetingLogicParams = {
     selectedStream,
     streamsApi,
+    clickStartStopStreamHandler,
   };
 
   const { changeMeetingLogicState, meetingLogicState } =
@@ -64,6 +72,8 @@ export const useCreateStreamButtonLogic = ({
     onFinishCreateStream,
     onFinishStopStream,
     beforeStartStream,
+    showError,
+    setClickStartStopStreamHandler,
   };
 
   const { handlers, actionConfirmationData } =
@@ -79,8 +89,8 @@ export const useCreateStreamButtonLogic = ({
     }, 1000);
 
     return () => {
-      console.log('clearTimeout');
       clearTimeout(timeout);
+      supportBookingAPI.close().finally();
     };
   }, []);
 
@@ -94,6 +104,7 @@ export const useCreateStreamButtonLogic = ({
       streamsApi,
       selectedStream,
       loading,
+      streamRequestIsRunning,
     },
     meetingsData: {
       meetingLogicState,

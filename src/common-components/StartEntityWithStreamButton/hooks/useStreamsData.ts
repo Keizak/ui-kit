@@ -20,15 +20,35 @@ export const useStreamsData = (
   const [streams, setStreams] = useState<IStream[]>([]);
   const [selectedStream, setSelectedStream] = useState<IStream | null>(null);
   const [loading, setLoading] = useState(false);
+  const [streamRequestIsRunning, setStreamRequestIsRunning] = useState(false);
 
+  const withStreamRequestIsRunningStatus = async (
+    operation: () => Promise<any>
+  ) => {
+    try {
+      setStreamRequestIsRunning(true);
+
+      return await operation();
+    } catch (e) {
+      return console.error(e);
+    } finally {
+      setStreamRequestIsRunning(false);
+    }
+  };
   // Создаем функцию updateStream, которая отправляет запрос на обновление данных о стриме
   const updateStream = async (newStream: IStream) => {
-    return await streamsAPI.updateStream(newStream);
+    await withStreamRequestIsRunningStatus(() =>
+      streamsAPI.updateStream(newStream)
+    );
   };
 
   // Создаем функцию stopStream, которая отправляет запрос на остановку стрима по его id
   const stopStream = async (streamId: number) => {
-    return await streamsAPI.stop(streamId);
+    await withStreamRequestIsRunningStatus(() => streamsAPI.stop(streamId));
+  };
+
+  const startStream = async (streamId: number) => {
+    await withStreamRequestIsRunningStatus(() => streamsAPI.start(streamId));
   };
 
   // Создаем функцию getStreamsWithNeededTypeForThisUser, которая получает список стримов нужного типа для пользователя с заданным id
@@ -98,10 +118,6 @@ export const useStreamsData = (
     getStreamsContainerFunctions().finally();
   }, []);
 
-  useEffect(() => {
-    console.log(loading, 'loading');
-  }, [loading]);
-
   // Возвращаем объект с состояниями и функциями для работы со списком стримов
   return {
     streams: {
@@ -116,10 +132,13 @@ export const useStreamsData = (
       getStreams: getStreamsContainerFunctions,
       updateStream,
       stopStream,
+      startStream,
+      withStreamRequestIsRunningStatus,
     },
     loading: {
       set: setLoading,
       state: loading,
     },
+    streamRequestIsRunning,
   };
 };

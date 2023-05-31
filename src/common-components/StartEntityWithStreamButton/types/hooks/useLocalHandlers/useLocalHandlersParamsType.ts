@@ -1,4 +1,7 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { IStream } from '../../api';
+import { StreamsApiDataType } from '../useStreamsData/StreamsApiDataType';
 
 export type useLocalHandlersParamsType = {
   createMeetingStatus: boolean;
@@ -7,10 +10,7 @@ export type useLocalHandlersParamsType = {
     set: (stream: IStream) => void;
     state: IStream | null;
   };
-  streamsApi: {
-    updateStream: (newStream: IStream) => any;
-    getStreams: () => void;
-  };
+  streamsApi: StreamsApiDataType;
   asyncHandler: (operation: () => Promise<any>) => Promise<any>;
   onFinishCreateStream?: () => void;
   onFinishStopStream?: () => void;
@@ -19,4 +19,8 @@ export type useLocalHandlersParamsType = {
     selectedStream: IStream,
     set: (stream: IStream) => void
   ) => Promise<any>;
+  showError: (error: string | string[]) => void;
+  setClickStartStopStreamHandler: Dispatch<
+    SetStateAction<{ status: 'mock' | 'real'; func: () => void }>
+  >;
 };

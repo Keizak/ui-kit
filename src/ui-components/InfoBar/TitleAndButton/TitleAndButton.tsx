@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-import { Block, Text } from '../../../ui-styled-components/common';
+import { Block, Text } from '../../../ui-styled-components';
 import { BasicButton } from '../../BasicButton/BasicButton';
 
 type TitleAndButtonPropsType = {
-  title: string;
+  title: ReactNode;
   buttonText: string | undefined;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
