@@ -20,6 +20,7 @@ export const useLocalHandlers = ({
   beforeStartStream,
   setClickStartStopStreamHandler,
   showError,
+                                   beforeStartStreamError
 }: useLocalHandlersParamsType): useLocalHandlersReturnType => {
   const dispatch = useDispatch();
 
@@ -67,10 +68,6 @@ export const useLocalHandlers = ({
         )
       );
     } else {
-      beforeStartStream &&
-        selectedStream.state &&
-        (await beforeStartStream(selectedStream.state, selectedStream.set));
-
       return await asyncHandler(() =>
         streamsApi.withStreamRequestIsRunningStatus(() =>
           streamsAPI.start(streamId).then((res) => {
@@ -148,8 +145,16 @@ export const useLocalHandlers = ({
     []
   );
 
-  const actionConfirmationHandler = (action: 'start' | 'stop' | null) => {
-    if (action === 'start') createMeeting().finally();
+  const actionConfirmationHandler = async (action: 'start' | 'stop' | null) => {
+
+    if (action === 'start') {
+      if (beforeStartStream && selectedStream.state) {
+        const resultBeforeStartStream = await beforeStartStream(selectedStream.state, selectedStream.set)
+        if (resultBeforeStartStream === null)
+          return showError(beforeStartStreamError)
+      }
+      createMeeting().finally();
+    }
     if (action === 'stop') clickStartStopStreamHandler();
 
     return setTimeout(() => setCurrentAction(null), 1000);

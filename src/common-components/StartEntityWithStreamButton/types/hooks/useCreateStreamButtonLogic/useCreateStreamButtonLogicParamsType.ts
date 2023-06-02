@@ -11,4 +11,5 @@ export type useCreateStreamButtonLogicParamsType = {
     selectedStream: IStream,
     set: (stream: IStream) => void
   ) => Promise<any>;
+  beforeStartStreamError:string
 };

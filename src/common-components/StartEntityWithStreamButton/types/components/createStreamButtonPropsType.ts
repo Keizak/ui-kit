@@ -30,6 +30,8 @@ export type createStreamButtonPropsType = {
     set: (stream: IStream) => void
   ) => Promise<any>;
 
+  beforeStartStreamError?: string
+
   statusMaxWidth?: string;
 
   withNameOfStream?: boolean;

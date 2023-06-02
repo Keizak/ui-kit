@@ -29,7 +29,9 @@ export const StartEntityWithStreamButton = memo(
       technologies,
       statusMaxWidth,
       showError,
+        beforeStartStreamError = "Что то пошла не так . Настройка перед созданием провалилась"
     } = props;
+
 
     //-----------------------------------------------useCreateStreamButtonLogic-----------------------------------------
 
@@ -48,6 +50,7 @@ export const StartEntityWithStreamButton = memo(
       onFinishStopStream,
       beforeStartStream,
       showError,
+        beforeStartStreamError
     });
 
     const { meetingLogicState, changeMeetingLogicState } = meetingsData;
