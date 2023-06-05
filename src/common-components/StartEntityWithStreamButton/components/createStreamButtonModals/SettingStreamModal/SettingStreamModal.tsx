@@ -60,10 +60,11 @@ export const SettingStreamModal = memo(
             {' '}
             <strong>Courses:</strong> {coursesStrings}
           </span>
-          <span>
+            {technologies.length > 0 &&  <span>
             {' '}
-            <strong>Technologies:</strong> {technologiesString}
-          </span>
+                <strong>Technologies:</strong> {technologiesString}
+          </span>}
+
           <span>
             <strong>Zoom-meeting Url:</strong>{' '}
             <a href={selectedStream.link}>{selectedStream.link}</a>
