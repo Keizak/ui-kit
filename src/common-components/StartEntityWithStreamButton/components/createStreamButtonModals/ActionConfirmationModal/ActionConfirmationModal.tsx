@@ -43,8 +43,8 @@ export const ActionConfirmationModal = memo(
             <DialogContentText id="alert-dialog-description">
               {props.currentAction === 'start' && (
                 <>
-                  Прежде чем нажать &quot;OK&quot; активируй IT-INCUBATOR
-                  STUDENTS BOT
+                  Прежде чем нажать &quot;OK&quot; убедись в том что, IT-INCUBATOR
+                  STUDENTS BOT активен в твоем Telegram. Туда придет ссылка на запуск стрима.
                   <br />
                   <br />
                 </>
