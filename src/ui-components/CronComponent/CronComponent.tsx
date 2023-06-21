@@ -241,7 +241,12 @@ export function CronComponent(props: CronComponentPropsType) {
   //----------------------------------------------UseEffect----------------------------------------------
 
   useEffect(() => {
-    onChangeValue && !checkForSubmit() && onChangeValue(submitTime());
+    if (onChangeValue && !checkForSubmit()) {
+      const cron = submitTime();
+      let date = new Date().getTimezoneOffset();
+
+      onChangeValue(cron, date);
+    }
   }, [date, startDate]);
 
   useEffect(() => {
