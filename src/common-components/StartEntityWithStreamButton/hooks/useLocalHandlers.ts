@@ -20,6 +20,7 @@ export const useLocalHandlers = ({
   beforeStartStream,
   setClickStartStopStreamHandler,
   showError,
+                                   beforeStartStreamError
 }: useLocalHandlersParamsType): useLocalHandlersReturnType => {
   const dispatch = useDispatch();
 
@@ -67,10 +68,6 @@ export const useLocalHandlers = ({
         )
       );
     } else {
-      beforeStartStream &&
-        selectedStream.state &&
-        (await beforeStartStream(selectedStream.state, selectedStream.set));
-
       return await asyncHandler(() =>
         streamsApi.withStreamRequestIsRunningStatus(() =>
           streamsAPI.start(streamId).then((res) => {
@@ -105,6 +102,12 @@ export const useLocalHandlers = ({
         selectedStream.state?.id,
         !!selectedStream.state.startedStreamSession
       );
+  };
+
+  const stopStreamHandler = () => {
+    if (selectedStream.state && selectedStream.state.startedStreamSession)
+      changeStatusStream(selectedStream.state?.id, true);
+    else return;
   };
 
   const createMeeting = async () => {
@@ -142,8 +145,16 @@ export const useLocalHandlers = ({
     []
   );
 
-  const actionConfirmationHandler = (action: 'start' | 'stop' | null) => {
-    if (action === 'start') createMeeting().finally();
+  const actionConfirmationHandler = async (action: 'start' | 'stop' | null) => {
+
+    if (action === 'start') {
+      if (beforeStartStream && selectedStream.state) {
+        const resultBeforeStartStream = await beforeStartStream(selectedStream.state, selectedStream.set)
+        if (resultBeforeStartStream === null)
+          return showError(beforeStartStreamError)
+      }
+      createMeeting().finally();
+    }
     if (action === 'stop') clickStartStopStreamHandler();
 
     return setTimeout(() => setCurrentAction(null), 1000);
@@ -172,7 +183,7 @@ export const useLocalHandlers = ({
   useEffect(() => {
     if (selectedStream.state)
       setClickStartStopStreamHandler({
-        func: clickStartStopStreamHandler,
+        func: stopStreamHandler,
         status: 'real',
       });
   }, [selectedStream.state]);

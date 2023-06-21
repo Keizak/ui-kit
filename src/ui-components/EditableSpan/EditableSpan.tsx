@@ -3,6 +3,7 @@ import React, { CSSProperties } from 'react';
 import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import { IconButton, TextField } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 
 import { TitleValue } from './TitleValue/TitleValue';
 import { useEditableSpanLogic } from './useEditableSpanLogic/useEditableSpanLogic';
@@ -62,13 +63,21 @@ const EditableSpan: React.FC<EditableSpanProps> = ({
             error={isEmptyTempleValue}
             helperText={isEmptyTempleValue ? 'Введите название стрима' : ''}
           />
-          <IconButton onClick={handleSave} color={'success'}>
-            <DoneOutlineIcon />
-          </IconButton>
-          {!isEmptyValue && (
-            <IconButton onClick={handleCancel} color={'error'}>
-              <CancelPresentationIcon />
+          <Tooltip title={'Потвердить изменения названия стрима'}>
+            <IconButton onClick={handleSave} color={'success'}>
+              <DoneOutlineIcon />
             </IconButton>
+          </Tooltip>
+          {!isEmptyValue && (
+            <Tooltip
+              title={
+                'Отменить изменение. Останется прежнем , до входа в режим редактирования'
+              }
+            >
+              <IconButton onClick={handleCancel} color={'error'}>
+                <CancelPresentationIcon />
+              </IconButton>
+            </Tooltip>
           )}
         </form>
       ) : (

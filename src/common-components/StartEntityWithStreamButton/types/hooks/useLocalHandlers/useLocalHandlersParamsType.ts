@@ -23,4 +23,6 @@ export type useLocalHandlersParamsType = {
   setClickStartStopStreamHandler: Dispatch<
     SetStateAction<{ status: 'mock' | 'real'; func: () => void }>
   >;
+
+  beforeStartStreamError:string
 };
