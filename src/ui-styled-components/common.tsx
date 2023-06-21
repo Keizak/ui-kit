@@ -31,6 +31,7 @@ export interface BlockProps {
   overflowY?: string;
   overflowX?: string;
   table?: boolean;
+  flexGrow ? : number
 }
 
 /**
@@ -62,47 +63,32 @@ export interface BlockProps {
  * @param {string} overflow-y - режим отображенияя информации не вмещающейся в границы блока по оси Y( необязательный )
  * @param {string} overflow-x - режим отображенияя информации не вмещающейся в границы блока по оси X( необязательный )
  */
-export const Block = styled.div`
-  display: ${(props: BlockProps) => (props.display ? props.display : 'flex')};
-  flex-direction: ${(props: BlockProps) =>
-    props.flexDirection ? props.flexDirection : 'row'};
-  justify-content: ${(props: BlockProps) =>
-    props.justifyContent ? props.justifyContent : 'center'};
-  align-items: ${(props: BlockProps) =>
-    props.alignItems ? props.alignItems : 'center'};
-  width: ${(props: BlockProps) => (props.width ? props.width : 'auto')};
-  min-width: ${(props: BlockProps) =>
-    props.minWidth ? props.minWidth : 'auto'};
-  height: ${(props: BlockProps) => (props.height ? props.height : '100%')};
-  min-height: ${(props: BlockProps) =>
-    props.minHeight ? props.minHeight : 'auto'};
-  max-height: ${(props: BlockProps) =>
-    props.maxHeight ? props.maxHeight : 'auto'};
-  padding: ${(props: BlockProps) => (props.padding ? props.padding : 0)};
-  margin: ${(props: BlockProps) => (props.margin ? props.margin : 0)};
-  background: ${(props: BlockProps) =>
-    props.background ? props.background : 'none'};
-  box-shadow: ${(props: BlockProps) =>
-    props.boxShadow ? props.boxShadow : 'none'};
-  border: ${(props: BlockProps) => (props.border ? props.border : '0')};
-  flex-wrap: ${(props: BlockProps) =>
-    props.flexWrap ? props.flexWrap : 'wrap'};
-  border-radius: ${(props: BlockProps) =>
-    props.borderRadius ? props.borderRadius : '0'};
-  cursor: ${(props: BlockProps) => (props.cursor ? props.cursor : 'auto')};
-  border-bottom: ${(props: BlockProps) =>
-    props.borderBottom ? props.borderBottom : 'auto'};
-  border-top: ${(props: BlockProps) =>
-    props.borderTop ? props.borderTop : 'auto'};
-  border-left: ${(props: BlockProps) =>
-    props.borderLeft ? props.borderLeft : 'auto'};
-  border-right: ${(props: BlockProps) =>
-    props.borderRight ? props.borderRight : 'auto'};
-  overflow-y: ${(props: BlockProps) =>
-    props.overflowY ? props.overflowY : ''};
-  overflow-x: ${(props: BlockProps) =>
-    props.overflowX ? props.overflowX : ''};
-  overflow: ${(props: BlockProps) => (props.overflow ? props.overflow : '')};
+export const Block = styled.div<BlockProps>`
+  display: flex;
+  flex-direction: ${(props) => props.flexDirection || 'row'};
+  justify-content: ${(props) => props.justifyContent || 'center'};
+  align-items: ${(props) => props.alignItems || 'center'};
+  flex-wrap: ${(props) => props.flexWrap || 'wrap'};
+  flex-grow: ${(props) => props.flexGrow || 0};
+  width: ${(props) => props.width || 'auto'};
+  min-width: ${(props) => props.minWidth || 'auto'};
+  max-height: ${(props) => props.maxHeight || 'auto'};
+  height: ${(props) => props.height || '100%'};
+  min-height: ${(props) => props.minHeight || 'auto'};
+  padding: ${(props) => props.padding || 0};
+  margin: ${(props) => props.margin || 0};
+  background: ${(props) => props.background || 'none'};
+  box-shadow: ${(props) => props.boxShadow || 'none'};
+  border: ${(props) => props.border || '0'};
+  border-radius: ${(props) => props.borderRadius || '0'};
+  cursor: ${(props) => props.cursor || 'auto'};
+  border-bottom: ${(props) => props.borderBottom || 'auto'};
+  border-top: ${(props) => props.borderTop || 'auto'};
+  border-left: ${(props) => props.borderLeft || 'auto'};
+  border-right: ${(props) => props.borderRight || 'auto'};
+  overflow: ${(props) => props.overflow || ''};
+  overflow-y: ${(props) => props.overflowY || ''};
+  overflow-x: ${(props) => props.overflowX || ''};
   transition: border-bottom 0.1s ease-in-out;
   word-break: break-all;
 `;
