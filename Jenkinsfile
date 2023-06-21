@@ -2,9 +2,6 @@ def app
 
 pipeline {
     agent any
-    environment {
-        GITHUB_ACCESS_TOKEN_WRITE = "${env.GITHUB_ACCESS_TOKEN_WRITE}"
-    }
     stages {
         stage('Clone repository') {
             steps {
@@ -20,23 +17,15 @@ pipeline {
                 echo "Install finished..."
             }
         }
-//         stage('Prepared version') {
-//             steps {
-//                 echo "Prepared started..."
-//                     script {
-//                          sh "npm version patch"
-//                     }
-//                 echo "Prepared finished..."
-//             }
-//         }
         stage('Preparing') {
              steps {
+              withCredentials([string(credentialsId: 'GITHUB_ACCESS_TOKEN_WRITE', variable: 'GITHUB_ACCESS_TOKEN_WRITE')]) {
                  echo "Preparing started..."
                      sh 'ls -ltr'
                      sh 'pwd'
                      sh "chmod +x preparing.sh"
-                     sh "./preparing.sh ${env.GITHUB_ACCESS_TOKEN_WRITE}"
-                     sh "cat .npmrc"
+                     sh "./preparing.sh $GITHUB_ACCESS_TOKEN_WRITE"
+               }
              }
         }
         stage('Publish package') {
