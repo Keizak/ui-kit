@@ -2,7 +2,7 @@ import React from 'react';
 
 import { nanoid } from 'nanoid';
 
-import { Block } from '../../ui-styled-components/common';
+import { Block } from '../../ui-styled-components';
 
 import { ToggleItem } from './ToggleItem/ToggleItem';
 
@@ -10,6 +10,7 @@ export type ToggleBarPropsType = {
   selectedValue: string;
   values: string[];
   selectValue: (value: string) => void;
+  flexWrap?: string;
 };
 /**
  * JSX Component( ToggleBar )
@@ -19,10 +20,11 @@ export type ToggleBarPropsType = {
  * @param {(value:string) => void} props.selectValue функция для выбора значения ( Обязательный )
  */
 export const ToggleBar = (props: ToggleBarPropsType) => {
+  const { flexWrap = 'nowrap' } = props;
   //-----------------------------------------------JSX-----------------------------------------------
 
   return (
-    <Block name={'Toggle'} width={'100%'}>
+    <Block name={'Toggle'} width={'100%'} flexWrap={flexWrap}>
       {props.values.map((value) => {
         return (
           <ToggleItem
