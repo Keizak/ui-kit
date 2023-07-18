@@ -249,7 +249,7 @@ export const withCRUDGrid = <
                         <div style={{width: '15%'}}>
                             <Grid>
                                 {props.renderContentAboveTable &&
-                                    props.renderContentAboveTable(() => dispatch(thunks.getItems(null)))}
+                                    props.renderContentAboveTable(() => dispatch(thunks.getItems()))}
                             </Grid>
                             {settings?.showCreate && settings.showCreate() ? (
                                 <Grid>
