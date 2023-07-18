@@ -39,7 +39,6 @@ export const useCRUDGridStyles = makeStyles(() =>
             flexDirection: 'column',
         },
         paper: {
-            /*width: '70%',*/
             marginTop: '20px',
             border: 'solid 1px black',
         },
