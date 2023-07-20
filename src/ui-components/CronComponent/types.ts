@@ -45,7 +45,7 @@ export type DaysOfWeeksKeysType = keyof typeof DaysOfWeeks;
 
 export type CronComponentPropsType = {
   onSubmit?: (value: string) => void;
-  onChangeValue?: (value: string) => void;
+  onChangeValue?: (cron: string, timeZone: number) => void;
   withButton?: boolean;
   defaultValue?: string;
 
