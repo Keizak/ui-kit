@@ -20,7 +20,7 @@ export const useLocalHandlers = ({
   beforeStartStream,
   setClickStartStopStreamHandler,
   showError,
-                                   beforeStartStreamError
+  beforeStartStreamError,
 }: useLocalHandlersParamsType): useLocalHandlersReturnType => {
   const dispatch = useDispatch();
 
@@ -44,6 +44,7 @@ export const useLocalHandlers = ({
     newStream && streamsApi.updateStream(newStream);
   };
   const changeStatusStream = async (streamId: number, status: boolean) => {
+    console.log(1);
     changeMeetingLogicState({ meetingCreatingStatus: '' });
     if (status) {
       return await asyncHandler(() =>
@@ -96,17 +97,17 @@ export const useLocalHandlers = ({
     changeMeetingLogicState({ settingsStreamStatusModal: true });
   }, []);
 
-  const clickStartStopStreamHandler = () => {
+  const clickStartStopStreamHandler = async () => {
     selectedStream.state &&
-      changeStatusStream(
+      (await changeStatusStream(
         selectedStream.state?.id,
         !!selectedStream.state.startedStreamSession
-      );
+      ));
   };
 
-  const stopStreamHandler = () => {
+  const stopStreamHandler = async () => {
     if (selectedStream.state && selectedStream.state.startedStreamSession)
-      changeStatusStream(selectedStream.state?.id, true);
+      await changeStatusStream(selectedStream.state?.id, true);
     else return;
   };
 
@@ -124,7 +125,7 @@ export const useLocalHandlers = ({
         )
       );
 
-    return res;
+    return await res();
   };
 
   const chooseText = useCallback(
@@ -146,12 +147,14 @@ export const useLocalHandlers = ({
   );
 
   const actionConfirmationHandler = async (action: 'start' | 'stop' | null) => {
-
     if (action === 'start') {
       if (beforeStartStream && selectedStream.state) {
-        const resultBeforeStartStream = await beforeStartStream(selectedStream.state, selectedStream.set)
+        const resultBeforeStartStream = await beforeStartStream(
+          selectedStream.state,
+          selectedStream.set
+        );
         if (resultBeforeStartStream === null)
-          return showError(beforeStartStreamError)
+          return showError(beforeStartStreamError);
       }
       createMeeting().finally();
     }
@@ -168,6 +171,7 @@ export const useLocalHandlers = ({
   useEffect(() => {
     if (createMeetingStatus)
       try {
+        console.log(2);
         changeStatusStream(
           selectedStream.state?.id ? selectedStream.state?.id : NaN,
           false
