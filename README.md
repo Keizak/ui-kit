@@ -21,4 +21,4 @@
 "styled-components": ">=5"
 <br/>
 
-yarn add @emotion/react "@emotion/styled @mui/icons-material @mui/material @mui/x-date-pickers dayjs nanoid react react-router-dom styled-components
+yarn add @emotion/react "@emotion/styled @mui/icons-material @mui/material @mui/x-date-pickers dayjs nanoid react react-router-dom styled-components"# ui-kit" 
